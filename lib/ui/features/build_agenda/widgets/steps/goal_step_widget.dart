@@ -52,30 +52,9 @@ class GoalStepWidget extends StatelessWidget {
                   });
             }).toList(),
           ),
-          _buildButtons(context, provider)
+          ProgressButtons(provider: provider, prevEnabled: false,),
         ],
       ),
     );
   }
-}
-
-Widget _buildButtons(BuildContext context, StepProvider provider) {
-  return StreamBuilder<int>(
-    stream: context.wizardController.indexStream,
-    initialData: context.wizardController.index,
-    builder: (context, snapshot) {
-      bool isFinished = false;
-      bool prevEnabled = false;
-      if (!snapshot.hasData || snapshot.hasError) {
-        return const SizedBox.shrink();
-      }
-      final index = snapshot.data!;
-
-      if (context.wizardController.isLastStep(index)) {
-        isFinished = true;
-      }
-      return ProgressButtons(
-          provider: provider, isFinished: isFinished, prevEnabled: prevEnabled);
-    },
-  );
 }

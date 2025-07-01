@@ -9,15 +9,33 @@ class ProgressButtons extends StatelessWidget {
   const ProgressButtons(
       {super.key,
       required this.provider,
-      required this.isFinished,
-      required this.prevEnabled});
+      this.prevEnabled});
   final StepProvider provider;
-  final bool isFinished;
-  final bool prevEnabled;
+  final bool? prevEnabled;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return _buildButtons(context, provider, prevEnabled ?? true);
+  }
+}
+
+Widget _buildButtons(BuildContext context, StepProvider provider, bool prevEnabled) {
+  return StreamBuilder<int>(
+    stream: context.wizardController.indexStream,
+    initialData: context.wizardController.index,
+    builder: (context, snapshot) {
+      bool isFinished = false;
+      if (!snapshot.hasData || snapshot.hasError) {
+        return const SizedBox.shrink();
+      }
+      final index = snapshot.data!;
+      if (context.wizardController.isFirstStep(index)) {
+        prevEnabled = false;
+      }
+      if (context.wizardController.isLastStep(index)) {
+        isFinished = true;
+      }
+      return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const SizedBox(height: 10,),
@@ -26,5 +44,6 @@ class ProgressButtons extends StatelessWidget {
           isFinished ? const FinishButton() : NextButton(provider: provider),
         ],
       );
-  }
+    },
+  );
 }

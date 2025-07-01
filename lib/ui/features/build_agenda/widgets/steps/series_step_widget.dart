@@ -50,32 +50,8 @@ class SeriesStepWidget extends StatelessWidget {
                 ],
               );
             }),
-            _buildButtons(context, provider)
+            ProgressButtons(provider: provider),
       ]),
     );
   }
-}
-
-
-Widget _buildButtons(BuildContext context, StepProvider provider) {
-  return StreamBuilder<int>(
-    stream: context.wizardController.indexStream,
-    initialData: context.wizardController.index,
-    builder: (context, snapshot) {
-      bool isFinished = false;
-      bool prevEnabled = true;
-      if (!snapshot.hasData || snapshot.hasError) {
-        return const SizedBox.shrink();
-      }
-      final index = snapshot.data!;
-      if (context.wizardController.isFirstStep(index)) {
-        prevEnabled = false;
-      }
-      if (context.wizardController.isLastStep(index)) {
-        isFinished = true;
-      }
-      return ProgressButtons(
-          provider: provider, isFinished: isFinished, prevEnabled: prevEnabled);
-    },
-  );
 }

@@ -1,13 +1,16 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_breakout_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/breakout_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/goal_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_overview.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/hosted_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/participant_count_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_single_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/breakout_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/goal_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/topic_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/hosted_step_widget.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/facilitate_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/participant_count_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/series_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/topic_step_widget.dart';
@@ -44,8 +47,9 @@ class AgendaWizard extends StatelessWidget {
           ),
           WizardStepController(step: provider.stepThreeProvider),
           WizardStepController(step: provider.stepFourProvider),
-          WizardStepController(
-              step: provider.stepFiveProvider, isNextEnabled: false)
+          WizardStepController(step: provider.stepFiveProvider),
+          WizardStepController(step: provider.stepSixProvider),
+          WizardStepController(step: provider.stepSevenProvider)
         ],
         child: Builder(
           builder: (context) {
@@ -63,13 +67,22 @@ class AgendaWizard extends StatelessWidget {
               body: WizardEventListener(
                 listener: (context, event) {
                   debugPrint('### ${event.runtimeType} received');
-                  if (event is WizardForcedGoBackToEvent) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        'Step ${event.toIndex + 2} got disabled so the wizard is moving back to step ${event.toIndex + 1}.',
-                      ),
-                      dismissDirection: DismissDirection.horizontal,
-                    ));
+                  if (event is WizardGoEvent) {
+                    int toIndex = event.toIndex;
+                    StepProvider? upcomingProvider =
+                        stepProviderMap[Steps.values[toIndex]];
+                    if (upcomingProvider == null) {
+                      throw Exception("Idk weird stuff provider is null");
+                    }
+                    if (event.toIndex > event.fromIndex) {
+                      upcomingProvider.previousStep = event.fromIndex;
+                    }
+                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    //   content: Text(
+                    //     'Storing ${event.toIndex} in the prev button.',
+                    //   ),
+                    //   dismissDirection: DismissDirection.horizontal,
+                    // ));
                   }
                 },
                 child: LayoutBuilder(builder: (context, constraints) {
@@ -113,8 +126,16 @@ Widget _buildWizard(
           provider: state,
         );
       }
-      if (state is HostedStepProvider) {
-        return HostedStepWidget(provider: state);
+      if (state is BreakoutStepProvider) {
+        return BreakoutStepWidget(
+          provider: state,
+        );
+      }
+      if (state is FacilitateBreakoutProvider) {
+        return FacilitatedStepWidget(provider: state, hasBreakouts: true);
+      }
+      if (state is FacilitateSingleProvider) {
+        return FacilitatedStepWidget(provider: state, hasBreakouts: false);
       }
       if (state is SeriesStepProvider) {
         return SeriesStepWidget(provider: state);
@@ -145,17 +166,21 @@ Widget _buildWizard(
 
 class AgendaWizardProvider {
   AgendaWizardProvider()
-      : stepOneProvider = GoalStepProvider(),
-        stepTwoProvider = TopicStepProvider(),
-        stepThreeProvider = ParticipantCountStepProvider(),
-        stepFourProvider = HostedStepProvider(),
-        stepFiveProvider = SeriesStepProvider();
+      : stepOneProvider = stepProviderMap[Steps.goalStep]!,
+        stepTwoProvider = stepProviderMap[Steps.topicStep]!,
+        stepThreeProvider = stepProviderMap[Steps.participantStep]!,
+        stepFourProvider = stepProviderMap[Steps.breakoutStep]!,
+        stepFiveProvider = stepProviderMap[Steps.facilitatedStep]!,
+        stepSixProvider = stepProviderMap[Steps.facilitatedBreakoutStep]!,
+        stepSevenProvider = stepProviderMap[Steps.seriesStep]!;
 
-  final GoalStepProvider stepOneProvider;
-  final TopicStepProvider stepTwoProvider;
-  final ParticipantCountStepProvider stepThreeProvider;
-  final HostedStepProvider stepFourProvider;
-  final SeriesStepProvider stepFiveProvider;
+  final StepProvider stepOneProvider;
+  final StepProvider stepTwoProvider;
+  final StepProvider stepThreeProvider;
+  final StepProvider stepFourProvider;
+  final StepProvider stepFiveProvider;
+  final StepProvider stepSixProvider;
+  final StepProvider stepSevenProvider;
 
   Future<void> reportIssue() async {
     debugPrint('Finished!');
@@ -166,5 +191,8 @@ class AgendaWizardProvider {
     stepTwoProvider.dispose();
     stepThreeProvider.dispose();
     stepFourProvider.dispose();
+    stepFiveProvider.dispose();
+    stepSixProvider.dispose();
+    stepSevenProvider.dispose();
   }
 }

@@ -16,7 +16,7 @@ class ParticipantCountWidget extends StatelessWidget {
           height: 40,
         ),
         Text(
-          'Will this event be part of a series, or is it a standalone?',
+          'How many participants do you anticipate attending the event?',
           style: AppTextStyle.headline3,
           textAlign: TextAlign.center,
         ),

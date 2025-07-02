@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_wizard/flutter_wizard.dart';
 
 class PreviousButton extends StatelessWidget {
-  const PreviousButton({super.key});
+  const PreviousButton({super.key, required this.returnIndex});
+
+  final int returnIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class PreviousButton extends StatelessWidget {
         }
         final enabled = snapshot.data!;
         return ElevatedButton(
-          onPressed: enabled ? context.wizardController.goBack : null,
+          onPressed: enabled ? () => context.wizardController.goTo(index: returnIndex) : null,
           child: const Text("Previous"),
         );
       },

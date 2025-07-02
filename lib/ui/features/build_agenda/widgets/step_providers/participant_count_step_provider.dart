@@ -47,8 +47,14 @@ class ParticipantCountStepProvider extends StepProvider {
 
   @override
   int calculateNextStep() {
-    int currStepIndex = wizardController.getStepIndex(this);
-    return currStepIndex + 1;
+    // breakout group step
+    int nextStep = Steps.breakoutStep.index;
+    if (_currParticipantCount.value == 1) {
+      // if it is a tiny amount, no participants
+      // go to event facilitator step
+      nextStep = Steps.facilitatedStep.index;
+    }
+    return nextStep;
   }
 
   @override

@@ -52,8 +52,7 @@ class TopicStepProvider extends StepProvider {
 
   @override
   int calculateNextStep() {
-    int currStepIndex = wizardController.getStepIndex(this);
-    return currStepIndex + 1;
+    return Steps.participantStep.index;
   }
 
   @override

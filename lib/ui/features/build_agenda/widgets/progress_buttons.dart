@@ -39,7 +39,7 @@ Widget _buildButtons(BuildContext context, StepProvider provider, bool prevEnabl
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const SizedBox(height: 10,),
-          prevEnabled ? const PreviousButton() : const SizedBox.shrink(),
+          prevEnabled ? PreviousButton(returnIndex: provider.previousStep,) : const SizedBox.shrink(),
           const SizedBox(width: 10),
           isFinished ? const FinishButton() : NextButton(provider: provider),
         ],

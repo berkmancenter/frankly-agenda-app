@@ -3,10 +3,12 @@ import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/go
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_overview.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/hosted_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/participant_count_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/goal_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/topic_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/hosted_step_widget.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/participant_count_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/series_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/steps/topic_step_widget.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +43,9 @@ class AgendaWizard extends StatelessWidget {
             step: provider.stepTwoProvider,
           ),
           WizardStepController(step: provider.stepThreeProvider),
+          WizardStepController(step: provider.stepFourProvider),
           WizardStepController(
-              step: provider.stepFourProvider, isNextEnabled: false)
+              step: provider.stepFiveProvider, isNextEnabled: false)
         ],
         child: Builder(
           builder: (context) {
@@ -105,6 +108,11 @@ Widget _buildWizard(
           provider: state,
         );
       }
+      if (state is ParticipantCountStepProvider) {
+        return ParticipantCountWidget(
+          provider: state,
+        );
+      }
       if (state is HostedStepProvider) {
         return HostedStepWidget(provider: state);
       }
@@ -139,13 +147,15 @@ class AgendaWizardProvider {
   AgendaWizardProvider()
       : stepOneProvider = GoalStepProvider(),
         stepTwoProvider = TopicStepProvider(),
-        stepThreeProvider = HostedStepProvider(),
-        stepFourProvider = SeriesStepProvider();
+        stepThreeProvider = ParticipantCountStepProvider(),
+        stepFourProvider = HostedStepProvider(),
+        stepFiveProvider = SeriesStepProvider();
 
   final GoalStepProvider stepOneProvider;
   final TopicStepProvider stepTwoProvider;
-  final HostedStepProvider stepThreeProvider;
-  final SeriesStepProvider stepFourProvider;
+  final ParticipantCountStepProvider stepThreeProvider;
+  final HostedStepProvider stepFourProvider;
+  final SeriesStepProvider stepFiveProvider;
 
   Future<void> reportIssue() async {
     debugPrint('Finished!');

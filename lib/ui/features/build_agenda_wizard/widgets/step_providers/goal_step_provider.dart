@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GoalStepProvider extends StepProvider {
@@ -33,8 +33,7 @@ class GoalStepProvider extends StepProvider {
 
   @override
   int calculateNextStep() {
-    int currStepIndex = wizardController.getStepIndex(this);
-    return currStepIndex + 1;
+    return Steps.topicStep.index;
   }
 
   /// Dispose (required)

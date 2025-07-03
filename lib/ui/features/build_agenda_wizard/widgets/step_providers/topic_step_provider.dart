@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -52,8 +52,7 @@ class TopicStepProvider extends StepProvider {
 
   @override
   int calculateNextStep() {
-    int currStepIndex = wizardController.getStepIndex(this);
-    return currStepIndex + 1;
+    return Steps.participantStep.index;
   }
 
   @override

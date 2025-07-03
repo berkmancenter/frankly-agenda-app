@@ -1,9 +1,7 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_step_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_wizard/flutter_wizard.dart';
 
 class SeriesStepWidget extends StatelessWidget {
   const SeriesStepWidget({super.key, required this.provider});
@@ -25,7 +23,7 @@ class SeriesStepWidget extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        StreamBuilder<IsSeries>(
+        StreamBuilder<IsSeries?>(
             stream: provider.getSeriesRadioStream(),
             initialData: provider.getSeriesRadioValue(),
             builder: (context, snapshot) {
@@ -37,7 +35,7 @@ class SeriesStepWidget extends StatelessWidget {
                         value: IsSeries.series,
                         groupValue: snapshot.data,
                         onChanged: (newValue) => provider
-                            .toggleSeriesStatus(newValue ?? IsSeries.series),
+                            .toggleSeriesStatus(newValue),
                       )),
                   ListTile(
                       title: const Text("Standalone"),
@@ -45,37 +43,13 @@ class SeriesStepWidget extends StatelessWidget {
                         value: IsSeries.standalone,
                         groupValue: snapshot.data,
                         onChanged: (newValue) => provider
-                            .toggleSeriesStatus(newValue ?? IsSeries.standalone),
+                            .toggleSeriesStatus(newValue),
                       )),
                 ],
               );
             }),
-            _buildButtons(context, provider)
+            ProgressButtons(provider: provider),
       ]),
     );
   }
-}
-
-
-Widget _buildButtons(BuildContext context, StepProvider provider) {
-  return StreamBuilder<int>(
-    stream: context.wizardController.indexStream,
-    initialData: context.wizardController.index,
-    builder: (context, snapshot) {
-      bool isFinished = false;
-      bool prevEnabled = true;
-      if (!snapshot.hasData || snapshot.hasError) {
-        return const SizedBox.shrink();
-      }
-      final index = snapshot.data!;
-      if (context.wizardController.isFirstStep(index)) {
-        prevEnabled = false;
-      }
-      if (context.wizardController.isLastStep(index)) {
-        isFinished = true;
-      }
-      return ProgressButtons(
-          provider: provider, isFinished: isFinished, prevEnabled: prevEnabled);
-    },
-  );
 }

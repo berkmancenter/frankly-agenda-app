@@ -1,5 +1,5 @@
-import 'package:agenda_wizard/ui/features/build_agenda/view_model/build_agenda_viewmodel.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/agenda_wizard.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/agenda_wizard.dart';
 import 'package:flutter/material.dart';
 
 class BuildAgendaScreen extends StatelessWidget {

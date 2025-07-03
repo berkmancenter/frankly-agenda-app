@@ -1,14 +1,13 @@
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/event_count_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/event_length_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_breakout_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/breakout_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/goal_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/participant_count_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_event_length_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_step_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_single_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/single_event_length_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/topic_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/goal_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/participant_count_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_event_length_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_single_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/single_event_length_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/topic_step_provider.dart';
 import 'package:flutter_wizard/flutter_wizard.dart';
 import 'package:rxdart/rxdart.dart';
 

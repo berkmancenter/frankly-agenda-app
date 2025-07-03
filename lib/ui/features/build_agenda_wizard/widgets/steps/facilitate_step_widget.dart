@@ -1,6 +1,6 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_step_provider.dart';
 import 'package:flutter/material.dart';
 
 class FacilitatedStepWidget extends StatelessWidget {
@@ -31,7 +31,7 @@ class FacilitatedStepWidget extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        StreamBuilder<IsFacilitated>(
+        StreamBuilder<IsFacilitated?>(
             stream: provider.getFacilitatedRadioStream(),
             initialData: provider.getFacilitatedRadioValue(),
             builder: (context, snapshot) {
@@ -44,7 +44,7 @@ class FacilitatedStepWidget extends StatelessWidget {
                         groupValue: snapshot.data,
                         onChanged: (newValue) =>
                             provider.toggleFacilitateStatus(
-                                newValue ?? IsFacilitated.facilitated),
+                                newValue),
                       )),
                   ListTile(
                       title: const Text("No"),
@@ -53,7 +53,7 @@ class FacilitatedStepWidget extends StatelessWidget {
                         groupValue: snapshot.data,
                         onChanged: (newValue) =>
                             provider.toggleFacilitateStatus(
-                                newValue ?? IsFacilitated.notFacilitated),
+                                newValue),
                       )),
                 ],
               );

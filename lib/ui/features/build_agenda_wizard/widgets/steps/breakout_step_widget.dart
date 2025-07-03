@@ -1,11 +1,10 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/breakout_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
 import 'package:flutter/material.dart';
 
 class BreakoutStepWidget extends StatelessWidget {
-  const BreakoutStepWidget(
-      {super.key, required this.provider});
+  const BreakoutStepWidget({super.key, required this.provider});
   final BreakoutStepProvider provider;
 
   @override
@@ -26,7 +25,7 @@ class BreakoutStepWidget extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        StreamBuilder<HasBreakoutGroups>(
+        StreamBuilder<HasBreakoutGroups?>(
             stream: provider.getBreakoutRadioStream(),
             initialData: provider.getBreakoutRadioValue(),
             builder: (context, snapshot) {
@@ -37,16 +36,16 @@ class BreakoutStepWidget extends StatelessWidget {
                       leading: Radio<HasBreakoutGroups?>(
                         value: HasBreakoutGroups.breakoutGroups,
                         groupValue: snapshot.data,
-                        onChanged: (newValue) => provider.toggleBreakoutStatus(
-                            newValue ?? HasBreakoutGroups.breakoutGroups),
+                        onChanged: (newValue) =>
+                            provider.toggleBreakoutStatus(newValue),
                       )),
                   ListTile(
                       title: const Text("No"),
                       leading: Radio<HasBreakoutGroups?>(
                         value: HasBreakoutGroups.noBreakoutGroups,
                         groupValue: snapshot.data,
-                        onChanged: (newValue) => provider.toggleBreakoutStatus(
-                            newValue ?? HasBreakoutGroups.noBreakoutGroups),
+                        onChanged: (newValue) =>
+                            provider.toggleBreakoutStatus(newValue),
                       )),
                 ],
               );

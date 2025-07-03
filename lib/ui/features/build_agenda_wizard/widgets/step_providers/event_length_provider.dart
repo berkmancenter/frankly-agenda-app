@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EventLengthProvider extends StepProvider {

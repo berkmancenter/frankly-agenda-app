@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FormInput extends StatelessWidget {
   const FormInput(
@@ -9,7 +10,8 @@ class FormInput extends StatelessWidget {
       this.changeCallback,
       this.focusNode,
       this.hintText,
-      this.inputType});
+      this.inputType,
+      this.typeFormatters = const []});
 
   final String labelText;
   final TextEditingController fieldController;
@@ -18,6 +20,7 @@ class FormInput extends StatelessWidget {
   final Function? changeCallback;
   final FocusNode? focusNode;
   final TextInputType? inputType;
+  final List<TextInputFormatter> typeFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +58,7 @@ class FormInput extends StatelessWidget {
           },
           focusNode: focusNode,
           keyboardType: inputType,
+          inputFormatters: [...typeFormatters],
         ),
         const SizedBox(
           height: 10,

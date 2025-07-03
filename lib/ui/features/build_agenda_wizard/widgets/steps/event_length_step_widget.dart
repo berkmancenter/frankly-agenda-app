@@ -1,17 +1,20 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/event_length_provider.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_length_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:duration_picker/duration_picker.dart';
 
 class EventLengthWidget extends StatelessWidget {
-  EventLengthWidget({super.key, required this.provider});
-  EventLengthProvider provider;
+  const EventLengthWidget({super.key, required this.provider, required this.isSeries});
+  final EventLengthProvider provider;
+  final bool isSeries;
 
   @override
   Widget build(BuildContext context) {
     String promptText = "How long will the event be?";
+    if (isSeries) {
+      promptText = "How long will each event be?";
+    }
 
     return Padding(
       padding: const EdgeInsets.all(10.0),

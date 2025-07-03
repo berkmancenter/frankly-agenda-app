@@ -1,10 +1,10 @@
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum ParticipantCounts { standalone }
 
 class ParticipantCountStepProvider extends StepProvider {
-  ParticipantCountStepProvider() : super(isEnabled: true);
+  ParticipantCountStepProvider() : super(isEnabled: false);
 
   final List<bool> _participantCountStates = [
     false,
@@ -43,6 +43,12 @@ class ParticipantCountStepProvider extends StepProvider {
 
   void updateParticipantCount(int? newValue) {
     _currParticipantCount.add(newValue);
+
+    if (_currParticipantCount.value != null) {
+      nextStepEnabled = true;
+    } else {
+      nextStepEnabled = false;
+    }
   }
 
   @override

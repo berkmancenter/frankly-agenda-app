@@ -1,18 +1,22 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/progress_buttons.dart';
-import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/event_count_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:string_validator/string_validator.dart';
 
 class EventCountWidget extends StatelessWidget {
   const EventCountWidget({super.key, required this.provider});
 
   final EventCountProvider provider;
   void onCountChange(newValue) {
-    provider.updateCountValue(
-      // TODO: check if int
-      int.parse(provider.countController.text),
-    );
+    String val = provider.countController.text;
+    if (isNumeric(val) == true) {
+      provider.updateCountValue(
+        int.parse(provider.countController.text),
+      );
+    }
   }
 
   @override
@@ -32,11 +36,13 @@ class EventCountWidget extends StatelessWidget {
           height: 20,
         ),
         FormInput(
-            labelText: "Number of events",
-            fieldController: provider.countController,
-            changeCallback: onCountChange,
-            isRequired: true,
-            inputType: TextInputType.number),
+          labelText: "",
+          fieldController: provider.countController,
+          changeCallback: onCountChange,
+          isRequired: true,
+          inputType: TextInputType.number,
+          typeFormatters: [FilteringTextInputFormatter.digitsOnly],
+        ),
         ProgressButtons(provider: provider),
       ]),
     );

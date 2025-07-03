@@ -48,6 +48,7 @@ dependencies:
   dart_casing: ^3.0.1
   flutter_wizard: ^2.0.5
   rxdart: ^0.27.7
+  duration_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:

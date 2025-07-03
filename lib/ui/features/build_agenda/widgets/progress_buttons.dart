@@ -32,14 +32,14 @@ Widget _buildButtons(BuildContext context, StepProvider provider, bool prevEnabl
       if (context.wizardController.isFirstStep(index)) {
         prevEnabled = false;
       }
-      if (context.wizardController.isLastStep(index)) {
+      if (provider.calculateNextStep() == 1000) {
         isFinished = true;
       }
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const SizedBox(height: 10,),
-          prevEnabled ? PreviousButton(returnIndex: provider.previousStep,) : const SizedBox.shrink(),
+          prevEnabled ? PreviousButton(returnFunc: provider.goPreviousStep,) : const SizedBox.shrink(),
           const SizedBox(width: 10),
           isFinished ? const FinishButton() : NextButton(provider: provider),
         ],

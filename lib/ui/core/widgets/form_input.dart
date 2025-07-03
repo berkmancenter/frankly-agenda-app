@@ -8,7 +8,8 @@ class FormInput extends StatelessWidget {
       required this.isRequired,
       this.changeCallback,
       this.focusNode,
-      this.hintText});
+      this.hintText,
+      this.inputType});
 
   final String labelText;
   final TextEditingController fieldController;
@@ -16,6 +17,7 @@ class FormInput extends StatelessWidget {
   final bool isRequired;
   final Function? changeCallback;
   final FocusNode? focusNode;
+  final TextInputType? inputType;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class FormInput extends StatelessWidget {
             }
           },
           focusNode: focusNode,
+          keyboardType: inputType,
         ),
         const SizedBox(
           height: 10,

@@ -1,9 +1,13 @@
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/event_count_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/event_length_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_breakout_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/breakout_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/goal_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/participant_count_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_event_length_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/series_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/facilitate_single_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/single_event_length_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/topic_step_provider.dart';
 import 'package:flutter_wizard/flutter_wizard.dart';
 import 'package:rxdart/rxdart.dart';
@@ -15,7 +19,10 @@ enum Steps {
   breakoutStep,
   facilitatedStep,
   facilitatedBreakoutStep,
-  seriesStep
+  seriesStep,
+  eventCountStep,
+  eventLengthStep,
+  seriesEventLengthStep,
 }
 
 Map<Steps, StepProvider> stepProviderMap = {
@@ -25,7 +32,10 @@ Map<Steps, StepProvider> stepProviderMap = {
   Steps.breakoutStep: BreakoutStepProvider(),
   Steps.facilitatedStep: FacilitateSingleProvider(),
   Steps.facilitatedBreakoutStep: FacilitateBreakoutProvider(),
-  Steps.seriesStep: SeriesStepProvider()
+  Steps.seriesStep: SeriesStepProvider(),
+  Steps.eventCountStep: EventCountProvider(),
+  Steps.eventLengthStep: SingleEventLengthProvider(),
+  Steps.seriesEventLengthStep: SeriesEventLengthProvider()
 };
 
 abstract class StepProvider with WizardStep {
@@ -59,6 +69,10 @@ abstract class StepProvider with WizardStep {
 
   void goNextStep() {
     wizardController.goTo(index: calculateNextStep());
+  }
+
+  void goPreviousStep() {
+    wizardController.goTo(index: _previousStep ?? 0);
   }
 
   int calculateNextStep();

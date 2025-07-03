@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/ui/core/themes/styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda/widgets/step_providers/step_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,13 @@ class NextButton extends StatelessWidget {
             child: const Text("Next"),
           );
         }
-        return const Text("I'm disabled");
+        return ElevatedButton(
+          onPressed: null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: context.theme.colorScheme.primaryFixedDim,
+          ),
+          child: const Text("Next"),
+        );
       },
     );
   }

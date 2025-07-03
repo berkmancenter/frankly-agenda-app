@@ -24,8 +24,10 @@ class SeriesStepProvider extends StepProvider {
 
     @override
   int calculateNextStep() {
-    int currStepIndex = wizardController.getStepIndex(this);
-    return currStepIndex + 1;
+    if (_seriesStatus.value == IsSeries.standalone) {
+      return Steps.eventLengthStep.index;
+    }
+    return Steps.eventCountStep.index;
   }
 
   @override

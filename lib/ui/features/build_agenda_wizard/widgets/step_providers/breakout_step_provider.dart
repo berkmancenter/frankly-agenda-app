@@ -1,9 +1,11 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BreakoutStepProvider extends StepProvider {
-  BreakoutStepProvider() : super(isEnabled: false);
+  BreakoutStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<HasBreakoutGroups?> _breakoutStatus =
       BehaviorSubject<HasBreakoutGroups?>.seeded(null);
@@ -37,5 +39,14 @@ class BreakoutStepProvider extends StepProvider {
   @override
   void dispose() {
     _breakoutStatus.close();
+  }
+
+  @override
+  void addData() {
+    if (_breakoutStatus.value != null) {
+      viewModel.addHasBreakoutGroups(_breakoutStatus.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

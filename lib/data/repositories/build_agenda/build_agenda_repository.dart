@@ -13,8 +13,8 @@ class BuildAgendaRepository {
     return Result.ok("Hello I am an agenda!");
   }
 
-  void addGoal(Goals goal) {
-    builder.goal = goal;
+  void addGoal(List<Goals> goals) {
+    builder.goals = goals;
   }
 
   void addTopic(String topic, String topicDescription) {
@@ -42,7 +42,7 @@ class BuildAgendaRepository {
     builder.eventCount = eventCount;
   }
 
-  void addEventLength(int eventLength) {
+  void addEventLength(Duration eventLength) {
     builder.eventLength = eventLength;
   }
 }

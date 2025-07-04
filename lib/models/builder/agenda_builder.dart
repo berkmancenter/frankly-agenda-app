@@ -4,7 +4,7 @@ import 'package:agenda_wizard/utils/step_enums.dart';
 class AgendaBuilder {
   AgendaBuilder();
 
-  Goals? goal;
+  List<Goals>? goals;
   String? topic;
   String? topicDescription;
   ParticipantBatches? participantCount;
@@ -12,5 +12,5 @@ class AgendaBuilder {
   IsFacilitated? isFacilitated;
   IsSeries? isSeries;
   int? eventCount;
-  int? eventLength; // in minutes
+  Duration? eventLength; // in minutes
 }

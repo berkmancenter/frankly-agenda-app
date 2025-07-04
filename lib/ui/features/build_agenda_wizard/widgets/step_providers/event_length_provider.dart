@@ -1,12 +1,13 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EventLengthProvider extends StepProvider {
-  EventLengthProvider() : super(isEnabled: true);
+  EventLengthProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<Duration> _duration =
       BehaviorSubject<Duration>.seeded(const Duration(minutes: 45));
-
 
   Stream<Duration> getDurationRadioStream() => _duration.stream;
   Duration getDurationRadioValue() => _duration.value;
@@ -23,5 +24,10 @@ class EventLengthProvider extends StepProvider {
   @override
   void dispose() {
     _duration.close();
+  }
+
+  @override
+  void addData() {
+    viewModel.addEventLength(_duration.value);
   }
 }

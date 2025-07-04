@@ -1,9 +1,12 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GoalStepProvider extends StepProvider {
-  GoalStepProvider() : super(isEnabled: false);
+  GoalStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
+
   /// Checkbox controls
   final Map<Goals, BehaviorSubject<bool>> _checkboxStates = {
     Goals.dialogue: BehaviorSubject<bool>.seeded(false),
@@ -16,8 +19,7 @@ class GoalStepProvider extends StepProvider {
     return _checkboxStates;
   }
 
-  Stream<bool> getGoalCheckboxStream(Goals key) =>
-      _checkboxStates[key]!.stream;
+  Stream<bool> getGoalCheckboxStream(Goals key) => _checkboxStates[key]!.stream;
   bool getGoalCheckboxValue(Goals key) => _checkboxStates[key]!.value;
 
   void toggleCheckbox(Goals key, bool newValue) {
@@ -44,5 +46,12 @@ class GoalStepProvider extends StepProvider {
     for (var subject in _checkboxStates.values) {
       subject.close();
     }
+  }
+
+  @override
+  void addData() {
+    Map<Goals, BehaviorSubject<bool>> filteredGoals = Map.fromEntries(
+        _checkboxStates.entries.where((entry) => entry.value.value == true));
+    viewModel.addGoal(filteredGoals.keys.toList());
   }
 }

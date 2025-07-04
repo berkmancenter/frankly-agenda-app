@@ -1,10 +1,12 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TopicStepProvider extends StepProvider {
 
-  TopicStepProvider() : super(isEnabled: false);
+  TopicStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final _topic = BehaviorSubject<String>.seeded("");
   final _topicDescription = BehaviorSubject<String>.seeded("");
@@ -59,5 +61,10 @@ class TopicStepProvider extends StepProvider {
   void dispose() {
     topicDescriptionController.dispose();
     topicController.dispose();
+  }
+  
+  @override
+  void addData() {
+    viewModel.addTopic(_topic.value, _topicDescription.value);
   }
 }

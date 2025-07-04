@@ -9,7 +9,7 @@ class BuildAgendaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AgendaWizard.provider();
+    return AgendaWizard.provider(pViewModel: viewModel);
   }
 }
 

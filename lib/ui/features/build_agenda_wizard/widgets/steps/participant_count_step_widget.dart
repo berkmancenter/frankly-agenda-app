@@ -1,6 +1,7 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/participant_count_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantCountWidget extends StatelessWidget {
@@ -25,7 +26,7 @@ class ParticipantCountWidget extends StatelessWidget {
         ),
         Column(
           children: provider.participantCountMap.keys.map((key) {
-            return StreamBuilder<int?>(
+            return StreamBuilder<ParticipantBatches?>(
                 stream: provider.getParticipantRadioStream(),
                 initialData: provider.currParticipantCount.value,
                 builder: (context, snapshot) {
@@ -33,7 +34,7 @@ class ParticipantCountWidget extends StatelessWidget {
                       title: Text("${provider.getParticipantString(key)}"),
                       leading: Radio<int?>(
                         value: key.index,
-                        groupValue: snapshot.data,
+                        groupValue: snapshot.data?.index,
                         onChanged: (newValue) =>
                             provider.updateParticipantCount(newValue),
                       ));

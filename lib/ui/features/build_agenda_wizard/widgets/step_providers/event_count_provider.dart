@@ -1,10 +1,12 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EventCountProvider extends StepProvider{
 
-  EventCountProvider() : super(isEnabled: true);
+  EventCountProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<int?> _eventCount =
       BehaviorSubject<int?>.seeded(null);
@@ -26,5 +28,14 @@ class EventCountProvider extends StepProvider{
   @override
   void dispose() {
     _eventCount.close();
+  }
+  
+  @override
+  void addData() {
+    if (_eventCount.value != null) {
+      viewModel.addEventCount(_eventCount.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

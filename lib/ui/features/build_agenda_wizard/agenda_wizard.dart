@@ -1,4 +1,5 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
@@ -24,14 +25,17 @@ import 'package:flutter_wizard/flutter_wizard.dart';
 import 'package:provider/provider.dart';
 
 class AgendaWizard extends StatelessWidget {
-  const AgendaWizard._({Key? key}) : super(key: key);
+  const AgendaWizard._({super.key, required this.viewModel});
+  final BuildAgendaViewmodel viewModel;
 
-  static Provider provider({Key? key}) {
+  static Provider provider(
+      {Key? key, required BuildAgendaViewmodel pViewModel}) {
     return Provider<AgendaWizardProvider>(
-      create: (_) => AgendaWizardProvider(),
+      create: (_) => AgendaWizardProvider(pViewModel),
       dispose: (_, provider) => provider.dispose(),
       child: AgendaWizard._(
         key: key,
+        viewModel: pViewModel,
       ),
     );
   }
@@ -78,7 +82,7 @@ class AgendaWizard extends StatelessWidget {
                   if (event is WizardGoEvent) {
                     int toIndex = event.toIndex;
                     StepProvider? upcomingProvider =
-                        stepProviderMap[Steps.values[toIndex]];
+                        provider.stepProviderMap[Steps.values[toIndex]];
                     if (upcomingProvider == null) {
                       throw Exception("Idk weird stuff provider is null");
                     }
@@ -188,28 +192,46 @@ Widget _buildWizard(
 }
 
 class AgendaWizardProvider {
-  AgendaWizardProvider()
-      : stepOneProvider = stepProviderMap[Steps.goalStep]!,
-        stepTwoProvider = stepProviderMap[Steps.topicStep]!,
-        stepThreeProvider = stepProviderMap[Steps.participantStep]!,
-        stepFourProvider = stepProviderMap[Steps.breakoutStep]!,
-        stepFiveProvider = stepProviderMap[Steps.facilitatedStep]!,
-        stepSixProvider = stepProviderMap[Steps.facilitatedBreakoutStep]!,
-        stepSevenProvider = stepProviderMap[Steps.seriesStep]!,
-        stepEightProvider = stepProviderMap[Steps.eventCountStep]!,
-        stepNineProvider = stepProviderMap[Steps.eventLengthStep]!,
-        stepTenProvider = stepProviderMap[Steps.seriesEventLengthStep]!;
+  Map<Steps, StepProvider> stepProviderMap = {};
 
-  final StepProvider stepOneProvider;
-  final StepProvider stepTwoProvider;
-  final StepProvider stepThreeProvider;
-  final StepProvider stepFourProvider;
-  final StepProvider stepFiveProvider;
-  final StepProvider stepSixProvider;
-  final StepProvider stepSevenProvider;
-  final StepProvider stepEightProvider;
-  final StepProvider stepNineProvider;
-  final StepProvider stepTenProvider;
+  AgendaWizardProvider(this.viewModel) {
+    stepProviderMap = {
+      Steps.goalStep: GoalStepProvider(viewModel),
+      Steps.topicStep: TopicStepProvider(viewModel),
+      Steps.participantStep: ParticipantCountStepProvider(viewModel),
+      Steps.breakoutStep: BreakoutStepProvider(viewModel),
+      Steps.facilitatedStep: FacilitateSingleProvider(viewModel),
+      Steps.facilitatedBreakoutStep: FacilitateBreakoutProvider(viewModel),
+      Steps.seriesStep: SeriesStepProvider(viewModel),
+      Steps.eventCountStep: EventCountProvider(viewModel),
+      Steps.eventLengthStep: SingleEventLengthProvider(viewModel),
+      Steps.seriesEventLengthStep: SeriesEventLengthProvider(viewModel),
+    };
+
+    stepOneProvider = stepProviderMap[Steps.goalStep]!;
+    stepTwoProvider = stepProviderMap[Steps.topicStep]!;
+    stepThreeProvider = stepProviderMap[Steps.participantStep]!;
+    stepFourProvider = stepProviderMap[Steps.breakoutStep]!;
+    stepFiveProvider = stepProviderMap[Steps.facilitatedStep]!;
+    stepSixProvider = stepProviderMap[Steps.facilitatedBreakoutStep]!;
+    stepSevenProvider = stepProviderMap[Steps.seriesStep]!;
+    stepEightProvider = stepProviderMap[Steps.eventCountStep]!;
+    stepNineProvider = stepProviderMap[Steps.eventLengthStep]!;
+    stepTenProvider = stepProviderMap[Steps.seriesEventLengthStep]!;
+  }
+
+  late StepProvider stepOneProvider;
+  late StepProvider stepTwoProvider;
+  late StepProvider stepThreeProvider;
+  late StepProvider stepFourProvider;
+  late StepProvider stepFiveProvider;
+  late StepProvider stepSixProvider;
+  late StepProvider stepSevenProvider;
+  late StepProvider stepEightProvider;
+  late StepProvider stepNineProvider;
+  late StepProvider stepTenProvider;
+
+  final BuildAgendaViewmodel viewModel;
 
   Future<void> reportIssue() async {
     debugPrint('Finished!');

@@ -1,9 +1,11 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ParticipantCountStepProvider extends StepProvider {
-  ParticipantCountStepProvider() : super(isEnabled: false);
+  ParticipantCountStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final List<bool> _participantCountStates = [
     false,
@@ -21,18 +23,19 @@ class ParticipantCountStepProvider extends StepProvider {
     ParticipantBatches.fiftyPlus: '50+',
   };
 
-  final BehaviorSubject<int?> _currParticipantCount =
-      BehaviorSubject<int?>.seeded(null);
+  final BehaviorSubject<ParticipantBatches?> _currParticipantCount =
+      BehaviorSubject<ParticipantBatches?>.seeded(null);
 
   Map<ParticipantBatches, String> get participantCountMap {
     return _participantCountMap;
   }
 
-  BehaviorSubject<int?> get currParticipantCount {
+  BehaviorSubject<ParticipantBatches?> get currParticipantCount {
     return _currParticipantCount;
   }
 
-  Stream<int?> getParticipantRadioStream() => _currParticipantCount.stream;
+  Stream<ParticipantBatches?> getParticipantRadioStream() =>
+      _currParticipantCount.stream;
   bool getParticipantRadioValue(int radioNum) =>
       _participantCountStates[radioNum];
 
@@ -41,8 +44,12 @@ class ParticipantCountStepProvider extends StepProvider {
   }
 
   void updateParticipantCount(int? newValue) {
-    _currParticipantCount.add(newValue);
-
+    // if (ParticipantBatches.values != null)
+    if (newValue != null) {
+      _currParticipantCount.add(ParticipantBatches.values[newValue]);
+    } else {
+      _currParticipantCount.add(null);
+    }
     if (_currParticipantCount.value != null) {
       nextStepEnabled = true;
     } else {
@@ -65,5 +72,14 @@ class ParticipantCountStepProvider extends StepProvider {
   @override
   void dispose() {
     _currParticipantCount.close();
+  }
+
+  @override
+  void addData() {
+    if (_currParticipantCount.value != null) {
+      viewModel.addParticipantCount(_currParticipantCount.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

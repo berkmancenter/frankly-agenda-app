@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
@@ -24,23 +25,12 @@ enum Steps {
   seriesEventLengthStep,
 }
 
-Map<Steps, StepProvider> stepProviderMap = {
-  Steps.goalStep: GoalStepProvider(),
-  Steps.topicStep: TopicStepProvider(),
-  Steps.participantStep: ParticipantCountStepProvider(),
-  Steps.breakoutStep: BreakoutStepProvider(),
-  Steps.facilitatedStep: FacilitateSingleProvider(),
-  Steps.facilitatedBreakoutStep: FacilitateBreakoutProvider(),
-  Steps.seriesStep: SeriesStepProvider(),
-  Steps.eventCountStep: EventCountProvider(),
-  Steps.eventLengthStep: SingleEventLengthProvider(),
-  Steps.seriesEventLengthStep: SeriesEventLengthProvider()
-};
-
 abstract class StepProvider with WizardStep {
-  StepProvider({required bool isEnabled}) {
+  StepProvider({required bool isEnabled, required this.viewModel}) {
     nextStepEnabled = isEnabled;
   }
+
+  BuildAgendaViewmodel viewModel;
 
   int? _previousStep;
 
@@ -67,6 +57,7 @@ abstract class StepProvider with WizardStep {
   bool isNextStepEnabled() => _nextStepEnabled.value;
 
   void goNextStep() {
+    addData();
     wizardController.goTo(index: calculateNextStep());
   }
 
@@ -74,6 +65,7 @@ abstract class StepProvider with WizardStep {
     wizardController.goTo(index: _previousStep ?? 0);
   }
 
+  void addData();
   int calculateNextStep();
 
   void dispose();

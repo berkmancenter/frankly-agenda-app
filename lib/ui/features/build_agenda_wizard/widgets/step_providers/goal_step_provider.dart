@@ -1,25 +1,26 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GoalStepProvider extends StepProvider {
   GoalStepProvider() : super(isEnabled: false);
   /// Checkbox controls
-  final Map<String, BehaviorSubject<bool>> _checkboxStates = {
-    'dialogue': BehaviorSubject<bool>.seeded(false),
-    'exploration': BehaviorSubject<bool>.seeded(false),
-    'evaluation': BehaviorSubject<bool>.seeded(false),
-    'deliberation': BehaviorSubject<bool>.seeded(false),
+  final Map<Goals, BehaviorSubject<bool>> _checkboxStates = {
+    Goals.dialogue: BehaviorSubject<bool>.seeded(false),
+    Goals.exploration: BehaviorSubject<bool>.seeded(false),
+    Goals.evaluation: BehaviorSubject<bool>.seeded(false),
+    Goals.deliberation: BehaviorSubject<bool>.seeded(false),
   };
 
-  Map<String, BehaviorSubject<bool>> get checkboxStates {
+  Map<Goals, BehaviorSubject<bool>> get checkboxStates {
     return _checkboxStates;
   }
 
-  Stream<bool> getGoalCheckboxStream(String key) =>
+  Stream<bool> getGoalCheckboxStream(Goals key) =>
       _checkboxStates[key]!.stream;
-  bool getGoalCheckboxValue(String key) => _checkboxStates[key]!.value;
+  bool getGoalCheckboxValue(Goals key) => _checkboxStates[key]!.value;
 
-  void toggleCheckbox(String key, bool newValue) {
+  void toggleCheckbox(Goals key, bool newValue) {
     _checkboxStates[key]!.add(newValue);
 
     for (var box in _checkboxStates.values) {

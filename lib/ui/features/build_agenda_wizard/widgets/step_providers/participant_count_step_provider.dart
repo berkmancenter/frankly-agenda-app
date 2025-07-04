@@ -1,7 +1,6 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
-
-enum ParticipantCounts { standalone }
 
 class ParticipantCountStepProvider extends StepProvider {
   ParticipantCountStepProvider() : super(isEnabled: false);
@@ -14,18 +13,18 @@ class ParticipantCountStepProvider extends StepProvider {
     false,
   ];
 
-  final Map<int, String> _participantCountMap = {
-    1: '0-5',
-    2: '5-10',
-    3: '10-25',
-    4: '25-50',
-    5: '50+',
+  final Map<ParticipantBatches, String> _participantCountMap = {
+    ParticipantBatches.zeroToFive: '0-5',
+    ParticipantBatches.fiveToTen: '5-10',
+    ParticipantBatches.tenToTwentyFive: '10-25',
+    ParticipantBatches.twentyFivetoFifty: '25-50',
+    ParticipantBatches.fiftyPlus: '50+',
   };
 
   final BehaviorSubject<int?> _currParticipantCount =
       BehaviorSubject<int?>.seeded(null);
 
-  Map<int, String> get participantCountMap {
+  Map<ParticipantBatches, String> get participantCountMap {
     return _participantCountMap;
   }
 
@@ -37,7 +36,7 @@ class ParticipantCountStepProvider extends StepProvider {
   bool getParticipantRadioValue(int radioNum) =>
       _participantCountStates[radioNum];
 
-  String? getParticipantString(int key) {
+  String? getParticipantString(ParticipantBatches key) {
     return _participantCountMap[key];
   }
 

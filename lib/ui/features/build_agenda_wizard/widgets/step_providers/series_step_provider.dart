@@ -1,7 +1,7 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum IsSeries { series, standalone }
 
 class SeriesStepProvider extends StepProvider {
   SeriesStepProvider() : super(isEnabled: false);

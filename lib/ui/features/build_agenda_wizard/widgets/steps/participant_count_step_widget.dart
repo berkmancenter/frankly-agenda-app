@@ -32,7 +32,7 @@ class ParticipantCountWidget extends StatelessWidget {
                   return ListTile(
                       title: Text("${provider.getParticipantString(key)}"),
                       leading: Radio<int?>(
-                        value: key,
+                        value: key.index,
                         groupValue: snapshot.data,
                         onChanged: (newValue) =>
                             provider.updateParticipantCount(newValue),

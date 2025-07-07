@@ -9,10 +9,6 @@ class BuildAgendaViewmodel {
   BuildAgendaViewmodel({required BuildAgendaRepository buildAgendaRepository})
       : _buildAgendaRepository = buildAgendaRepository;
 
-  Future<Result> _buildAgenda() async {
-    return Result.ok(null);
-  }
-
   void addGoal(List<Goals> goals) {
     _buildAgendaRepository.addGoal(goals);
   }
@@ -44,5 +40,12 @@ class BuildAgendaViewmodel {
   void addEventLength(Duration eventLength) {
     _buildAgendaRepository.addEventLength(eventLength);
   }
+
+  Future<Result> generateAgenda() async {
+    final agendaResult = await _buildAgendaRepository.buildAgenda();
+    return agendaResult;
+  }
+
+
   
 }

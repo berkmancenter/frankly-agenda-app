@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 
 class EventLengthProvider extends StepProvider {
   EventLengthProvider(BuildAgendaViewmodel viewModel)
-      : super(isEnabled: false, viewModel: viewModel);
+      : super(isEnabled: true, viewModel: viewModel);
 
   final BehaviorSubject<Duration> _duration =
       BehaviorSubject<Duration>.seeded(const Duration(minutes: 45));
@@ -14,11 +14,13 @@ class EventLengthProvider extends StepProvider {
 
   void updateDurationValue(Duration newValue) {
     _duration.add(newValue);
+    nextStepEnabled = true;
   }
+    
 
   @override
   int calculateNextStep() {
-    return 1000; // 1000 wizard should finish
+    return Steps.generateWizardStep.index; // 1000 wizard should finish
   }
 
   @override

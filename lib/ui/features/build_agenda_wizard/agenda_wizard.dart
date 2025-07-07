@@ -3,6 +3,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_a
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/generate_agenda_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/goal_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_overview.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/participant_count_step_provider.dart';
@@ -14,6 +15,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/breakout_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_count_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_length_step_widget.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/generate_agenda_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/goal_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/topic_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/facilitate_step_widget.dart';
@@ -62,6 +64,7 @@ class AgendaWizard extends StatelessWidget {
           WizardStepController(step: provider.stepEightProvider),
           WizardStepController(step: provider.stepNineProvider),
           WizardStepController(step: provider.stepTenProvider),
+          WizardStepController(step: provider.stepElevenProvider)
         ],
         child: Builder(
           builder: (context) {
@@ -167,6 +170,11 @@ Widget _buildWizard(
           isSeries: true,
         );
       }
+      if (state is GenerateAgendaProvider) {
+        return GenerateAgendaStepWizard(
+          provider: state,
+        );
+      }
       return Container();
     },
   );
@@ -218,6 +226,7 @@ class AgendaWizardProvider {
     stepEightProvider = stepProviderMap[Steps.eventCountStep]!;
     stepNineProvider = stepProviderMap[Steps.eventLengthStep]!;
     stepTenProvider = stepProviderMap[Steps.seriesEventLengthStep]!;
+    stepElevenProvider = GenerateAgendaProvider(viewModel: viewModel);
   }
 
   late StepProvider stepOneProvider;
@@ -230,6 +239,7 @@ class AgendaWizardProvider {
   late StepProvider stepEightProvider;
   late StepProvider stepNineProvider;
   late StepProvider stepTenProvider;
+  late GenerateAgendaProvider stepElevenProvider;
 
   final BuildAgendaViewmodel viewModel;
 
@@ -248,5 +258,6 @@ class AgendaWizardProvider {
     stepEightProvider.dispose();
     stepNineProvider.dispose();
     stepTenProvider.dispose();
+    stepElevenProvider.dispose();
   }
 }

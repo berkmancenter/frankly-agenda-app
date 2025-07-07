@@ -10,7 +10,9 @@ class BuildAgendaRepository {
 
   Future<Result<String>> buildAgenda() async {
     print(builder.toString());
-    return Result.ok("Hello I am an agenda!");
+    //return Result.ok("Hello I am an agenda!");
+    return Result.error(Exception("A really bad error happened!"),
+        "A terrible error ocurred!!!!");
   }
 
   void addGoal(List<Goals> goals) {

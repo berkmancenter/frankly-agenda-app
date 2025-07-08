@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wizard/flutter_wizard.dart';
 
 class PreviousButton extends StatelessWidget {
   const PreviousButton({super.key, required this.returnFunc});

@@ -101,12 +101,6 @@ class AgendaWizard extends StatelessWidget {
                               as GenerateAgendaProvider;
                           await generateProvider.buildAgenda();
                     }
-                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //   content: Text(
-                    //     'Storing ${event.toIndex} in the prev button.',
-                    //   ),
-                    //   dismissDirection: DismissDirection.horizontal,
-                    // ));
                   }
                 },
                 child: LayoutBuilder(builder: (context, constraints) {

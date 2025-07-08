@@ -18,6 +18,10 @@ class EventCountProvider extends FormStepProvider{
 
   void updateCountValue(int newValue) {
     _eventCount.add(newValue);
+
+    if (_eventCount.value != null) {
+      nextStepEnabled = true;
+    }
   }
 
   @override

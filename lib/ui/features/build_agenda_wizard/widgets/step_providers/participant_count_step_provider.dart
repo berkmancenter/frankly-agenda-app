@@ -61,7 +61,7 @@ class ParticipantCountStepProvider extends FormStepProvider {
   int calculateNextStep() {
     // breakout group step
     int nextStep = Steps.breakoutStep.index;
-    if (_currParticipantCount.value == 1) {
+    if (_currParticipantCount.value == ParticipantBatches.zeroToFive) {
       // if it is a tiny amount, no participants
       // go to event facilitator step
       nextStep = Steps.facilitatedStep.index;

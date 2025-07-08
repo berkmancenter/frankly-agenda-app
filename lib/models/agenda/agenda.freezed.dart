@@ -20,6 +20,7 @@ AgendaModel _$AgendaModelFromJson(Map<String, dynamic> json) {
 mixin _$AgendaModel {
   String get name;
   String get description;
+  List<AgendaItemModel> get agendaItems;
 
   /// Create a copy of AgendaModel
   /// with the given fields replaced by the non-null parameter values.
@@ -38,16 +39,19 @@ mixin _$AgendaModel {
             other is AgendaModel &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
-                other.description == description));
+                other.description == description) &&
+            const DeepCollectionEquality()
+                .equals(other.agendaItems, agendaItems));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, name, description);
+  int get hashCode => Object.hash(runtimeType, name, description,
+      const DeepCollectionEquality().hash(agendaItems));
 
   @override
   String toString() {
-    return 'AgendaModel(name: $name, description: $description)';
+    return 'AgendaModel(name: $name, description: $description, agendaItems: $agendaItems)';
   }
 }
 
@@ -57,7 +61,8 @@ abstract mixin class $AgendaModelCopyWith<$Res> {
           AgendaModel value, $Res Function(AgendaModel) _then) =
       _$AgendaModelCopyWithImpl;
   @useResult
-  $Res call({String name, String description});
+  $Res call(
+      {String name, String description, List<AgendaItemModel> agendaItems});
 }
 
 /// @nodoc
@@ -74,6 +79,7 @@ class _$AgendaModelCopyWithImpl<$Res> implements $AgendaModelCopyWith<$Res> {
   $Res call({
     Object? name = null,
     Object? description = null,
+    Object? agendaItems = null,
   }) {
     return _then(_self.copyWith(
       name: null == name
@@ -84,6 +90,10 @@ class _$AgendaModelCopyWithImpl<$Res> implements $AgendaModelCopyWith<$Res> {
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      agendaItems: null == agendaItems
+          ? _self.agendaItems
+          : agendaItems // ignore: cast_nullable_to_non_nullable
+              as List<AgendaItemModel>,
     ));
   }
 }
@@ -91,13 +101,24 @@ class _$AgendaModelCopyWithImpl<$Res> implements $AgendaModelCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _Agenda implements AgendaModel {
-  const _Agenda({required this.name, required this.description});
+  const _Agenda(
+      {required this.name,
+      required this.description,
+      required final List<AgendaItemModel> agendaItems})
+      : _agendaItems = agendaItems;
   factory _Agenda.fromJson(Map<String, dynamic> json) => _$AgendaFromJson(json);
 
   @override
   final String name;
   @override
   final String description;
+  final List<AgendaItemModel> _agendaItems;
+  @override
+  List<AgendaItemModel> get agendaItems {
+    if (_agendaItems is EqualUnmodifiableListView) return _agendaItems;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_agendaItems);
+  }
 
   /// Create a copy of AgendaModel
   /// with the given fields replaced by the non-null parameter values.
@@ -121,16 +142,19 @@ class _Agenda implements AgendaModel {
             other is _Agenda &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
-                other.description == description));
+                other.description == description) &&
+            const DeepCollectionEquality()
+                .equals(other._agendaItems, _agendaItems));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, name, description);
+  int get hashCode => Object.hash(runtimeType, name, description,
+      const DeepCollectionEquality().hash(_agendaItems));
 
   @override
   String toString() {
-    return 'AgendaModel(name: $name, description: $description)';
+    return 'AgendaModel(name: $name, description: $description, agendaItems: $agendaItems)';
   }
 }
 
@@ -141,7 +165,8 @@ abstract mixin class _$AgendaCopyWith<$Res>
       __$AgendaCopyWithImpl;
   @override
   @useResult
-  $Res call({String name, String description});
+  $Res call(
+      {String name, String description, List<AgendaItemModel> agendaItems});
 }
 
 /// @nodoc
@@ -158,6 +183,7 @@ class __$AgendaCopyWithImpl<$Res> implements _$AgendaCopyWith<$Res> {
   $Res call({
     Object? name = null,
     Object? description = null,
+    Object? agendaItems = null,
   }) {
     return _then(_Agenda(
       name: null == name
@@ -168,6 +194,10 @@ class __$AgendaCopyWithImpl<$Res> implements _$AgendaCopyWith<$Res> {
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      agendaItems: null == agendaItems
+          ? _self._agendaItems
+          : agendaItems // ignore: cast_nullable_to_non_nullable
+              as List<AgendaItemModel>,
     ));
   }
 }

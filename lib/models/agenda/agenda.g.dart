@@ -9,9 +9,13 @@ part of 'agenda.dart';
 _Agenda _$AgendaFromJson(Map<String, dynamic> json) => _Agenda(
       name: json['name'] as String,
       description: json['description'] as String,
+      agendaItems: (json['agendaItems'] as List<dynamic>)
+          .map((e) => AgendaItemModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$AgendaToJson(_Agenda instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
+      'agendaItems': instance.agendaItems,
     };

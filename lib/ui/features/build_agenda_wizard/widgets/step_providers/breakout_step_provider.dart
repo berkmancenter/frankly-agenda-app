@@ -1,9 +1,9 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-class BreakoutStepProvider extends StepProvider {
+class BreakoutStepProvider extends FormStepProvider {
   BreakoutStepProvider(BuildAgendaViewmodel viewModel)
       : super(isEnabled: false, viewModel: viewModel);
 

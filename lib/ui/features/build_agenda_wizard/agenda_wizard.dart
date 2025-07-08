@@ -11,6 +11,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_single_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/single_event_length_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/breakout_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_count_widget.dart';
@@ -80,17 +81,25 @@ class AgendaWizard extends StatelessWidget {
                 ),
               ),
               body: WizardEventListener(
-                listener: (context, event) {
+                listener: (context, event) async {
                   debugPrint('### ${event.runtimeType} received');
                   if (event is WizardGoEvent) {
                     int toIndex = event.toIndex;
                     StepProvider? upcomingProvider =
                         provider.stepProviderMap[Steps.values[toIndex]];
+
                     if (upcomingProvider == null) {
                       throw Exception("Idk weird stuff provider is null");
                     }
                     if (event.toIndex > event.fromIndex) {
                       upcomingProvider.previousStep = event.fromIndex;
+                    }
+                    if (provider.stepProviderMap.keys.elementAt(toIndex) ==
+                        Steps.generateWizardStep) {
+                      GenerateAgendaProvider generateProvider =
+                          provider.stepProviderMap.values.elementAt(toIndex)
+                              as GenerateAgendaProvider;
+                          await generateProvider.buildAgenda();
                     }
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     //   content: Text(
@@ -214,6 +223,7 @@ class AgendaWizardProvider {
       Steps.eventCountStep: EventCountProvider(viewModel),
       Steps.eventLengthStep: SingleEventLengthProvider(viewModel),
       Steps.seriesEventLengthStep: SeriesEventLengthProvider(viewModel),
+      Steps.generateWizardStep: GenerateAgendaProvider(viewModel: viewModel)
     };
 
     stepOneProvider = stepProviderMap[Steps.goalStep]!;
@@ -226,7 +236,7 @@ class AgendaWizardProvider {
     stepEightProvider = stepProviderMap[Steps.eventCountStep]!;
     stepNineProvider = stepProviderMap[Steps.eventLengthStep]!;
     stepTenProvider = stepProviderMap[Steps.seriesEventLengthStep]!;
-    stepElevenProvider = GenerateAgendaProvider(viewModel: viewModel);
+    stepElevenProvider = stepProviderMap[Steps.generateWizardStep]!;
   }
 
   late StepProvider stepOneProvider;
@@ -239,7 +249,7 @@ class AgendaWizardProvider {
   late StepProvider stepEightProvider;
   late StepProvider stepNineProvider;
   late StepProvider stepTenProvider;
-  late GenerateAgendaProvider stepElevenProvider;
+  late StepProvider stepElevenProvider;
 
   final BuildAgendaViewmodel viewModel;
 

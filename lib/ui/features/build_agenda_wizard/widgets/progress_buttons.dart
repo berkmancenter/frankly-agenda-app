@@ -1,16 +1,14 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/finish_button.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/next_button.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/previous_button.dart';
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wizard/flutter_wizard.dart';
-import 'package:agenda_wizard/routing/router.dart';
-import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/utils/result.dart';
+
 
 class ProgressButtons extends StatefulWidget {
   const ProgressButtons({super.key, required this.provider, this.prevEnabled});
-  final StepProvider provider;
+  final FormStepProvider provider;
   final bool? prevEnabled;
 
   @override
@@ -43,7 +41,7 @@ class _ProgressButtonsState extends State<ProgressButtons> {
   }
 }
 
-Widget _buildButtons(BuildContext context, StepProvider provider,
+Widget _buildButtons(BuildContext context, FormStepProvider provider,
     bool prevEnabled) {
   return StreamBuilder<int>(
     stream: context.wizardController.indexStream,

@@ -36,11 +36,12 @@ class EventCountWidget extends StatelessWidget {
           height: 20,
         ),
         FormInput(
-          labelText: "",
+          labelText: "Event Count",
           fieldController: provider.countController,
           changeCallback: onCountChange,
           isRequired: true,
           inputType: TextInputType.number,
+          width: 150,
           typeFormatters: [FilteringTextInputFormatter.digitsOnly],
         ),
         ProgressButtons(provider: provider),

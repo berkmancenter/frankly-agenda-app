@@ -94,18 +94,15 @@ class AgendaWizard extends StatelessWidget {
                     if (event.toIndex > event.fromIndex) {
                       upcomingProvider.previousStep = event.fromIndex;
                     }
-                    if (provider.stepProviderMap.keys.elementAt(toIndex) ==
-                        Steps.generateWizardStep) {
-                      GenerateAgendaProvider generateProvider =
-                          provider.stepProviderMap.values.elementAt(toIndex)
-                              as GenerateAgendaProvider;
-                          await generateProvider.buildAgenda();
-                    }
+                    // if (provider.stepProviderMap.keys.elementAt(toIndex) ==
+                    //     Steps.generateWizardStep) {
+                    //   provider.dispose();
+                    // }
                   }
                 },
                 child: LayoutBuilder(builder: (context, constraints) {
                   return Column(children: [
-                    const Text("I'm a progress bar maybe"),
+                    _buildProgressIndicator(context),
                     Expanded(
                       child: _buildWizard(
                         context,
@@ -120,86 +117,109 @@ class AgendaWizard extends StatelessWidget {
           },
         ));
   }
-}
 
-Widget _buildWizard(
-  BuildContext context, {
-  required AgendaWizardProvider provider,
-  required BoxConstraints constraints,
-}) {
-  final wizard = Wizard(
-    stepBuilder: (context, state) {
-      if (state is GoalStepProvider) {
-        return GoalStepWidget(
-          provider: state,
-        );
-      }
-      if (state is TopicStepProvider) {
-        return TopicStepWidget(
-          provider: state,
-        );
-      }
-      if (state is ParticipantCountStepProvider) {
-        return ParticipantCountWidget(
-          provider: state,
-        );
-      }
-      if (state is BreakoutStepProvider) {
-        return BreakoutStepWidget(
-          provider: state,
-        );
-      }
-      if (state is FacilitateBreakoutProvider) {
-        return FacilitatedStepWidget(provider: state, hasBreakouts: true);
-      }
-      if (state is FacilitateSingleProvider) {
-        return FacilitatedStepWidget(provider: state, hasBreakouts: false);
-      }
-      if (state is SeriesStepProvider) {
-        return SeriesStepWidget(provider: state);
-      }
-      if (state is EventCountProvider) {
-        return EventCountWidget(provider: state);
-      }
-      if (state is SingleEventLengthProvider) {
-        return EventLengthWidget(
-          provider: state,
-          isSeries: false,
-        );
-      }
-      if (state is SeriesEventLengthProvider) {
-        return EventLengthWidget(
-          provider: state,
-          isSeries: true,
-        );
-      }
-      if (state is GenerateAgendaProvider) {
-        return GenerateAgendaStepWizard(
-          provider: state,
-        );
-      }
-      return Container();
-    },
-  );
-  final narrow = constraints.maxWidth <= 500;
-  if (narrow) {
-    return Row(children: [
-      Expanded(
-        child: wizard,
-      ),
-    ]);
+  Widget _buildWizard(
+    BuildContext context, {
+    required AgendaWizardProvider provider,
+    required BoxConstraints constraints,
+  }) {
+    final wizard = Wizard(
+      stepBuilder: (context, state) {
+        if (state is GoalStepProvider) {
+          return GoalStepWidget(
+            provider: state,
+          );
+        }
+        if (state is TopicStepProvider) {
+          return TopicStepWidget(
+            provider: state,
+          );
+        }
+        if (state is ParticipantCountStepProvider) {
+          return ParticipantCountWidget(
+            provider: state,
+          );
+        }
+        if (state is BreakoutStepProvider) {
+          return BreakoutStepWidget(
+            provider: state,
+          );
+        }
+        if (state is FacilitateBreakoutProvider) {
+          return FacilitatedStepWidget(provider: state, hasBreakouts: true);
+        }
+        if (state is FacilitateSingleProvider) {
+          return FacilitatedStepWidget(provider: state, hasBreakouts: false);
+        }
+        if (state is SeriesStepProvider) {
+          return SeriesStepWidget(provider: state);
+        }
+        if (state is EventCountProvider) {
+          return EventCountWidget(provider: state);
+        }
+        if (state is SingleEventLengthProvider) {
+          return EventLengthWidget(
+            provider: state,
+            isSeries: false,
+          );
+        }
+        if (state is SeriesEventLengthProvider) {
+          return EventLengthWidget(
+            provider: state,
+            isSeries: true,
+          );
+        }
+        if (state is GenerateAgendaProvider) {
+          return GenerateAgendaStepWizard(
+            provider: state,
+          );
+        }
+        return Container();
+      },
+    );
+    final narrow = constraints.maxWidth <= 500;
+    if (narrow) {
+      return Row(children: [
+        Expanded(
+          child: wizard,
+        ),
+      ]);
+    }
+    return Row(
+      children: [
+        const SizedBox(
+          width: 200,
+          child: StepOverview(),
+        ),
+        Expanded(
+          child: wizard,
+        ),
+      ],
+    );
   }
-  return Row(
-    children: [
-      const SizedBox(
-        width: 200,
-        child: StepOverview(),
-      ),
-      Expanded(
-        child: wizard,
-      ),
-    ],
-  );
+
+  Widget _buildProgressIndicator(
+    BuildContext context,
+  ) {
+    return StreamBuilder<int>(
+      stream: context.wizardController.indexStream,
+      initialData: context.wizardController.index,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.hasError) {
+          return const SizedBox.shrink();
+        }
+        final index = snapshot.data!;
+        int count = context.wizardController.stepCount - 1;
+        assert(index <= count && index >=0 && count > 1);
+        return Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: LinearProgressIndicator(
+            value: index / count, 
+          ),
+        );
+      },
+    );
+  }
 }
 
 class AgendaWizardProvider {
@@ -217,7 +237,7 @@ class AgendaWizardProvider {
       Steps.eventCountStep: EventCountProvider(viewModel),
       Steps.eventLengthStep: SingleEventLengthProvider(viewModel),
       Steps.seriesEventLengthStep: SeriesEventLengthProvider(viewModel),
-      Steps.generateWizardStep: GenerateAgendaProvider(viewModel: viewModel)
+      Steps.generateWizardStep: GenerateAgendaProvider(viewModel: viewModel, closeShopCallback: dispose)
     };
 
     stepOneProvider = stepProviderMap[Steps.goalStep]!;

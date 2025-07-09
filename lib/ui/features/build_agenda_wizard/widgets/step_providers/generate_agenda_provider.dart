@@ -6,11 +6,14 @@ import 'package:rxdart/rxdart.dart';
 enum AgendaStatuses { isComplete, inProgress, notStarted, hasError }
 
 class GenerateAgendaProvider extends StepProvider {
-
-  GenerateAgendaProvider({required BuildAgendaViewmodel viewModel})
-      : _viewModel = viewModel;
+  GenerateAgendaProvider(
+      {required BuildAgendaViewmodel viewModel,
+      required Function closeShopCallback})
+      : _viewModel = viewModel,
+        _closeShopCallback = closeShopCallback;
 
   final BuildAgendaViewmodel _viewModel;
+  final Function _closeShopCallback;
 
   final BehaviorSubject<AgendaStatuses> _agendaStatus =
       BehaviorSubject<AgendaStatuses>.seeded(AgendaStatuses.notStarted);
@@ -22,7 +25,12 @@ class GenerateAgendaProvider extends StepProvider {
 
   Stream<AgendaStatuses> getAgendaStatusStream() => agendaStatus.stream;
 
-  Future<Result?> buildAgenda() async {
+  @override
+  Future<void> onShowing() async {
+    await _buildAgenda();
+  }
+
+  Future<Result?> _buildAgenda() async {
     _agendaStatus.add(AgendaStatuses.inProgress);
     try {
       final agendaResult = await _viewModel.generateAgenda();
@@ -41,6 +49,14 @@ class GenerateAgendaProvider extends StepProvider {
       _agendaStatus.add(AgendaStatuses.hasError);
       return Result.error(Exception(e), "Weird error happened.");
     }
+    finally {
+      _closeShop();
+    }
+  }
+
+  Future<void> _closeShop() async {
+    await _closeShopCallback();
+    wizardController.dispose();
   }
 
   @override

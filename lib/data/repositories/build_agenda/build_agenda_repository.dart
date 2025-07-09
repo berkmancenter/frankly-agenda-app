@@ -11,9 +11,9 @@ class BuildAgendaRepository {
   Future<Result<String>> buildAgenda() async {
     print(builder.toString());
     await Future.delayed(const Duration(seconds: 8));
-    return Result.ok("Hello I am an agenda!");
-    // return Result.error(Exception("A really bad error happened!"),
-    //     "A terrible error ocurred!!!!");
+    //return Result.ok("Hello I am an agenda!");
+    return Result.error(Exception("A really bad error happened!"),
+        "A terrible error ocurred!!!!");
   }
 
   void addGoal(List<Goals> goals) {

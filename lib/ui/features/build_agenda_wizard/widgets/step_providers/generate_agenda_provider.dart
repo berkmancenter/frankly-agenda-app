@@ -8,12 +8,15 @@ enum AgendaStatuses { isComplete, inProgress, notStarted, hasError }
 class GenerateAgendaProvider extends StepProvider {
   GenerateAgendaProvider(
       {required BuildAgendaViewmodel viewModel,
-      required Function closeShopCallback})
+      required Function closeShopCallback,
+      required Function refreshWizardCallback})
       : _viewModel = viewModel,
-        _closeShopCallback = closeShopCallback;
+        _closeShopCallback = closeShopCallback,
+        _refreshWizardCallback = refreshWizardCallback;
 
   final BuildAgendaViewmodel _viewModel;
   final Function _closeShopCallback;
+  final Function _refreshWizardCallback;
 
   final BehaviorSubject<AgendaStatuses> _agendaStatus =
       BehaviorSubject<AgendaStatuses>.seeded(AgendaStatuses.notStarted);
@@ -48,9 +51,9 @@ class GenerateAgendaProvider extends StepProvider {
       print("Bad things agenda did not generate very weird: $e");
       _agendaStatus.add(AgendaStatuses.hasError);
       return Result.error(Exception(e), "Weird error happened.");
-    }
-    finally {
+    } finally {
       _closeShop();
+      _refreshWizardCallback();
     }
   }
 

@@ -29,17 +29,24 @@ import 'package:flutter_wizard/flutter_wizard.dart';
 import 'package:provider/provider.dart';
 
 class AgendaWizard extends StatelessWidget {
-  const AgendaWizard._({super.key, required this.viewModel});
+  const AgendaWizard._(
+      {super.key,
+      required this.viewModel,
+      required this.refreshWizardCallback});
   final BuildAgendaViewmodel viewModel;
+  final Function refreshWizardCallback;
 
   static Provider provider(
-      {Key? key, required BuildAgendaViewmodel pViewModel}) {
+      {Key? key,
+      required BuildAgendaViewmodel pViewModel,
+      required Function pRefreshVizardCallback}) {
     return Provider<AgendaWizardProvider>(
-      create: (_) => AgendaWizardProvider(pViewModel),
+      create: (_) => AgendaWizardProvider(pViewModel, pRefreshVizardCallback),
       dispose: (_, provider) => provider.dispose(),
       child: AgendaWizard._(
         key: key,
         viewModel: pViewModel,
+        refreshWizardCallback: pRefreshVizardCallback,
       ),
     );
   }
@@ -227,7 +234,7 @@ class AgendaWizard extends StatelessWidget {
 class AgendaWizardProvider {
   Map<Steps, StepProvider> stepProviderMap = {};
 
-  AgendaWizardProvider(this.viewModel) {
+  AgendaWizardProvider(this.viewModel, this.refreshWizardCallback) {
     stepProviderMap = {
       Steps.goalStep: GoalStepProvider(viewModel),
       Steps.topicStep: TopicStepProvider(viewModel),
@@ -241,7 +248,9 @@ class AgendaWizardProvider {
       Steps.eventLengthStep: SingleEventLengthProvider(viewModel),
       Steps.seriesEventLengthStep: SeriesEventLengthProvider(viewModel),
       Steps.generateWizardStep: GenerateAgendaProvider(
-          viewModel: viewModel, closeShopCallback: dispose)
+          viewModel: viewModel,
+          closeShopCallback: dispose,
+          refreshWizardCallback: refreshWizardCallback)
     };
 
     goalStepProvider = stepProviderMap[Steps.goalStep]!;
@@ -274,6 +283,7 @@ class AgendaWizardProvider {
   late StepProvider generateWizardStepProvider;
 
   final BuildAgendaViewmodel viewModel;
+  final Function refreshWizardCallback;
 
   Future<void> reportIssue() async {
     debugPrint('Finished!');

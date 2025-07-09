@@ -91,9 +91,9 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
         ],
       );
     } else if (agendaStatus == AgendaStatuses.notStarted) {
-      return Text("Not started!");
+      return const Text("Not started!");
     } else {
-      return Text("Agenda weirdly has no status . . .");
+      return const Text("Agenda weirdly has no status . . .");
     }
   }
 }

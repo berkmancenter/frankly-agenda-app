@@ -17,6 +17,10 @@ class BuildAgendaViewmodel {
     _buildAgendaRepository.addTopic(topic, topicDescription);
   }
 
+  void addAudience(String audienceDescription) {
+    _buildAgendaRepository.addAudience(audienceDescription);
+  }
+
   void addParticipantCount(ParticipantBatches count) {
     _buildAgendaRepository.addParticipantCount(count);
   }

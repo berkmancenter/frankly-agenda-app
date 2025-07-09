@@ -25,6 +25,10 @@ class BuildAgendaRepository {
     builder.topicDescription = topicDescription;
   }
 
+  void addAudience(String audienceDescription) {
+    builder.audienceDescription = audienceDescription;
+  }
+
   void addParticipantCount(ParticipantBatches count) {
     builder.participantCount = count;
   }

@@ -15,7 +15,7 @@ const List<Color> kOdometerColors = [
 /// [height] will become 20/10 => 2.
 class AppTextStyle {
   static TextStyle headline1 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 40,
@@ -24,7 +24,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline2 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 30,
@@ -33,7 +33,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline2Light = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontSize: 34,
@@ -42,7 +42,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline3 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 24,
@@ -51,7 +51,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline4 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 18,
@@ -60,7 +60,7 @@ class AppTextStyle {
   );
 
   static TextStyle headlineSmall = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 12,
@@ -69,7 +69,7 @@ class AppTextStyle {
   );
 
   static TextStyle subhead = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontSize: 18,
@@ -78,7 +78,7 @@ class AppTextStyle {
   );
 
   static TextStyle eyebrow = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 16,
@@ -87,7 +87,7 @@ class AppTextStyle {
   );
 
   static TextStyle eyebrowSmall = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 14,
@@ -96,7 +96,7 @@ class AppTextStyle {
   );
 
   static TextStyle body = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 16,
@@ -105,7 +105,7 @@ class AppTextStyle {
   );
 
   static TextStyle bodyMedium = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
       fontSize: 16,
@@ -114,7 +114,7 @@ class AppTextStyle {
   );
 
   static TextStyle bodySmall = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 14,
@@ -123,7 +123,7 @@ class AppTextStyle {
   );
 
   static TextStyle timeLarge = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w200,
       fontStyle: FontStyle.normal,
       fontSize: 126,

@@ -2,6 +2,7 @@
 /// Plugin for Figma. The only thing that has been changed
 /// is the util method toColorScheme, which only creates a very
 /// limited palette by default and has been extended to fix that issue.
+library;
 
 import 'package:flutter/material.dart';
 

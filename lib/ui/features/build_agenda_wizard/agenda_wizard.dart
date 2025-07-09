@@ -1,5 +1,6 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/audience_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
@@ -52,20 +53,21 @@ class AgendaWizard extends StatelessWidget {
     return DefaultWizardController(
         stepControllers: [
           WizardStepController(
-            step: provider.stepOneProvider,
+            step: provider.goalStepProvider,
           ),
           WizardStepController(
-            step: provider.stepTwoProvider,
+            step: provider.topicStepProvider,
           ),
-          WizardStepController(step: provider.stepThreeProvider),
-          WizardStepController(step: provider.stepFourProvider),
-          WizardStepController(step: provider.stepFiveProvider),
-          WizardStepController(step: provider.stepSixProvider),
-          WizardStepController(step: provider.stepSevenProvider),
-          WizardStepController(step: provider.stepEightProvider),
-          WizardStepController(step: provider.stepNineProvider),
-          WizardStepController(step: provider.stepTenProvider),
-          WizardStepController(step: provider.stepElevenProvider)
+          WizardStepController(step: provider.audienceStepProvider),
+          WizardStepController(step: provider.participantStepProvider),
+          WizardStepController(step: provider.breakoutStepProvider),
+          WizardStepController(step: provider.facilitatedStepProvider),
+          WizardStepController(step: provider.facilitatedBreakoutStepProvider),
+          WizardStepController(step: provider.seriesStepProvider),
+          WizardStepController(step: provider.eventCountStepProvider),
+          WizardStepController(step: provider.eventLengthStepProvider),
+          WizardStepController(step: provider.seriesEventLengthStepProvider),
+          WizardStepController(step: provider.generateWizardStepProvider)
         ],
         child: Builder(
           builder: (context) {
@@ -210,11 +212,11 @@ class AgendaWizard extends StatelessWidget {
         }
         final index = snapshot.data!;
         int count = context.wizardController.stepCount - 1;
-        assert(index <= count && index >=0 && count > 1);
+        assert(index <= count && index >= 0 && count > 1);
         return Padding(
           padding: const EdgeInsets.all(10.0),
           child: LinearProgressIndicator(
-            value: index / count, 
+            value: index / count,
           ),
         );
       },
@@ -229,6 +231,7 @@ class AgendaWizardProvider {
     stepProviderMap = {
       Steps.goalStep: GoalStepProvider(viewModel),
       Steps.topicStep: TopicStepProvider(viewModel),
+      Steps.audienceStep: AudienceStepProvider(viewModel),
       Steps.participantStep: ParticipantCountStepProvider(viewModel),
       Steps.breakoutStep: BreakoutStepProvider(viewModel),
       Steps.facilitatedStep: FacilitateSingleProvider(viewModel),
@@ -237,33 +240,38 @@ class AgendaWizardProvider {
       Steps.eventCountStep: EventCountProvider(viewModel),
       Steps.eventLengthStep: SingleEventLengthProvider(viewModel),
       Steps.seriesEventLengthStep: SeriesEventLengthProvider(viewModel),
-      Steps.generateWizardStep: GenerateAgendaProvider(viewModel: viewModel, closeShopCallback: dispose)
+      Steps.generateWizardStep: GenerateAgendaProvider(
+          viewModel: viewModel, closeShopCallback: dispose)
     };
 
-    stepOneProvider = stepProviderMap[Steps.goalStep]!;
-    stepTwoProvider = stepProviderMap[Steps.topicStep]!;
-    stepThreeProvider = stepProviderMap[Steps.participantStep]!;
-    stepFourProvider = stepProviderMap[Steps.breakoutStep]!;
-    stepFiveProvider = stepProviderMap[Steps.facilitatedStep]!;
-    stepSixProvider = stepProviderMap[Steps.facilitatedBreakoutStep]!;
-    stepSevenProvider = stepProviderMap[Steps.seriesStep]!;
-    stepEightProvider = stepProviderMap[Steps.eventCountStep]!;
-    stepNineProvider = stepProviderMap[Steps.eventLengthStep]!;
-    stepTenProvider = stepProviderMap[Steps.seriesEventLengthStep]!;
-    stepElevenProvider = stepProviderMap[Steps.generateWizardStep]!;
+    goalStepProvider = stepProviderMap[Steps.goalStep]!;
+    topicStepProvider = stepProviderMap[Steps.topicStep]!;
+    audienceStepProvider = stepProviderMap[Steps.audienceStep]!;
+    participantStepProvider = stepProviderMap[Steps.participantStep]!;
+    breakoutStepProvider = stepProviderMap[Steps.breakoutStep]!;
+    facilitatedStepProvider = stepProviderMap[Steps.facilitatedStep]!;
+    facilitatedBreakoutStepProvider =
+        stepProviderMap[Steps.facilitatedBreakoutStep]!;
+    seriesStepProvider = stepProviderMap[Steps.seriesStep]!;
+    eventCountStepProvider = stepProviderMap[Steps.eventCountStep]!;
+    eventLengthStepProvider = stepProviderMap[Steps.eventLengthStep]!;
+    seriesEventLengthStepProvider =
+        stepProviderMap[Steps.seriesEventLengthStep]!;
+    generateWizardStepProvider = stepProviderMap[Steps.generateWizardStep]!;
   }
 
-  late StepProvider stepOneProvider;
-  late StepProvider stepTwoProvider;
-  late StepProvider stepThreeProvider;
-  late StepProvider stepFourProvider;
-  late StepProvider stepFiveProvider;
-  late StepProvider stepSixProvider;
-  late StepProvider stepSevenProvider;
-  late StepProvider stepEightProvider;
-  late StepProvider stepNineProvider;
-  late StepProvider stepTenProvider;
-  late StepProvider stepElevenProvider;
+  late StepProvider goalStepProvider;
+  late StepProvider topicStepProvider;
+  late StepProvider audienceStepProvider;
+  late StepProvider participantStepProvider;
+  late StepProvider breakoutStepProvider;
+  late StepProvider facilitatedStepProvider;
+  late StepProvider facilitatedBreakoutStepProvider;
+  late StepProvider seriesStepProvider;
+  late StepProvider eventCountStepProvider;
+  late StepProvider eventLengthStepProvider;
+  late StepProvider seriesEventLengthStepProvider;
+  late StepProvider generateWizardStepProvider;
 
   final BuildAgendaViewmodel viewModel;
 
@@ -272,16 +280,17 @@ class AgendaWizardProvider {
   }
 
   Future<void> dispose() async {
-    stepOneProvider.dispose();
-    stepTwoProvider.dispose();
-    stepThreeProvider.dispose();
-    stepFourProvider.dispose();
-    stepFiveProvider.dispose();
-    stepSixProvider.dispose();
-    stepSevenProvider.dispose();
-    stepEightProvider.dispose();
-    stepNineProvider.dispose();
-    stepTenProvider.dispose();
-    stepElevenProvider.dispose();
+    goalStepProvider.dispose();
+    topicStepProvider.dispose();
+    audienceStepProvider.dispose();
+    participantStepProvider.dispose();
+    breakoutStepProvider.dispose();
+    facilitatedStepProvider.dispose();
+    facilitatedBreakoutStepProvider.dispose();
+    seriesStepProvider.dispose();
+    eventCountStepProvider.dispose();
+    eventLengthStepProvider.dispose();
+    seriesEventLengthStepProvider.dispose();
+    generateWizardStepProvider.dispose();
   }
 }

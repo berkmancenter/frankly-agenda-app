@@ -7,6 +7,7 @@ class AgendaBuilder {
   List<Goals>? goals;
   String? topic;
   String? topicDescription;
+  String? audienceDescription;
   ParticipantBatches? participantCount;
   HasBreakoutGroups? hasBreakoutGroups;
   IsFacilitated? isFacilitated;

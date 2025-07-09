@@ -16,7 +16,7 @@ class ProgressButtons extends StatefulWidget {
 }
 
 class _ProgressButtonsState extends State<ProgressButtons> {
-  String _errorMessage = "";
+  final String _errorMessage = "";
 
   @override
   Widget build(BuildContext context) {

@@ -54,7 +54,7 @@ class TopicStepProvider extends FormStepProvider {
 
   @override
   int calculateNextStep() {
-    return Steps.participantStep.index;
+    return Steps.audienceStep.index;
   }
 
   @override

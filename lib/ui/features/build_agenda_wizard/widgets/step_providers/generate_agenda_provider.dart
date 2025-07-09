@@ -45,7 +45,7 @@ class GenerateAgendaProvider extends StepProvider {
           return agendaResult;
       }
     } catch (e) {
-      print("Bad things agenda did not generate very weird: ${e}");
+      print("Bad things agenda did not generate very weird: $e");
       _agendaStatus.add(AgendaStatuses.hasError);
       return Result.error(Exception(e), "Weird error happened.");
     }

@@ -59,8 +59,12 @@ class TopicStepProvider extends FormStepProvider {
 
   @override
   void dispose() {
+    _topic.close();
+    _topicDescription.close();
     topicDescriptionController.dispose();
     topicController.dispose();
+    topicFocusNode.dispose();
+    super.dispose();
   }
   
   @override

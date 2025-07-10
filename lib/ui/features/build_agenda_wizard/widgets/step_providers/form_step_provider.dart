@@ -1,5 +1,6 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum Steps {
@@ -49,4 +50,10 @@ abstract class FormStepProvider extends StepProvider {
 
   void addData();
   int calculateNextStep();
+
+  @mustCallSuper
+  @override
+  void dispose() {
+    _nextStepEnabled.close();
+  }
 }

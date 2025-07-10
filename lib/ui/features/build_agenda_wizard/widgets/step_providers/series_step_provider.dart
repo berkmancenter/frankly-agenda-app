@@ -3,7 +3,6 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-
 class SeriesStepProvider extends FormStepProvider {
   SeriesStepProvider(BuildAgendaViewmodel viewModel)
       : super(isEnabled: false, viewModel: viewModel);
@@ -39,8 +38,9 @@ class SeriesStepProvider extends FormStepProvider {
   @override
   void dispose() {
     _seriesStatus.close();
+    super.dispose();
   }
-  
+
   @override
   void addData() {
     if (_seriesStatus.value != null) {

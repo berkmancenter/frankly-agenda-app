@@ -11,11 +11,9 @@ class GenerateAgendaProvider extends StepProvider {
       required Function closeShopCallback,
       required Function refreshWizardCallback})
       : _viewModel = viewModel,
-        _closeShopCallback = closeShopCallback,
         _refreshWizardCallback = refreshWizardCallback;
 
   final BuildAgendaViewmodel _viewModel;
-  final Function _closeShopCallback;
   final Function _refreshWizardCallback;
 
   final BehaviorSubject<AgendaStatuses> _agendaStatus =
@@ -51,15 +49,12 @@ class GenerateAgendaProvider extends StepProvider {
       print("Bad things agenda did not generate very weird: $e");
       _agendaStatus.add(AgendaStatuses.hasError);
       return Result.error(Exception(e), "Weird error happened.");
-    } finally {
-      _closeShop();
-      _refreshWizardCallback();
     }
   }
 
-  Future<void> _closeShop() async {
-    await _closeShopCallback();
-    wizardController.dispose();
+  Future<void> closeShop() async {
+    print("Closing shop");
+    _refreshWizardCallback();
   }
 
   @override

@@ -36,6 +36,7 @@ class FacilitateStepProvider extends FormStepProvider {
   @override
   void dispose() {
     _facilitateStatus.close();
+    super.dispose();
   }
 
   @override

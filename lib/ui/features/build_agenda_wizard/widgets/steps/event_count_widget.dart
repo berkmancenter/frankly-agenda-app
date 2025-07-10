@@ -40,6 +40,7 @@ class EventCountWidget extends StatelessWidget {
           fieldController: provider.countController,
           changeCallback: onCountChange,
           isRequired: true,
+          focusNode: provider.eventFocusNode,
           inputType: TextInputType.number,
           width: 150,
           typeFormatters: [FilteringTextInputFormatter.digitsOnly],

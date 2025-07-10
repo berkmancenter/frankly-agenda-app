@@ -8,18 +8,23 @@ class BuildAgendaScreen extends StatefulWidget {
 
   @override
   State<BuildAgendaScreen> createState() => _BuildAgendaScreenState();
+  
 }
 
 class _BuildAgendaScreenState extends State<BuildAgendaScreen> {
+  Key _childKey = UniqueKey();
 
   void refreshWizardCallback() {
-    setState(() {});
+    setState(() {
+       _childKey = UniqueKey();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return AgendaWizard.provider(pViewModel: widget.viewModel);
+    return AgendaWizard.provider(
+        key: _childKey,
+        pViewModel: widget.viewModel,
+        pRefreshVizardCallback: refreshWizardCallback);
   }
 }
-
-

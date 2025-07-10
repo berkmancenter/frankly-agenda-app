@@ -26,6 +26,7 @@ class EventLengthProvider extends FormStepProvider {
   @override
   void dispose() {
     _duration.close();
+    super.dispose();
   }
 
   @override

@@ -52,7 +52,10 @@ class AudienceStepProvider extends FormStepProvider {
 
   @override
   void dispose() {
+    _audienceDescription.close();
     audienceController.dispose();
+    audienceFocusNode.dispose();
+    super.dispose();
   }
   
   @override

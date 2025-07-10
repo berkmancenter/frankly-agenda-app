@@ -39,6 +39,7 @@ class BreakoutStepProvider extends FormStepProvider {
   @override
   void dispose() {
     _breakoutStatus.close();
+    super.dispose();
   }
 
   @override

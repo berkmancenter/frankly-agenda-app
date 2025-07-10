@@ -14,6 +14,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/single_event_length_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/audience_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/breakout_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_count_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_length_step_widget.dart';
@@ -41,6 +42,7 @@ class AgendaWizard extends StatelessWidget {
       required BuildAgendaViewmodel pViewModel,
       required Function pRefreshVizardCallback}) {
     return Provider<AgendaWizardProvider>(
+      key: key,
       create: (_) => AgendaWizardProvider(pViewModel, pRefreshVizardCallback),
       dispose: (_, provider) => provider.dispose(),
       child: AgendaWizard._(
@@ -141,6 +143,11 @@ class AgendaWizard extends StatelessWidget {
         }
         if (state is TopicStepProvider) {
           return TopicStepWidget(
+            provider: state,
+          );
+        }
+        if (state is AudienceStepProvider) {
+          return AudienceStepWidget(
             provider: state,
           );
         }

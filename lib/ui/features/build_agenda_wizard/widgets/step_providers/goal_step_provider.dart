@@ -46,6 +46,7 @@ class GoalStepProvider extends FormStepProvider {
     for (var subject in _checkboxStates.values) {
       subject.close();
     }
+    super.dispose();
   }
 
   @override

@@ -72,6 +72,7 @@ class ParticipantCountStepProvider extends FormStepProvider {
   @override
   void dispose() {
     _currParticipantCount.close();
+    super.dispose();
   }
 
   @override

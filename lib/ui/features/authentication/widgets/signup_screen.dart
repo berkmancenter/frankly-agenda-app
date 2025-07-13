@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SignupScreen extends StatelessWidget {
-  SignupScreen({super.key, required AuthViewModel authViewModel})
+  const SignupScreen({super.key, required AuthViewModel authViewModel})
       : _authViewModel = authViewModel;
 
   final AuthViewModel _authViewModel;

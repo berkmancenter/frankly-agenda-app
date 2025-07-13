@@ -1,14 +1,25 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-part 'agenda.freezed.dart';
+import 'package:agenda_wizard/models/agenda/agenda_item.dart';
+import 'package:agenda_wizard/models/agenda/agenda_section.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'agenda.g.dart';
 
-@freezed
-abstract class AgendaModel with _$AgendaModel {
-  const factory AgendaModel({
-    required String name,
-    required String description,
-  }) = _Agenda;
+@JsonSerializable()
+class Agenda {
+  final String name, description;
+  final List<AgendaSection> sections;
+  final bool isSeries;
+  final int? eventNumber; // which event(s) in a series of events
+  final List<AgendaItem>? additionalInformation;
 
-  factory AgendaModel.fromJson(Map<String, Object?> json) => _$AgendaFromJson(json);
+  Agenda(
+      {required this.name,
+      required this.description,
+      required this.sections,
+      required this.isSeries,
+      this.eventNumber,
+      this.additionalInformation});
 
+  factory Agenda.fromJson(Map<String, dynamic> json) => _$AgendaFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AgendaToJson(this);
 }

@@ -24,8 +24,8 @@ class HomeViewmodel extends ChangeNotifier{
   UserModel? _user;
   UserModel? get user => _user;
 
-  List<AgendaModel> _agendas = List.empty();
-  List<AgendaModel> get agendas => _agendas;
+  final List<Agenda> _agendas = List.empty();
+  List<Agenda> get agendas => _agendas;
 
   Future<Result?> _loadHomeData() async {
     _user = _userRepository.getCurrentUser();

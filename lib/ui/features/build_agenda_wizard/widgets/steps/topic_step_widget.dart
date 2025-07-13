@@ -49,6 +49,9 @@ class TopicStepWidget extends StatelessWidget {
             fieldController: provider.topicDescriptionController,
             isRequired: false,
             changeCallback: onDescriptionChange,
+            inputType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 4,
           )
         ]),
         ProgressButtons(provider: provider),

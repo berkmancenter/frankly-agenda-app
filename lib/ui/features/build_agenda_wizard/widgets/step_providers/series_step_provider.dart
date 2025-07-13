@@ -1,10 +1,11 @@
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum IsSeries { series, standalone }
-
-class SeriesStepProvider extends StepProvider {
-  SeriesStepProvider() : super(isEnabled: false);
+class SeriesStepProvider extends FormStepProvider {
+  SeriesStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<IsSeries?> _seriesStatus =
       BehaviorSubject<IsSeries?>.seeded(null);
@@ -37,5 +38,15 @@ class SeriesStepProvider extends StepProvider {
   @override
   void dispose() {
     _seriesStatus.close();
+    super.dispose();
+  }
+
+  @override
+  void addData() {
+    if (_seriesStatus.value != null) {
+      viewModel.addIsSeries(_seriesStatus.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

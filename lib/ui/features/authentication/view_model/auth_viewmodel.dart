@@ -11,8 +11,7 @@ class AuthViewModel extends ChangeNotifier {
 
   final AuthRepository _authRepository;
 
-  Future<Result> createUser(
-      String name, String email, String password) async {
+  Future<Result> createUser(String name, String email, String password) async {
     UserModel newUser = UserModel(name: name, email: email);
     final result = await _authRepository.registerUserAuth(newUser, password);
     return result;

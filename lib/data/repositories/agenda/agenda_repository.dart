@@ -7,13 +7,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AgendaRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<AgendaModel> _userAgendas = [];
+  List<Agenda> _userAgendas = [];
 
   Future<void> init() async {
     final agendaItems = await getAgendas();
   }
 
-  Future<Result<List<AgendaModel>>?> getAgendas() async {
+  Future<Result<List<Agenda>>?> getAgendas() async {
     // TODO
     // get the actual user from a service I think
     // 

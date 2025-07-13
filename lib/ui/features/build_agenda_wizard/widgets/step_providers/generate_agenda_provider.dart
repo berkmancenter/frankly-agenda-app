@@ -1,3 +1,5 @@
+import 'package:agenda_wizard/routing/router.dart';
+import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/utils/result.dart';
@@ -31,24 +33,22 @@ class GenerateAgendaProvider extends StepProvider {
     await _buildAgenda();
   }
 
-  Future<Result?> _buildAgenda() async {
+  Future<void> _buildAgenda() async {
     _agendaStatus.add(AgendaStatuses.inProgress);
     try {
       final agendaResult = await _viewModel.generateAgenda();
       switch (agendaResult) {
         case Ok<void>():
-          print('Generated agenda');
           _agendaStatus.add(AgendaStatuses.isComplete);
-          return agendaResult;
+          await Future.delayed(const Duration(milliseconds: 500));
+          closeShop();
+          router.go(Routes.editAgenda);
         case Error():
-          print("Bad things agenda did not generate.");
           _agendaStatus.add(AgendaStatuses.hasError);
-          return agendaResult;
       }
     } catch (e) {
       print("Bad things agenda did not generate very weird: $e");
       _agendaStatus.add(AgendaStatuses.hasError);
-      return Result.error(Exception(e), "Weird error happened.");
     }
   }
 

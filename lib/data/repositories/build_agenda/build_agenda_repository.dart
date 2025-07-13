@@ -15,7 +15,7 @@ class BuildAgendaRepository {
   Future<Result<List<Agenda>>> buildAgenda() async {
     print(builder.toJson());
     try {
-      await Future.delayed(const Duration(seconds: 4));
+      await Future.delayed(const Duration(seconds: 2));
       List<Agenda> agenda = await _readJson();
       return Result.ok(agenda);
     } catch (e) {

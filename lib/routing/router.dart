@@ -5,6 +5,8 @@ import 'package:agenda_wizard/ui/features/authentication/widgets/login_screen.da
 import 'package:agenda_wizard/ui/features/authentication/widgets/signup_screen.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/build_agenda_screen.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_editor.dart';
 import 'package:agenda_wizard/ui/features/home/view_model/home_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/home/widgets/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,6 +59,13 @@ final router = GoRouter(
                 redirect: (context, state) {
                   final user = FirebaseAuth.instance.currentUser;
                   return user == null ? Routes.login : null;
+                },
+              ),
+              GoRoute(
+                path: Routes.editAgenda,
+                builder: (context, state) {
+                  final agendaEditorViewmodel = AgendaEditorViewmodel();
+                  return AgendaEditor(viewModel: agendaEditorViewmodel);
                 },
               )
             ],

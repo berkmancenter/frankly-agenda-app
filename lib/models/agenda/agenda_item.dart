@@ -1,16 +1,23 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-part 'agenda_item.freezed.dart';
+import 'package:agenda_wizard/models/agenda/custom_duration.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'agenda_item.g.dart';
 
+@JsonSerializable()
+class AgendaItem {
+  final String title;
+  final List<String> content;
+  final CustomDuration? duration;
+  final List<String>? importance, guidance;
 
-@freezed
-abstract class AgendaItemModel with _$AgendaItemModel {
-  const factory AgendaItemModel({
-    required String title,
-    String? content,
-    required Duration duration,
-  }) = _AgendaItem;
+  AgendaItem(
+      {required this.title,
+      required this.content,
+      this.duration,
+      this.importance,
+      this.guidance});
 
-  factory AgendaItemModel.fromJson(Map<String, Object?> json) =>
+  factory AgendaItem.fromJson(Map<String, dynamic> json) =>
       _$AgendaItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AgendaItemToJson(this);
 }

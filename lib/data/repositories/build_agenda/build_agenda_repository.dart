@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 
+import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/utils/result.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
@@ -11,19 +12,30 @@ import 'package:flutter/services.dart';
 class BuildAgendaRepository {
   AgendaBuilder builder = AgendaBuilder();
 
-  Future<Result<String>> buildAgenda() async {
+  Future<Result<List<Agenda>>> buildAgenda() async {
     print(builder.toJson());
-    await Future.delayed(const Duration(seconds: 4));
-    
-    return const Result.ok("Hello I am an agenda!");
-    // return Result.error(Exception("A really bad error happened!"),
-    //     "A terrible error ocurred!!!!");
+    try {
+      await Future.delayed(const Duration(seconds: 4));
+      List<Agenda> agenda = await _readJson();
+      return Result.ok(agenda);
+    } catch (e) {
+      return Result.error(Exception(e), "Failed to parse agenda JSON.");
+    }
   }
 
-  Future<void> readJson() async {
-    final String response = await rootBundle.loadString('assets/sample.json');
-    final data = await json.decode(response);
-// ...
+  Future<List<Agenda>> _readJson() async {
+    try {
+      final String response =
+          await rootBundle.loadString('lib/assets/sample_agenda.json');
+      List<dynamic> raw_agendas = await json.decode(response);
+      List<Agenda> agendas =
+          raw_agendas.map((item) => Agenda.fromJson(item)).toList();
+
+      return agendas;
+    } catch (e) {
+      print(e);
+      throw Exception("bad json decoding: $e");
+    }
   }
 
   void addGoal(List<Goals> goals) {

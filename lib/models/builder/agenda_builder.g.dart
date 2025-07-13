@@ -6,8 +6,8 @@ part of 'agenda_builder.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
-    _AgendaBuilder(
+AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
+    AgendaBuilder(
       goals: (json['goals'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$GoalsEnumMap, e))
           .toList(),
@@ -25,7 +25,7 @@ _AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
           : Duration(microseconds: (json['eventLength'] as num).toInt()),
     );
 
-Map<String, dynamic> _$AgendaBuilderToJson(_AgendaBuilder instance) =>
+Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
     <String, dynamic>{
       'goals': instance.goals?.map((e) => _$GoalsEnumMap[e]!).toList(),
       'topic': instance.topic,

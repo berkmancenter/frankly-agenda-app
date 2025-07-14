@@ -1,4 +1,5 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
+import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/ui/core/widgets/app_scaffold.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/auth_viewmodel.dart';
@@ -68,10 +69,10 @@ final router = GoRouter(
                   final agendaEditorViewmodel = AgendaEditorViewmodel(
                     agendaRepository: context.read(),
                   );
-                  List<Agenda> agendas = state.extra as List<Agenda>;
+                  EventPlan eventPlan = state.extra as EventPlan;
                   return AgendaEditor(
                     viewModel: agendaEditorViewmodel,
-                    agendas: agendas,
+                    eventPlan: eventPlan,
                   );
                 },
               )

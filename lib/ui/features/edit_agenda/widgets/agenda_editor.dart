@@ -1,4 +1,5 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
+import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
@@ -8,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AgendaEditor extends StatelessWidget {
-  const AgendaEditor({super.key, required this.viewModel, required this.agendas});
+  const AgendaEditor({super.key, required this.viewModel, required this.eventPlan});
 
   final AgendaEditorViewmodel viewModel;
-  final List<Agenda> agendas;
+  final EventPlan eventPlan;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class AgendaEditor extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    agendas[0].name,
+                    eventPlan.eventName,
                     style: AppTextStyle.headline3,
                     textAlign: TextAlign.center,
                   ),
@@ -54,6 +55,7 @@ class AgendaEditor extends StatelessWidget {
                   ),
                   EditAgendaForm(
                     viewModel: viewModel,
+                    event: eventPlan,
                   ),
                   const SizedBox(
                     height: 10,
@@ -70,7 +72,8 @@ class AgendaEditor extends StatelessWidget {
 
 class EditAgendaForm extends StatefulWidget {
   final AgendaEditorViewmodel viewModel;
-  const EditAgendaForm({super.key, required this.viewModel});
+  final EventPlan event;
+  const EditAgendaForm({super.key, required this.viewModel, required this.event});
 
   @override
   State<EditAgendaForm> createState() => _EditAgendaFormState();
@@ -84,15 +87,17 @@ class _EditAgendaFormState extends State<EditAgendaForm> {
 
   @override
   Widget build(BuildContext context) {
+    _name.value = TextEditingValue(text: widget.event.eventName);
     return Form(
         key: _formKey,
         child: Column(
           children: [
             const SizedBox(height: 10,),
             FormInput(
-              labelText: 'Agenda Name',
+              labelText: 'Event Name',
               fieldController: _name,
               isRequired: true,
+
             ),
           ],
         ));

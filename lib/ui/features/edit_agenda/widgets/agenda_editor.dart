@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
@@ -7,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AgendaEditor extends StatelessWidget {
-  const AgendaEditor({super.key, required this.viewModel});
+  const AgendaEditor({super.key, required this.viewModel, required this.agendas});
 
   final AgendaEditorViewmodel viewModel;
+  final List<Agenda> agendas;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class AgendaEditor extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    'Agenda Name',
+                    agendas[0].name,
                     style: AppTextStyle.headline3,
                     textAlign: TextAlign.center,
                   ),
@@ -86,7 +88,7 @@ class _EditAgendaFormState extends State<EditAgendaForm> {
         key: _formKey,
         child: Column(
           children: [
-            Text("hi"),
+            const SizedBox(height: 10,),
             FormInput(
               labelText: 'Agenda Name',
               fieldController: _name,

@@ -16,8 +16,8 @@ class BuildAgendaRepository {
     print(builder.toJson());
     try {
       await Future.delayed(const Duration(seconds: 2));
-      List<Agenda> agenda = await _readJson();
-      return Result.ok(agenda);
+      List<Agenda> agendas = await _readJson();
+      return Result.ok(agendas);
     } catch (e) {
       return Result.error(Exception(e), "Failed to parse agenda JSON.");
     }

@@ -42,7 +42,7 @@ class GenerateAgendaProvider extends StepProvider {
           _agendaStatus.add(AgendaStatuses.isComplete);
           await Future.delayed(const Duration(milliseconds: 500));
           closeShop();
-          router.go(Routes.editAgenda);
+          router.go(Routes.editAgenda, extra: agendaResult.value);
         case Error():
           _agendaStatus.add(AgendaStatuses.hasError);
       }

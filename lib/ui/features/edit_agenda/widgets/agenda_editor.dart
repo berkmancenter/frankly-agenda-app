@@ -4,221 +4,264 @@ import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_section.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class AgendaEditor extends StatelessWidget {
-  const AgendaEditor(
-      {super.key, required this.viewModel, required this.eventPlan});
+  const AgendaEditor({super.key, required this.viewModel});
 
   final AgendaEditorViewmodel viewModel;
-  final EventPlan eventPlan;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed: () => router.go(Routes.agendas),
-                    icon: const Icon(Icons.view_agenda)),
-                const Text("Agenda Editor"),
-                const SizedBox(
-                  width: 50,
-                )
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  eventPlan.eventName,
-                  style: AppTextStyle.headline3,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
-                  style: AppTextStyle.eyebrowSmall,
-                ),
-                EditAgendaForm(
-                  viewModel: viewModel,
-                  event: eventPlan,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    return Container(
+      color: context.theme.colorScheme.surfaceContainer,
+      child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ListenableBuilder(
+              listenable: viewModel,
+              builder: (BuildContext context, _) {
+                return ListView(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          onPressed: () => router.go(Routes.agendas),
+                          icon: const Icon(Icons.view_agenda)),
+                      const Text("Agenda Editor"),
+                      const SizedBox(
+                        width: 50,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    viewModel.eventPlan.eventName,
+                    style: AppTextStyle.headline3,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
+                    style: AppTextStyle.eyebrowSmall,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  EventDetails(
+                    viewModel: viewModel,
+                    event: viewModel.eventPlan,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ..._generateAgendas(viewModel.eventPlan, viewModel),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ]);
+              })),
     );
   }
 }
 
-class EditAgendaForm extends StatefulWidget {
+class EventDetails extends StatefulWidget {
   final AgendaEditorViewmodel viewModel;
   final EventPlan event;
-  const EditAgendaForm(
-      {super.key, required this.viewModel, required this.event});
+  const EventDetails({super.key, required this.viewModel, required this.event});
 
   @override
-  State<EditAgendaForm> createState() => _EditAgendaFormState();
+  State<EventDetails> createState() => _EventDetailsState();
 }
 
-class _EditAgendaFormState extends State<EditAgendaForm> {
-  final _formKey = GlobalKey<FormState>();
+class _EventDetailsState extends State<EventDetails> {
+  final _eventDetailFormKey = GlobalKey<FormState>();
+
+  bool isEditing = false;
 
   final TextEditingController _name = TextEditingController();
   final TextEditingController _description = TextEditingController();
+
+  void toggleEditing() {
+    setState(() {
+      isEditing = !isEditing;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     _name.value = TextEditingValue(text: widget.event.eventName);
     _description.value = TextEditingValue(text: widget.event.eventDescription);
-    return Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            FormInput(
-              labelText: 'Event Name',
-              fieldController: _name,
-              isRequired: true,
-            ),
-            FormInput(
-              labelText: "Event Description",
-              fieldController: _description,
-              isRequired: false,
-              inputType: TextInputType.multiline,
-              maxLines: null,
-              minLines: 4,
-            ),
-            _generateAgendas(widget.event),
-          ],
-        ));
-  }
-}
-
-Widget _generateAgendas(EventPlan event) {
-  Widget? agendaSectionsColumn;
-  if (event.isSeries) {
-    for (var i = 0; i < event.agendas.length; i++) {
-      List<Widget> agendaSections =
-          _generateAgendaSections(i, event.agendas[i]);
-      int agendaCount = i + 1;
-      agendaSectionsColumn = Column(
+    Widget detailsWidget;
+    if (isEditing) {
+      detailsWidget = Form(
+          key: _eventDetailFormKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FormInput(
+                labelText: 'Event Name',
+                fieldController: _name,
+                isRequired: true,
+              ),
+              FormInput(
+                labelText: "Event Description",
+                fieldController: _description,
+                isRequired: false,
+                inputType: TextInputType.multiline,
+                maxLines: null,
+                minLines: 4,
+              ),
+            ],
+          ));
+    } else {
+      detailsWidget = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 40,
+            height: 5,
+            width: double.infinity,
           ),
+          Text("Event Name", style: AppTextStyle.bodyMedium),
           Text(
-            "Agenda ${numToString(agendaCount)}",
-            style: AppTextStyle.headline4,
-            textAlign: TextAlign.center,
+            widget.event.eventName,
+            style: AppTextStyle.body,
           ),
-          ...agendaSections
+          const SizedBox(
+            height: 15,
+            width: double.infinity,
+          ),
+          Text("Event Description", style: AppTextStyle.bodyMedium),
+          Text(
+            widget.event.eventDescription,
+            style: AppTextStyle.body,
+          ),
+          const SizedBox(
+            height: 5,
+            width: double.infinity,
+          ),
         ],
       );
     }
-  } else {
-    if (event.agendas.isEmpty) {
-      return const Text("No agendas found.");
-    }
-    List<Widget> agendaSections =
-        _generateAgendaSections(null, event.agendas[0]);
-    agendaSectionsColumn = Column(
-      children: [...agendaSections],
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Event Details", style: AppTextStyle.headlineSmall),
+            IconButton(
+                onPressed: () => toggleEditing(),
+                icon: isEditing
+                    ? const Icon(Icons.close)
+                    : const Icon(Icons.edit)),
+          ],
+        ),
+        Container(
+            // backgroundColor: context.theme.colorScheme.onTertiary,
+            decoration: BoxDecoration(
+              color: context.theme.colorScheme.onTertiary,
+              border: Border.all(
+                color: context.theme.colorScheme.onTertiary,
+              ),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: detailsWidget,
+            )),
+      ],
     );
   }
-  return agendaSectionsColumn ?? const Text("No agendas.");
 }
 
-List<Widget> _generateAgendaSections(int? agendaIndex, Agenda agenda) {
-  List<Widget> agendaSections = [];
+List<Widget> _generateAgendas(
+    EventPlan event, AgendaEditorViewmodel viewmodel) {
+  List<Widget> agendas = [];
 
-  for (var i = 0; i < agenda.sections.length; i++) {
-    final TextEditingController sectionName =
-        TextEditingController(text: agenda.sections[i].name);
-    final TextEditingController sectionDescription =
-        TextEditingController(text: agenda.sections[i].description);
-    agendaSections.add(
-      FormInput(
-        labelText: 'Section Title',
-        fieldController: sectionName,
-        isRequired: true,
-      ),
-    );
-    agendaSections.add(
-      FormInput(
-        labelText: "Section Description",
-        fieldController: sectionDescription,
-        isRequired: false,
-        inputType: TextInputType.multiline,
-        maxLines: null,
-        minLines: 4,
-      ),
-    );
-    agendaSections.add(const SizedBox(height: 20));
-    agendaSections.add(Text(
-      "${agenda.sections[i].name} Items",
-      style: AppTextStyle.bodyMedium,
-      textAlign: TextAlign.left,
-    ));
-    List<Widget> items = _generateAgendaItems(agenda.sections[i]);
-    for (Widget item in items) {
-      agendaSections.add(item);
-    }
-    agendaSections.add(const SizedBox(height: 20));
-  }
-
-  return agendaSections;
-}
-
-List<Widget> _generateAgendaItems(AgendaSection agendaSection) {
-  List<Widget> agendaItems = [];
-
-  for (var i = 0; i < agendaSection.items.length; i++) {
-    // final TextEditingController itemTitle =
-    //     TextEditingController(text: agendaSection.items[i].title);
-    // agendaItems.add(
-    //   FormInput(
-    //     labelText: '',
-    //     fieldController: itemTitle,
-    //     isRequired: true,
-    //   ),
-    // );
-    for (var j = 0; j < agendaSection.items[i].content.length; j++) {
-      final TextEditingController itemContent =
-          TextEditingController(text: agendaSection.items[i].content[j]);
-      agendaItems.add(FormInput(
-        labelText: "Item Prompt",
-        fieldController: itemContent,
-        isRequired: false,
-        inputType: TextInputType.multiline,
-        maxLines: null,
-        minLines: 4,
+  if (event.isSeries) {
+    for (var i = 0; i < event.agendas.length; i++) {
+      agendas.add(AgendaWidget(
+        agenda: event.agendas[i],
+        agendaIndex: i,
+        viewmodel: viewmodel,
       ));
     }
+  } else {
+    if (event.agendas.isEmpty) {
+      return agendas;
+    }
+    agendas.add(AgendaWidget(
+      agenda: event.agendas[0],
+      agendaIndex: 0,
+      viewmodel: viewmodel,
+    ));
+  }
+  return agendas;
+}
+
+class AgendaWidget extends StatelessWidget {
+  final Agenda agenda;
+
+  final int agendaIndex;
+
+  final AgendaEditorViewmodel viewmodel;
+
+  const AgendaWidget(
+      {super.key,
+      required this.agenda,
+      required this.viewmodel,
+      required this.agendaIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+            this.viewmodel.eventPlan.isSeries == false
+                ? "Agenda"
+                : "Agenda ${numToString(agendaIndex + 1)}",
+            style: AppTextStyle.headlineSmall),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+            decoration: BoxDecoration(
+              color: context.theme.colorScheme.onTertiary,
+              border: Border.all(
+                color: context.theme.colorScheme.onTertiary,
+              ),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                  children: [..._generateAgendaSections(agendaIndex, agenda)]),
+            )),
+      ],
+    );
   }
 
-  return agendaItems;
+  List<Widget> _generateAgendaSections(int agendaIndex, Agenda agenda) {
+    List<Widget> agendaSections = [];
+    for (var i = 0; i < agenda.sections.length; i++) {
+      agendaSections.add(AgendaSectionWidget(
+        section: agenda.sections[i],
+        sectionIndex: i,
+        agendaIndex: agendaIndex,
+        formKey: GlobalKey<FormState>(),
+        viewmodel: viewmodel,
+      ));
+    }
+
+    return agendaSections;
+  }
 }

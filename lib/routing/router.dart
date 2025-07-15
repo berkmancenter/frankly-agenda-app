@@ -66,14 +66,10 @@ final router = GoRouter(
               GoRoute(
                 path: Routes.editAgenda,
                 builder: (context, state) {
-                  final agendaEditorViewmodel = AgendaEditorViewmodel(
-                    agendaRepository: context.read(),
-                  );
                   EventPlan eventPlan = state.extra as EventPlan;
-                  return AgendaEditor(
-                    viewModel: agendaEditorViewmodel,
-                    eventPlan: eventPlan,
-                  );
+                  final agendaEditorViewmodel = AgendaEditorViewmodel(
+                      agendaRepository: context.read(), eventPlan: eventPlan);
+                  return AgendaEditor(viewModel: agendaEditorViewmodel);
                 },
               )
             ],

@@ -46,8 +46,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
     for (TextEditingController controller in contentControllerList) {
       contentControllerStrings.add(controller.text);
     }
-    widget.viewmodel.updateItem(widget.agendaIndex, widget.sectionIndex, widget.itemIndex, 
-      itemTitle.text, contentControllerStrings);
+    widget.viewmodel.updateItem(widget.agendaIndex, widget.sectionIndex,
+        widget.itemIndex, itemTitle.text, contentControllerStrings);
 
     isEditing = false;
   }
@@ -126,8 +126,10 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 isRequired: true,
               ),
               ...generateFormContentItems(),
-              IconButton(
-                  onPressed: () => updateItem(), icon: const Icon(Icons.save))
+              TextButton.icon(
+                  label: const Text('Save'),
+                  onPressed: () => updateItem(),
+                  icon: const Icon(Icons.save)),
             ],
           ));
     } else {

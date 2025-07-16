@@ -4,7 +4,7 @@ part 'event_plan.g.dart';
 
 @JsonSerializable()
 class EventPlan {
-  final String eventName, eventDescription;
+  String eventName, eventDescription;
   final List<Agenda> agendas;
   final bool isSeries;
 

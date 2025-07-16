@@ -1,11 +1,9 @@
-import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_item.dart';
-import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AgendaSectionWidget extends StatefulWidget {
@@ -37,6 +35,12 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
     setState(() {
       isEditing = !isEditing;
     });
+  }
+
+  void updateSection() {
+    widget.viewmodel.updateSectionInfo(widget.agendaIndex, widget.sectionIndex,
+        sectionName.text, sectionDescription.text);
+    isEditing = false;
   }
 
   @override
@@ -79,6 +83,10 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
                 maxLines: null,
                 minLines: 4,
               ),
+              TextButton.icon(
+                  label: const Text('Save'),
+                  onPressed: () => updateSection(),
+                  icon: const Icon(Icons.save)),
             ],
           ));
     } else {

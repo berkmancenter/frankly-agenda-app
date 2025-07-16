@@ -22,4 +22,18 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         newItem;
     notifyListeners();
   }
+
+  void updateSectionInfo(int agendaIndex, int sectionIndex, String sectionName,
+      String description) {
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].name = sectionName;
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].description =
+        description;
+    notifyListeners();
+  }
+
+  void updateEventInfo(String eventName, String description) {
+    eventPlan.eventName = eventName;
+    eventPlan.eventDescription = description;
+    notifyListeners();
+  }
 }

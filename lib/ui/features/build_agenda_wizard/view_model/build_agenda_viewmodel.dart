@@ -1,5 +1,4 @@
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
-import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/utils/result.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';

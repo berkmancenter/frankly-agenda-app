@@ -50,6 +50,7 @@ dependencies:
   rxdart: ^0.27.7
   duration_picker: ^1.2.0
   string_validator: ^1.2.0
+  flutter_to_pdf: ^0.4.0
 
 dev_dependencies:
   flutter_test:

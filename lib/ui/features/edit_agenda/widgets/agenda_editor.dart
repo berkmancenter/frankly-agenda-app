@@ -1,5 +1,4 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
-import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
@@ -96,6 +95,11 @@ class _EventDetailsState extends State<EventDetails> {
     });
   }
 
+  void updateEvent() {
+    widget.viewModel.updateEventInfo(_name.text, _description.text);
+    isEditing = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     _name.value = TextEditingValue(text: widget.event.eventName);
@@ -120,6 +124,10 @@ class _EventDetailsState extends State<EventDetails> {
                 maxLines: null,
                 minLines: 4,
               ),
+              TextButton.icon(
+                  label: const Text('Save'),
+                  onPressed: () => updateEvent(),
+                  icon: const Icon(Icons.save)),
             ],
           ));
     } else {
@@ -226,7 +234,7 @@ class AgendaWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            this.viewmodel.eventPlan.isSeries == false
+            viewmodel.eventPlan.isSeries == false
                 ? "Agenda"
                 : "Agenda ${numToString(agendaIndex + 1)}",
             style: AppTextStyle.headlineSmall),

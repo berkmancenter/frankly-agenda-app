@@ -8,6 +8,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_a
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/build_agenda_screen.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_editor.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_editor_screen.dart';
 import 'package:agenda_wizard/ui/features/home/view_model/home_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/home/widgets/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,7 +69,7 @@ final router = GoRouter(
                   EventPlan eventPlan = state.extra as EventPlan;
                   final agendaEditorViewmodel = AgendaEditorViewmodel(
                       agendaRepository: context.read(), eventPlan: eventPlan);
-                  return AgendaEditor(viewModel: agendaEditorViewmodel);
+                  return AgendaEditorScreen(viewModel: agendaEditorViewmodel);
                 },
               )
             ],

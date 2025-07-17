@@ -1,7 +1,5 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
-import 'package:agenda_wizard/routing/router.dart';
-import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
@@ -17,58 +15,37 @@ class AgendaEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.theme.colorScheme.surfaceContainer,
-      child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ListenableBuilder(
-              listenable: viewModel,
-              builder: (BuildContext context, _) {
-                return ListView(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () => router.go(Routes.agendas),
-                          icon: const Icon(Icons.view_agenda)),
-                      const Text("Agenda Editor"),
-                      const SizedBox(
-                        width: 50,
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    viewModel.eventPlan.eventName,
-                    style: AppTextStyle.headline3,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
-                    style: AppTextStyle.eyebrowSmall,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  EventDetails(
-                    viewModel: viewModel,
-                    event: viewModel.eventPlan,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ..._generateAgendas(viewModel.eventPlan, viewModel),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ]);
-              })),
-    );
+    return Column(children: [
+      const SizedBox(
+        height: 10,
+      ),
+      Text(
+        viewModel.eventPlan.eventName,
+        style: AppTextStyle.headline3,
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      Text(
+        'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
+        style: AppTextStyle.eyebrowSmall,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      EventDetails(
+        viewModel: viewModel,
+        event: viewModel.eventPlan,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      ..._generateAgendas(viewModel.eventPlan, viewModel),
+      const SizedBox(
+        height: 10,
+      ),
+    ]);
   }
 }
 

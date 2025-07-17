@@ -26,7 +26,7 @@ class BuildAgendaRepository {
   Future<EventPlan> _readJson() async {
     try {
       final String response =
-          await rootBundle.loadString('lib/assets/sample_agenda.json');
+          await rootBundle.loadString('assets/sample_agenda.json');
       var rawEvent = await json.decode(response);
       EventPlan eventPlan = EventPlan.fromJson(rawEvent);
 

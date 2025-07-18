@@ -1,6 +1,7 @@
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_item.dart';
@@ -123,40 +124,21 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
           ),
           borderRadius: BorderRadius.circular(4),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            sectionWidgets,
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Prompts:",
-              style: AppTextStyle.subhead,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ..._generateAgendaItems(),
-            Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: context.theme.colorScheme
-                          .surfaceContainer, // Customize border color
-                      width: 1, // Customize border width
-                    ),
-                  ),
-                ),
-                child: const SizedBox(
-                  height: 20,
-                  width: double.infinity,
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ));
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          sectionWidgets,
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Prompts:",
+            style: AppTextStyle.subhead,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ..._generateAgendaItems(),
+          const DividerLine(),
+        ]));
   }
 
   List<Widget> _generateAgendaItems() {

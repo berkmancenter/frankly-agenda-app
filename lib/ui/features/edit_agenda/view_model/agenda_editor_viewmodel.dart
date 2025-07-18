@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
+import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_to_pdf/flutter_to_pdf.dart';
@@ -60,13 +61,32 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
     final overlay = OverlayEntry(
       builder: (_) => Material(
-        child: Center(
-          child: IntrinsicHeight(
-            child: Column(
-              key: key,
-              children: [widget],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 50,
             ),
-          ),
+            const Icon(
+              Icons.post_add,
+              size: 50,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Text(
+              "building PDF . . .",
+              style: AppTextStyle.headline4,
+            ),
+            Center(
+              child: IntrinsicHeight(
+                child: Column(
+                  key: key,
+                  children: [Opacity(opacity: 0, child: widget)],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

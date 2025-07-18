@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
@@ -52,9 +54,48 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Result> exportPDF() async {
+  Future<double> measureWidgetHeight(
+      BuildContext context, Widget widget) async {
+    final key = GlobalKey();
+
+    final overlay = OverlayEntry(
+      builder: (_) => Material(
+        child: Center(
+          child: IntrinsicHeight(
+            child: Column(
+              key: key,
+              children: [widget],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlay);
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    final height = key.currentContext?.size?.height ?? 0;
+    overlay.remove();
+    return height;
+  }
+
+  Future<Result> buildPDF(List<String> frameIds) async {
     try {
-      final pdf = await exportDelegate.exportToPdfDocument(agendaPDFID);
+      final pdf = await exportDelegate.exportToPdfDocument(frameIds[0]);
+
+      for (var i = 1; i < frameIds.length; i++) {
+        final newPage = await exportDelegate.exportToPdfPage(frameIds[i]);
+        pdf.addPage(newPage);
+      }
+      return await savePDF(pdf);
+    } catch (e) {
+      return Result.error(
+          Exception("Error building pdf: $e"), "Error building PDF.");
+    }
+  }
+
+  Future<Result> savePDF(var pdf) async {
+    try {
       final bytes = await pdf.save();
 
       String dir = (await getApplicationDocumentsDirectory()).path;

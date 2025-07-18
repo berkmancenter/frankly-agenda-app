@@ -4,12 +4,15 @@ sealed class Result<T> {
   const factory Result.ok(T value) = Ok._;
 
   const factory Result.error(Exception error, [String? displayError]) = Error._;
+
+  get value => null;
 }
 
 /// Subclass of result - Ok
 final class Ok<T> extends Result<T> {
   const Ok._(this.value);
 
+  @override
   final T value;
 
   @override

@@ -1,4 +1,5 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
+import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/firebase_collections.dart';
 import 'package:agenda_wizard/models/user/user.dart';
 import 'package:agenda_wizard/utils/result.dart';
@@ -21,6 +22,10 @@ class AgendaRepository {
 
     // final agendaDocs = await _firestore.collection(FirebaseCollections.agendas).get();
     // return Result.ok(AgendaModel.fromJson(agendaDocs.data()));
+  }
+
+  Future<Result<EventPlan>> updateEvent(EventPlan event) async {
+    return Result.ok(event);
   }
 
 

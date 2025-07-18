@@ -1,4 +1,5 @@
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
+import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/utils/result.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
 
@@ -45,9 +46,9 @@ class BuildAgendaViewmodel {
     _buildAgendaRepository.addEventLength(eventLength);
   }
 
-  Future<Result> generateAgenda() async {
-    final agendaResult = await _buildAgendaRepository.buildAgenda();
-    return agendaResult;
+  Future<Result<EventPlan>> generateAgenda() async {
+    final eventResult = await _buildAgendaRepository.buildAgenda();
+    return eventResult;
   }
 
 

@@ -5,17 +5,12 @@ part 'agenda.g.dart';
 
 @JsonSerializable()
 class Agenda {
-  final String name, description;
   final List<AgendaSection> sections;
-  final bool isSeries;
   final int? eventNumber; // which event(s) in a series of events
   final List<AgendaItem>? additionalInformation;
 
   Agenda(
-      {required this.name,
-      required this.description,
-      required this.sections,
-      required this.isSeries,
+      {required this.sections,
       this.eventNumber,
       this.additionalInformation});
 

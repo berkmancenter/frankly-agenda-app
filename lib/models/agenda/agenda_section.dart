@@ -4,7 +4,7 @@ part 'agenda_section.g.dart';
 
 @JsonSerializable()
 class AgendaSection {
-  final String name, description;
+  String name, description;
   final List<AgendaItem> items;
 
   AgendaSection(

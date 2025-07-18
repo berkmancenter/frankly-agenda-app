@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:agenda_wizard/models/firebase_collections.dart';
 import 'package:agenda_wizard/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

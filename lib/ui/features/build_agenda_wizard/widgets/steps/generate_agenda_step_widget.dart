@@ -76,8 +76,8 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-              onPressed: () => goHome(), child: const Text("Go home")),
+          // ElevatedButton(
+          //     onPressed: () => goHome(), child: const Text("Go home")),
           const SizedBox(
             height: 100,
           ),

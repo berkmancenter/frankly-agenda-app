@@ -83,6 +83,13 @@ class _LogInFormState extends State<LogInForm> {
   final TextEditingController _password = TextEditingController();
   String _errorMessage = "";
 
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   Future<void> submitLogin() async {
     if (_formKey.currentState!.validate()) {
       try {

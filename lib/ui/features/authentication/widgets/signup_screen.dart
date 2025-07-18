@@ -91,6 +91,15 @@ class _SignUpFormState extends State<SignUpForm> {
 
   String _errorMessage = "";
 
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    _password.dispose();
+    _reenterPassword.dispose();
+    super.dispose();
+  }
+
   Future<void> submitSignIn() async {
     if (_formKey.currentState!.validate()) {
       try {

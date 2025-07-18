@@ -32,6 +32,13 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
   final TextEditingController sectionName = TextEditingController();
   final TextEditingController sectionDescription = TextEditingController();
 
+  @override
+  void dispose() {
+    sectionName.dispose();
+    sectionDescription.dispose();
+    super.dispose();
+  }
+
   void toggleEditing() {
     setState(() {
       isEditing = !isEditing;

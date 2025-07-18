@@ -66,6 +66,13 @@ class _EventDetailsState extends State<EventDetails> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _description = TextEditingController();
 
+  @override
+  void dispose() {
+    _name.dispose();
+    _description.dispose();
+    super.dispose();
+  }
+
   void toggleEditing() {
     setState(() {
       isEditing = !isEditing;

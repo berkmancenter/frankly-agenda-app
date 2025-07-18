@@ -35,6 +35,18 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
 
   final TextEditingController itemDescription = TextEditingController();
 
+  @override
+  void dispose() {
+    itemTitle.dispose();
+    itemDescription.dispose();
+
+    for (var controller in contentControllerList) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
+
   void toggleEditing() {
     setState(() {
       isEditing = !isEditing;

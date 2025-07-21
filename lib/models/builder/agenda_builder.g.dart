@@ -43,7 +43,6 @@ Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
 const _$GoalsEnumMap = {
   Goals.dialogue: 'dialogue',
   Goals.exploration: 'exploration',
-  Goals.evaluation: 'evaluation',
   Goals.deliberation: 'deliberation',
 };
 

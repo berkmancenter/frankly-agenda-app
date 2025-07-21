@@ -12,10 +12,10 @@ class GoalStepWidget extends StatelessWidget {
 
   final Map<Goals, String> _checkedBoxLabels = {
     Goals.dialogue: "To understand one another's values and build trust",
-    Goals.exploration: "To generate ideas, questions, and unknowns about a topic",
-    Goals.evaluation: "Coalescing around or making some type of decision(s)",
+    Goals.exploration:
+        "To generate ideas, questions, and unknowns about a topic",
     Goals.deliberation:
-        "All of the above- find common ground and shared perspectives to make decisions",
+        "Finding common ground and shared perspectives to make decisions",
   };
 
   @override
@@ -51,7 +51,10 @@ class GoalStepWidget extends StatelessWidget {
                   });
             }).toList(),
           ),
-          ProgressButtons(provider: provider, prevEnabled: false,),
+          ProgressButtons(
+            provider: provider,
+            prevEnabled: false,
+          ),
         ],
       ),
     );

@@ -11,7 +11,6 @@ class GoalStepProvider extends FormStepProvider {
   final Map<Goals, BehaviorSubject<bool>> _checkboxStates = {
     Goals.dialogue: BehaviorSubject<bool>.seeded(false),
     Goals.exploration: BehaviorSubject<bool>.seeded(false),
-    Goals.evaluation: BehaviorSubject<bool>.seeded(false),
     Goals.deliberation: BehaviorSubject<bool>.seeded(false),
   };
 

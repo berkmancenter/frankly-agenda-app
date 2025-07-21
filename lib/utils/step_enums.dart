@@ -1,4 +1,4 @@
-enum Goals { dialogue, exploration, evaluation, deliberation }
+enum Goals { dialogue, exploration, deliberation }
 
 enum ParticipantBatches {zeroToFive, fiveToTen, tenToTwentyFive, twentyFivetoFifty, fiftyPlus}
 

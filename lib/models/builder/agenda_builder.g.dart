@@ -11,6 +11,7 @@ AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
       goals: (json['goals'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$GoalsEnumMap, e))
           .toList(),
+      isConcreteDecision: json['isConcreteDecision'] as bool?,
       topic: json['topic'] as String?,
       topicDescription: json['topicDescription'] as String?,
       audienceDescription: json['audienceDescription'] as String?,
@@ -28,6 +29,7 @@ AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
     <String, dynamic>{
       'goals': instance.goals?.map((e) => _$GoalsEnumMap[e]!).toList(),
+      'isConcreteDecision': instance.isConcreteDecision,
       'topic': instance.topic,
       'topicDescription': instance.topicDescription,
       'audienceDescription': instance.audienceDescription,

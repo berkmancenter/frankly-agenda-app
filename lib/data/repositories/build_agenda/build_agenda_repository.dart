@@ -41,6 +41,10 @@ class BuildAgendaRepository {
     builder.goals = goals;
   }
 
+  void addIsConcreteDecision(IsConcrete isConcreteDecision) {
+    builder.isConcreteDecision = isConcreteDecision == IsConcrete.concrete;
+  }
+
   void addTopic(String topic, String topicDescription) {
     builder.topic = topic;
     builder.topicDescription = topicDescription;

@@ -35,7 +35,13 @@ class GoalStepProvider extends FormStepProvider {
 
   @override
   int calculateNextStep() {
-    return Steps.topicStep.index;
+    Map<Goals, BehaviorSubject<bool>> filteredGoals = Map.fromEntries(
+        _checkboxStates.entries.where((entry) => entry.value.value == true));
+    if (filteredGoals.containsKey(Goals.deliberation)) {
+      return Steps.concreteDecisionStep.index;
+    } else {
+      return Steps.topicStep.index;
+    }
   }
 
   /// Dispose (required)

@@ -5,6 +5,7 @@ part 'agenda_builder.g.dart';
 @JsonSerializable()
 class AgendaBuilder {
   List<Goals>? goals;
+  bool? isConcreteDecision;
   String? topic;
   String? topicDescription;
   String? audienceDescription;
@@ -17,6 +18,7 @@ class AgendaBuilder {
 
   AgendaBuilder({
     this.goals,
+    this.isConcreteDecision,
     this.topic,
     this.topicDescription,
     this.audienceDescription,

@@ -1,6 +1,7 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/audience_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/concrete_decision_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_step_provider.dart';
@@ -16,6 +17,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/audience_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/breakout_step_widget.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/concrete_decision_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_count_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_length_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/generate_agenda_step_widget.dart';
@@ -64,6 +66,7 @@ class AgendaWizard extends StatelessWidget {
           WizardStepController(
             step: provider.goalStepProvider,
           ),
+          WizardStepController(step: provider.concreteStepProvider),
           WizardStepController(
             step: provider.topicStepProvider,
           ),
@@ -140,6 +143,9 @@ class AgendaWizard extends StatelessWidget {
           return GoalStepWidget(
             provider: state,
           );
+        }
+        if (state is ConcreteDecisionProvider) {
+          return ConcreteDecisionStepWidget(provider: state);
         }
         if (state is TopicStepProvider) {
           return TopicStepWidget(
@@ -244,6 +250,7 @@ class AgendaWizardProvider {
   AgendaWizardProvider(this.viewModel, this.refreshWizardCallback) {
     stepProviderMap = {
       Steps.goalStep: GoalStepProvider(viewModel),
+      Steps.concreteDecisionStep: ConcreteDecisionProvider(viewModel),
       Steps.topicStep: TopicStepProvider(viewModel),
       Steps.audienceStep: AudienceStepProvider(viewModel),
       Steps.participantStep: ParticipantCountStepProvider(viewModel),
@@ -261,6 +268,7 @@ class AgendaWizardProvider {
     };
 
     goalStepProvider = stepProviderMap[Steps.goalStep]!;
+    concreteStepProvider = stepProviderMap[Steps.concreteDecisionStep]!;
     topicStepProvider = stepProviderMap[Steps.topicStep]!;
     audienceStepProvider = stepProviderMap[Steps.audienceStep]!;
     participantStepProvider = stepProviderMap[Steps.participantStep]!;
@@ -277,6 +285,7 @@ class AgendaWizardProvider {
   }
 
   late StepProvider goalStepProvider;
+  late StepProvider concreteStepProvider;
   late StepProvider topicStepProvider;
   late StepProvider audienceStepProvider;
   late StepProvider participantStepProvider;
@@ -298,6 +307,7 @@ class AgendaWizardProvider {
 
   Future<void> dispose() async {
     goalStepProvider.dispose();
+    concreteStepProvider.dispose();
     topicStepProvider.dispose();
     audienceStepProvider.dispose();
     participantStepProvider.dispose();

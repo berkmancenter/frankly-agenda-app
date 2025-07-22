@@ -14,6 +14,10 @@ class BuildAgendaViewmodel {
     _buildAgendaRepository.addGoal(goals);
   }
 
+  void addIsConcrete(IsConcrete isConcreteDecision) {
+    _buildAgendaRepository.addIsConcreteDecision(isConcreteDecision);
+  }
+
   void addTopic(String topic, String topicDescription) {
     _buildAgendaRepository.addTopic(topic, topicDescription);
   }
@@ -50,7 +54,4 @@ class BuildAgendaViewmodel {
     final eventResult = await _buildAgendaRepository.buildAgenda();
     return eventResult;
   }
-
-
-  
 }

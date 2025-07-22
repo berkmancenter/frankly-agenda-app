@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 enum Steps {
   goalStep,
+  concreteDecisionStep,
   topicStep,
   audienceStep,
   participantStep,

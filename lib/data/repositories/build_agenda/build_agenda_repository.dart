@@ -55,6 +55,25 @@ class BuildAgendaRepository {
   }
 
   void addParticipantCount(ParticipantBatches count) {
+            if (count == ParticipantBatches.zeroToFive) {
+            builder.lowerParticipantCount = 1;
+            builder.upperParticipantCount = 5;
+        } else if (count == ParticipantBatches.fiveToTen) {
+            builder.lowerParticipantCount = 5;
+            builder.upperParticipantCount = 10;
+        }
+        else if (count == ParticipantBatches.tenToTwentyFive) {
+            builder.lowerParticipantCount = 10;
+            builder.upperParticipantCount = 25;
+        }
+        else if (count == ParticipantBatches.twentyFivetoFifty) {
+            builder.lowerParticipantCount = 25;
+            builder.upperParticipantCount = 50;
+        }
+        else if (count == ParticipantBatches.fiftyPlus) {
+            builder.lowerParticipantCount = 50;
+            builder.upperParticipantCount = 75;
+        }
     builder.participantCount = count;
   }
 

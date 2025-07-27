@@ -43,7 +43,9 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                         icon: const Icon(Icons.view_agenda)),
                   ),
                 ),
-                editMode ? const Text("Agenda Editor") : const Text("Agenda Preview"),
+                editMode
+                    ? const Text("Agenda Editor")
+                    : const Text("Agenda Preview"),
                 SizedBox(
                   width: 120,
                   child: Align(

@@ -58,4 +58,6 @@ class BuildAgendaViewmodel {
     final eventResult = await _buildAgendaRepository.buildAgenda();
     return eventResult;
   }
+
+
 }

@@ -48,6 +48,11 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         description;
     notifyListeners();
   }
+  
+   void deleteSection(int agendaIndex, int sectionIndex) {
+    eventPlan.agendas[agendaIndex].sections.removeAt(sectionIndex);
+    notifyListeners();
+  }
 
   void updateEventInfo(String eventName, String description) {
     eventPlan.eventName = eventName;

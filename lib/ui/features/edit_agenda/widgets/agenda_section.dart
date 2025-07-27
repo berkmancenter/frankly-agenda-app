@@ -51,6 +51,13 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
     isEditing = false;
   }
 
+  void deleteSection() {
+    widget.viewmodel.deleteSection(
+      widget.agendaIndex,
+      widget.sectionIndex,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final agendaSectionFormKey = widget.formKey;
@@ -106,9 +113,38 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
             children: [
               Text("${widget.sectionIndex + 1}. ${widget.section.name}",
                   style: AppTextStyle.headline4),
-              IconButton(
-                  onPressed: () => toggleEditing(),
-                  icon: const Icon(Icons.edit)),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () => showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SimpleDialog(
+                              title: const Text(
+                                  'Are you sure you want to delete this section?'),
+                              children: <Widget>[
+                                SimpleDialogOption(
+                                  onPressed: () {
+                                    deleteSection();
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Yes'),
+                                ),
+                                SimpleDialogOption(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('No'),
+                                ),
+                              ],
+                            );
+                          }),
+                      icon: const Icon(Icons.delete)),
+                  IconButton(
+                      onPressed: () => toggleEditing(),
+                      icon: const Icon(Icons.edit)),
+                ],
+              ),
             ],
           ),
           const SizedBox(

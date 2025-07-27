@@ -10,6 +10,7 @@ enum Steps {
   audienceStep,
   participantStep,
   breakoutStep,
+  breakoutCountStep,
   facilitatedStep,
   facilitatedBreakoutStep,
   seriesStep,

@@ -17,6 +17,8 @@ AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
       audienceDescription: json['audienceDescription'] as String?,
       participantCount: $enumDecodeNullable(
           _$ParticipantBatchesEnumMap, json['participantCount']),
+      upperParticipantCount: (json['upperParticipantCount'] as num?)?.toInt(),
+      lowerParticipantCount: (json['lowerParticipantCount'] as num?)?.toInt(),
       hasBreakoutGroups: json['hasBreakoutGroups'] as bool?,
       isFacilitated: json['isFacilitated'] as bool?,
       isSeries: json['isSeries'] as bool?,
@@ -35,6 +37,8 @@ Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
       'audienceDescription': instance.audienceDescription,
       'participantCount':
           _$ParticipantBatchesEnumMap[instance.participantCount],
+      'upperParticipantCount': instance.upperParticipantCount,
+      'lowerParticipantCount': instance.lowerParticipantCount,
       'hasBreakoutGroups': instance.hasBreakoutGroups,
       'isFacilitated': instance.isFacilitated,
       'isSeries': instance.isSeries,

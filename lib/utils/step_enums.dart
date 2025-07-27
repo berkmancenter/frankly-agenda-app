@@ -1,6 +1,14 @@
 enum Goals { dialogue, exploration, deliberation }
 
-enum ParticipantBatches {zeroToFive, fiveToTen, tenToTwentyFive, twentyFivetoFifty, fiftyPlus}
+enum ParticipantBatches {
+  zeroToFive,
+  fiveToTen,
+  tenToFifteen,
+  tenToTwentyFive,
+  fifteenToTwentyFive,
+  twentyFivetoFifty,
+  fiftyPlus
+}
 
 enum HasBreakoutGroups { breakoutGroups, noBreakoutGroups }
 

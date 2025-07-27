@@ -10,6 +10,8 @@ class AgendaBuilder {
   String? topicDescription;
   String? audienceDescription;
   ParticipantBatches? participantCount;
+  int? upperParticipantCount;
+  int? lowerParticipantCount;
   bool? hasBreakoutGroups;
   bool? isFacilitated;
   bool? isSeries;
@@ -23,11 +25,13 @@ class AgendaBuilder {
     this.topicDescription,
     this.audienceDescription,
     this.participantCount,
+    this.upperParticipantCount,
+    this.lowerParticipantCount,
     this.hasBreakoutGroups,
     this.isFacilitated,
     this.isSeries,
     this.eventCount,
-    this.eventLength, // in minutes
+    this.eventLength,
   });
 
   factory AgendaBuilder.fromJson(Map<String, Object?> json) =>

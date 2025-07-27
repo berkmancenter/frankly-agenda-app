@@ -30,7 +30,7 @@ class BreakoutStepProvider extends FormStepProvider {
   @override
   int calculateNextStep() {
     if (_breakoutStatus.value == HasBreakoutGroups.breakoutGroups) {
-      return Steps.facilitatedBreakoutStep.index;
+      return Steps.breakoutCountStep.index;
     } else {
       return Steps.facilitatedStep.index;
     }

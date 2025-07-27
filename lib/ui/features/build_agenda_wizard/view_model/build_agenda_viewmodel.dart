@@ -30,6 +30,10 @@ class BuildAgendaViewmodel {
     _buildAgendaRepository.addParticipantCount(count);
   }
 
+  void addBreakOutParticipantCount(ParticipantBatches count) {
+    _buildAgendaRepository.addBreakOutParticipantCount(count);
+  }
+
   void addHasBreakoutGroups(HasBreakoutGroups hasGroups) {
     _buildAgendaRepository.addHasBreakoutGroups(hasGroups);
   }

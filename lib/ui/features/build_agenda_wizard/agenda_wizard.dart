@@ -1,6 +1,7 @@
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/audience_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_participant_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/concrete_decision_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_count_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/facilitate_breakout_provider.dart';
@@ -16,6 +17,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/audience_step_widget.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/breakout_count_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/breakout_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/concrete_decision_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/event_count_widget.dart';
@@ -73,6 +75,7 @@ class AgendaWizard extends StatelessWidget {
           WizardStepController(step: provider.audienceStepProvider),
           WizardStepController(step: provider.participantStepProvider),
           WizardStepController(step: provider.breakoutStepProvider),
+          WizardStepController(step: provider.breakoutCountStepProvider),
           WizardStepController(step: provider.facilitatedStepProvider),
           WizardStepController(step: provider.facilitatedBreakoutStepProvider),
           WizardStepController(step: provider.seriesStepProvider),
@@ -167,6 +170,11 @@ class AgendaWizard extends StatelessWidget {
             provider: state,
           );
         }
+        if (state is BreakoutParticipantProvider) {
+          return BreakoutCountWidget(
+            provider: state,
+          );
+        }
         if (state is FacilitateBreakoutProvider) {
           return FacilitatedStepWidget(provider: state, hasBreakouts: true);
         }
@@ -255,6 +263,7 @@ class AgendaWizardProvider {
       Steps.audienceStep: AudienceStepProvider(viewModel),
       Steps.participantStep: ParticipantCountStepProvider(viewModel),
       Steps.breakoutStep: BreakoutStepProvider(viewModel),
+      Steps.breakoutCountStep: BreakoutParticipantProvider(viewModel),
       Steps.facilitatedStep: FacilitateSingleProvider(viewModel),
       Steps.facilitatedBreakoutStep: FacilitateBreakoutProvider(viewModel),
       Steps.seriesStep: SeriesStepProvider(viewModel),
@@ -273,6 +282,7 @@ class AgendaWizardProvider {
     audienceStepProvider = stepProviderMap[Steps.audienceStep]!;
     participantStepProvider = stepProviderMap[Steps.participantStep]!;
     breakoutStepProvider = stepProviderMap[Steps.breakoutStep]!;
+    breakoutCountStepProvider = stepProviderMap[Steps.breakoutCountStep]!;
     facilitatedStepProvider = stepProviderMap[Steps.facilitatedStep]!;
     facilitatedBreakoutStepProvider =
         stepProviderMap[Steps.facilitatedBreakoutStep]!;
@@ -289,6 +299,7 @@ class AgendaWizardProvider {
   late StepProvider topicStepProvider;
   late StepProvider audienceStepProvider;
   late StepProvider participantStepProvider;
+  late StepProvider breakoutCountStepProvider;
   late StepProvider breakoutStepProvider;
   late StepProvider facilitatedStepProvider;
   late StepProvider facilitatedBreakoutStepProvider;
@@ -312,6 +323,7 @@ class AgendaWizardProvider {
     audienceStepProvider.dispose();
     participantStepProvider.dispose();
     breakoutStepProvider.dispose();
+    breakoutCountStepProvider.dispose();
     facilitatedStepProvider.dispose();
     facilitatedBreakoutStepProvider.dispose();
     seriesStepProvider.dispose();

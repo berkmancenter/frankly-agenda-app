@@ -73,7 +73,7 @@ class BreakoutParticipantProvider extends FormStepProvider {
   @override
   void addData() {
     if (_currBreakoutCount.value != null) {
-      viewModel.addParticipantCount(_currBreakoutCount.value!);
+      viewModel.addBreakOutParticipantCount(_currBreakoutCount.value!);
     } else {
       throw Exception("Sending null data from a radio button. Weird.");
     }

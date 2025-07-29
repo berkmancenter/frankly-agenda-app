@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
+import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
+import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/utils/result.dart';
@@ -33,11 +35,19 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     return await agendaRepository.updateEvent(eventPlan);
   }
 
-  void updateItem(int agendaIndex, int sectionIndex, int itemIndex,
-      String title, List<String> content) {
-    AgendaItem newItem = AgendaItem(title: title, content: content);
-    eventPlan.agendas[agendaIndex].sections[sectionIndex].items[itemIndex] =
-        newItem;
+  void deleteAgenda(int agendaIndex) {
+    eventPlan.agendas.removeAt(agendaIndex);
+    notifyListeners();
+  }
+
+  void addAgenda() {
+    AgendaSection newSection = AgendaSection(
+        name: "First Section",
+        description:
+            "This is the first section of your new agenda. Go ahead and edit, and don't forget to add prompts!",
+        items: []);
+    Agenda newAgenda = Agenda(sections: [newSection]);
+    eventPlan.agendas.add(newAgenda);
     notifyListeners();
   }
 
@@ -48,15 +58,43 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         description;
     notifyListeners();
   }
-  
-   void deleteSection(int agendaIndex, int sectionIndex) {
+
+  void deleteSection(int agendaIndex, int sectionIndex) {
     eventPlan.agendas[agendaIndex].sections.removeAt(sectionIndex);
+    notifyListeners();
+  }
+
+  void addSection(int agendaIndex, String title, String description) {
+    AgendaSection newSection =
+        AgendaSection(name: title, description: description, items: []);
+    eventPlan.agendas[agendaIndex].sections.add(newSection);
     notifyListeners();
   }
 
   void updateEventInfo(String eventName, String description) {
     eventPlan.eventName = eventName;
     eventPlan.eventDescription = description;
+    notifyListeners();
+  }
+
+  void updateItem(int agendaIndex, int sectionIndex, int itemIndex,
+      String title, List<String> content) {
+    AgendaItem newItem = AgendaItem(title: title, content: content);
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].items[itemIndex] =
+        newItem;
+    notifyListeners();
+  }
+
+  void deleteItem(int agendaIndex, int sectionIndex, int itemIndex) {
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].items
+        .removeAt(itemIndex);
+    notifyListeners();
+  }
+
+  void addItem(
+      int agendaIndex, int sectionIndex, String title, String content) {
+    AgendaItem newItem = AgendaItem(title: title, content: [content]);
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].items.add(newItem);
     notifyListeners();
   }
 

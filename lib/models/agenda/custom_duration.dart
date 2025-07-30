@@ -15,4 +15,10 @@ class CustomDuration {
       _$CustomDurationFromJson(json);
 
   Map<String, dynamic> toJson() => _$CustomDurationToJson(this);
+
+  CustomDuration deepCopy() {
+    CustomDuration newDuration =
+        CustomDuration(hours: hours, minutes: minutes, seconds: seconds);
+    return newDuration;
+  }
 }

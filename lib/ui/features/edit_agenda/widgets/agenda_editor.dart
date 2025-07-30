@@ -35,6 +35,10 @@ class AgendaEditor extends StatelessWidget {
       const SizedBox(
         height: 20,
       ),
+       TextButton.icon(
+          label: const Text('Reset Event Plan'),
+          onPressed: () => {viewModel.resetEventPlan()},
+          icon: const Icon(Icons.restore)),
       EventDetails(
         viewModel: viewModel,
         event: viewModel.eventPlan,

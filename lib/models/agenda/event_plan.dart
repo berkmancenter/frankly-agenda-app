@@ -14,7 +14,21 @@ class EventPlan {
       required this.agendas,
       required this.isSeries});
 
-  factory EventPlan.fromJson(Map<String, dynamic> json) => _$EventPlanFromJson(json);
+  factory EventPlan.fromJson(Map<String, dynamic> json) =>
+      _$EventPlanFromJson(json);
 
   Map<String, dynamic> toJson() => _$EventPlanToJson(this);
+
+  EventPlan deepCopy() {
+    List<Agenda> newAgendas = [];
+    for (Agenda agenda in agendas) {
+      newAgendas.add(agenda.deepCopy());
+    }
+    EventPlan newEvent = EventPlan(
+        eventName: eventName,
+        eventDescription: eventDescription,
+        agendas: newAgendas,
+        isSeries: isSeries);
+    return newEvent;
+  }
 }

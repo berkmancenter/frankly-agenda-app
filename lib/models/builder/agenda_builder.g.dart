@@ -55,7 +55,9 @@ const _$GoalsEnumMap = {
 const _$ParticipantBatchesEnumMap = {
   ParticipantBatches.zeroToFive: 'zeroToFive',
   ParticipantBatches.fiveToTen: 'fiveToTen',
+  ParticipantBatches.tenToFifteen: 'tenToFifteen',
   ParticipantBatches.tenToTwentyFive: 'tenToTwentyFive',
+  ParticipantBatches.fifteenToTwentyFive: 'fifteenToTwentyFive',
   ParticipantBatches.twentyFivetoFifty: 'twentyFivetoFifty',
   ParticipantBatches.fiftyPlus: 'fiftyPlus',
 };

@@ -15,10 +15,15 @@ import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 
 class AgendaEditorViewmodel extends ChangeNotifier {
   AgendaEditorViewmodel(
-      {required this.agendaRepository, required this.eventPlan});
+      {required this.agendaRepository, required this.eventPlan}) {
+        originalPlan = eventPlan.deepCopy();
+      } 
 
   final AgendaRepository agendaRepository;
+  
   EventPlan eventPlan;
+
+  late EventPlan originalPlan;
 
   String agendaPDFID = 'agendaId';
   final ExportDelegate exportDelegate = ExportDelegate(
@@ -33,6 +38,11 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   Future<Result> updateAgenda(eventPlan) async {
     return await agendaRepository.updateEvent(eventPlan);
+  }
+
+  void resetEventPlan() {
+    eventPlan = originalPlan.deepCopy();
+    notifyListeners();
   }
 
   void deleteAgenda(int agendaIndex) {

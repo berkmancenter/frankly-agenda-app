@@ -122,8 +122,10 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${widget.sectionIndex + 1}. ${widget.section.name}",
-                  style: AppTextStyle.headline4),
+              Expanded(
+                child: Text("${widget.sectionIndex + 1}. ${widget.section.name}",
+                    style: AppTextStyle.headline4),
+              ),
               Row(
                 children: [
                   DeleteIcon(

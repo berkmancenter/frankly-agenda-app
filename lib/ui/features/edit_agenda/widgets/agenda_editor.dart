@@ -35,10 +35,26 @@ class AgendaEditor extends StatelessWidget {
       const SizedBox(
         height: 20,
       ),
-       TextButton.icon(
-          label: const Text('Reset Event Plan'),
-          onPressed: () => {viewModel.resetEventPlan()},
-          icon: const Icon(Icons.restore)),
+      if (viewModel.editState == EditState.hasUpdated)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton.icon(
+                label: const Text('Reset Event'),
+                onPressed: () => {viewModel.resetEventPlan()},
+                icon: const Icon(Icons.restore)),
+          ],
+        ),
+      if (viewModel.editState == EditState.hasReverted)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton.icon(
+                label: const Text('Undo Reset'),
+                onPressed: () => {viewModel.undoReset()},
+                icon: const Icon(Icons.undo)),
+          ],
+        ),
       EventDetails(
         viewModel: viewModel,
         event: viewModel.eventPlan,

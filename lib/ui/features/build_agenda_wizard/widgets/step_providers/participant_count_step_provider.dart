@@ -43,6 +43,14 @@ class ParticipantCountStepProvider extends FormStepProvider {
     return _participantCountMap[key];
   }
 
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.participantCount != null) {
+      _currParticipantCount.add(viewModel.builder.participantCount);
+      nextStepEnabled = true;
+    }
+  }
+
   void updateParticipantCount(int? newValue) {
     // if (ParticipantBatches.values != null)
     if (newValue != null) {

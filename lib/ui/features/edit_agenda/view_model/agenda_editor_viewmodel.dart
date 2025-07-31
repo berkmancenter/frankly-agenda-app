@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
+import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
@@ -13,14 +14,18 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 
-enum EditState {original, hasUpdated, hasReverted}
+enum EditState { original, hasUpdated, hasReverted }
+
 class AgendaEditorViewmodel extends ChangeNotifier {
   AgendaEditorViewmodel(
-      {required this.agendaRepository, required this.eventPlan}) {
+      {required this.agendaRepository,
+      required this.eventPlan,
+      required this.buildAgendaRepository}) {
     originalPlan = eventPlan.deepCopy();
   }
 
   final AgendaRepository agendaRepository;
+  final BuildAgendaRepository buildAgendaRepository;
 
   EventPlan eventPlan;
 

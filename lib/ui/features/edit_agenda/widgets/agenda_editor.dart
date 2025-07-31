@@ -1,5 +1,7 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
+import 'package:agenda_wizard/routing/router.dart';
+import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
@@ -35,26 +37,39 @@ class AgendaEditor extends StatelessWidget {
       const SizedBox(
         height: 20,
       ),
-      if (viewModel.editState == EditState.hasUpdated)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton.icon(
-                label: const Text('Reset Event'),
-                onPressed: () => {viewModel.resetEventPlan()},
-                icon: const Icon(Icons.restore)),
-          ],
-        ),
-      if (viewModel.editState == EditState.hasReverted)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton.icon(
-                label: const Text('Undo Reset'),
-                onPressed: () => {viewModel.undoReset()},
-                icon: const Icon(Icons.undo)),
-          ],
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton.icon(
+              label: const Text('Update Event Details'),
+              onPressed: () => {
+                    router.go(Routes.buildAgenda,
+                        extra: viewModel.buildAgendaRepository
+                            .getLastAgendaBuild())
+                  },
+              icon: const Icon(Icons.update)),
+          if (viewModel.editState == EditState.hasUpdated)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                    label: const Text('Reset Event'),
+                    onPressed: () => {viewModel.resetEventPlan()},
+                    icon: const Icon(Icons.restore)),
+              ],
+            ),
+          if (viewModel.editState == EditState.hasReverted)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                    label: const Text('Undo Reset'),
+                    onPressed: () => {viewModel.undoReset()},
+                    icon: const Icon(Icons.undo)),
+              ],
+            ),
+        ],
+      ),
       EventDetails(
         viewModel: viewModel,
         event: viewModel.eventPlan,

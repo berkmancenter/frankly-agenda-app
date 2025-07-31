@@ -26,7 +26,8 @@ AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
       eventLength: json['eventLength'] == null
           ? null
           : Duration(microseconds: (json['eventLength'] as num).toInt()),
-    );
+    )..participantBreakoutBatches = $enumDecodeNullable(
+        _$ParticipantBatchesEnumMap, json['participantBreakoutBatches']);
 
 Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
     <String, dynamic>{
@@ -37,6 +38,8 @@ Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
       'audienceDescription': instance.audienceDescription,
       'participantCount':
           _$ParticipantBatchesEnumMap[instance.participantCount],
+      'participantBreakoutBatches':
+          _$ParticipantBatchesEnumMap[instance.participantBreakoutBatches],
       'upperParticipantCount': instance.upperParticipantCount,
       'lowerParticipantCount': instance.lowerParticipantCount,
       'hasBreakoutGroups': instance.hasBreakoutGroups,

@@ -12,12 +12,18 @@ class EventLengthProvider extends FormStepProvider {
   Stream<Duration> getDurationRadioStream() => _duration.stream;
   Duration getDurationRadioValue() => _duration.value;
 
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.eventLength != null) {
+      _duration.add(viewModel.builder.eventLength!);
+    }
+  }
+
   void updateDurationValue(Duration newValue) {
     _duration.add(newValue);
     nextStepEnabled = true;
   }
-    
-
+  
   @override
   int calculateNextStep() {
     return Steps.generateWizardStep.index; // 1000 wizard should finish

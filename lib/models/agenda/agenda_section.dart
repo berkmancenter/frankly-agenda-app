@@ -1,4 +1,3 @@
-import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'agenda_section.g.dart';

@@ -1,4 +1,6 @@
+import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
+import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/ui/core/widgets/app_scaffold.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/auth_viewmodel.dart';
@@ -42,9 +44,10 @@ final router = GoRouter(
               GoRoute(
                 path: Routes.buildAgenda,
                 builder: (context, state) {
+                  AgendaBuilder? agendaBuilder = state.extra as AgendaBuilder?;
                   final buildAgendaViewModel = BuildAgendaViewmodel(
-                    buildAgendaRepository: context.read(),
-                  );
+                      buildAgendaRepository: context.read(),
+                      agendaBuilder: agendaBuilder);
                   return BuildAgendaScreen(viewModel: buildAgendaViewModel);
                 },
               )
@@ -67,7 +70,9 @@ final router = GoRouter(
                 builder: (context, state) {
                   EventPlan eventPlan = state.extra as EventPlan;
                   final agendaEditorViewmodel = AgendaEditorViewmodel(
-                      agendaRepository: context.read(), eventPlan: eventPlan);
+                      agendaRepository: context.read(),
+                      eventPlan: eventPlan,
+                      buildAgendaRepository: context.read());
                   return AgendaEditorScreen(viewModel: agendaEditorViewmodel);
                 },
               )

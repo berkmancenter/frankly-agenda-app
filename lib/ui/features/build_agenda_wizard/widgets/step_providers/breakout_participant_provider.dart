@@ -7,13 +7,7 @@ class BreakoutParticipantProvider extends FormStepProvider {
   BreakoutParticipantProvider(BuildAgendaViewmodel viewModel)
       : super(isEnabled: false, viewModel: viewModel);
 
-  final List<bool> _breakoutCountStates = [
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+  final List<bool> _breakoutCountStates = [false, false, false, false, false];
 
   final Map<ParticipantBatches, String> _breakoutCountMap = {
     ParticipantBatches.zeroToFive: '0-5',
@@ -36,11 +30,18 @@ class BreakoutParticipantProvider extends FormStepProvider {
 
   Stream<ParticipantBatches?> getBreakoutRadioStream() =>
       _currBreakoutCount.stream;
-  bool getParticipantRadioValue(int radioNum) =>
-      _breakoutCountStates[radioNum];
+  bool getParticipantRadioValue(int radioNum) => _breakoutCountStates[radioNum];
 
   String? getBreakoutString(ParticipantBatches key) {
     return breakoutCountMap[key];
+  }
+
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.participantBreakoutBatches != null) {
+      _currBreakoutCount.add(viewModel.builder.participantBreakoutBatches);
+      nextStepEnabled = true;
+    }
   }
 
   void updateBreakoutCount(int? newValue) {

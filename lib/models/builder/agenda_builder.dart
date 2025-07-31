@@ -10,6 +10,7 @@ class AgendaBuilder {
   String? topicDescription;
   String? audienceDescription;
   ParticipantBatches? participantCount;
+  ParticipantBatches? participantBreakoutBatches;
   int? upperParticipantCount;
   int? lowerParticipantCount;
   bool? hasBreakoutGroups;

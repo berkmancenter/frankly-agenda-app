@@ -51,10 +51,7 @@ class GoalStepWidget extends StatelessWidget {
                   });
             }).toList(),
           ),
-          ProgressButtons(
-            provider: provider,
-            prevEnabled: false,
-          ),
+          ProgressButtons(provider: provider),
         ],
       ),
     );

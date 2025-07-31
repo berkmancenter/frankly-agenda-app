@@ -6,13 +6,16 @@ import 'dart:convert';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/utils/result.dart';
-import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:flutter/services.dart';
 
 class BuildAgendaRepository {
-  AgendaBuilder builder = AgendaBuilder();
+  final List<AgendaBuilder> _userAgendaBuilds = [];
 
-  Future<Result<EventPlan>> buildAgenda() async {
+  List<AgendaBuilder> get userAgendaBuilds {
+    return _userAgendaBuilds;
+  }
+
+  Future<Result<EventPlan>> buildAgenda(AgendaBuilder builder) async {
     print(builder.toJson());
     try {
       await Future.delayed(const Duration(seconds: 2));
@@ -37,76 +40,12 @@ class BuildAgendaRepository {
     }
   }
 
-  void addGoal(List<Goals> goals) {
-    builder.goals = goals;
+  void addAgendaBuild(AgendaBuilder agendaBuilder) {
+    _userAgendaBuilds.add(agendaBuilder);
   }
 
-  void addIsConcreteDecision(IsConcrete isConcreteDecision) {
-    builder.isConcreteDecision = isConcreteDecision == IsConcrete.concrete;
-  }
-
-  void addTopic(String topic, String topicDescription) {
-    builder.topic = topic;
-    builder.topicDescription = topicDescription;
-  }
-
-  void addAudience(String audienceDescription) {
-    builder.audienceDescription = audienceDescription;
-  }
-
-  void addParticipantCount(ParticipantBatches count) {
-    builder.participantCount = count;
-    if (builder.hasBreakoutGroups == false) {
-      _addBatches(count);
-    }
-  }
-
-  void addBreakOutParticipantCount(ParticipantBatches count) {
-    _addBatches(count);
-  }
-
-  void addHasBreakoutGroups(HasBreakoutGroups hasGroups) {
-    builder.hasBreakoutGroups = hasGroups == HasBreakoutGroups.breakoutGroups;
-  }
-
-  void addIsFacilitated(IsFacilitated isFacilitated) {
-    builder.isFacilitated = isFacilitated == IsFacilitated.facilitated;
-  }
-
-  void addIsSeries(IsSeries isSeries) {
-    builder.isSeries = isSeries == IsSeries.series;
-  }
-
-  void addEventCount(int eventCount) {
-    builder.eventCount = eventCount;
-  }
-
-  void addEventLength(Duration eventLength) {
-    builder.eventLength = eventLength;
-  }
-
-  void _addBatches(ParticipantBatches count) {
-    if (count == ParticipantBatches.zeroToFive) {
-      builder.lowerParticipantCount = 1;
-      builder.upperParticipantCount = 5;
-    } else if (count == ParticipantBatches.fiveToTen) {
-      builder.lowerParticipantCount = 5;
-      builder.upperParticipantCount = 10;
-    } else if (count == ParticipantBatches.tenToFifteen) {
-      builder.lowerParticipantCount = 10;
-      builder.upperParticipantCount = 15;
-    } else if (count == ParticipantBatches.tenToTwentyFive) {
-      builder.lowerParticipantCount = 10;
-      builder.upperParticipantCount = 25;
-    } else if (count == ParticipantBatches.fifteenToTwentyFive) {
-      builder.lowerParticipantCount = 15;
-      builder.upperParticipantCount = 25;
-    } else if (count == ParticipantBatches.twentyFivetoFifty) {
-      builder.lowerParticipantCount = 25;
-      builder.upperParticipantCount = 50;
-    } else if (count == ParticipantBatches.fiftyPlus) {
-      builder.lowerParticipantCount = 50;
-      builder.upperParticipantCount = 75;
-    }
+  AgendaBuilder getLastAgendaBuild() {
+    AgendaBuilder returnBuilder = _userAgendaBuilds.last;
+    return returnBuilder;
   }
 }

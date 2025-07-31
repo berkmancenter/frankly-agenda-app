@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AudienceStepProvider extends FormStepProvider {
-
   AudienceStepProvider(BuildAgendaViewmodel viewModel)
       : super(isEnabled: false, viewModel: viewModel);
 
@@ -24,6 +23,12 @@ class AudienceStepProvider extends FormStepProvider {
 
   @override
   Future<void> onShowing() async {
+    if (viewModel.builder.audienceDescription != null) {
+      _audienceDescription.add(viewModel.builder.audienceDescription!);
+      audienceController.text = _audienceDescription.value;
+      nextStepEnabled = true;
+    }
+
     if (_audienceDescription.value.isEmpty) {
       audienceFocusNode.requestFocus();
     }
@@ -57,7 +62,7 @@ class AudienceStepProvider extends FormStepProvider {
     audienceFocusNode.dispose();
     super.dispose();
   }
-  
+
   @override
   void addData() {
     viewModel.addAudience(_audienceDescription.value);

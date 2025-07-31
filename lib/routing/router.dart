@@ -12,6 +12,8 @@ import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_v
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_editor_screen.dart';
 import 'package:agenda_wizard/ui/features/home/view_model/home_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/home/widgets/home_screen.dart';
+import 'package:agenda_wizard/ui/features/list_agendas/view_model/list_agendas_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/list_agendas/widgets/list_agendas_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -47,7 +49,8 @@ final router = GoRouter(
                   AgendaBuilder? agendaBuilder = state.extra as AgendaBuilder?;
                   final buildAgendaViewModel = BuildAgendaViewmodel(
                       buildAgendaRepository: context.read(),
-                      agendaBuilder: agendaBuilder);
+                      agendaBuilder: agendaBuilder,
+                      agendaRepository: context.read());
                   return BuildAgendaScreen(viewModel: buildAgendaViewModel);
                 },
               )
@@ -56,26 +59,33 @@ final router = GoRouter(
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.agendas,
-                builder: (context, state) {
-                  return const Placeholder(child: Text('Hi i\'m your agendas'));
-                },
-                redirect: (context, state) {
-                  final user = FirebaseAuth.instance.currentUser;
-                  return user == null ? Routes.login : null;
-                },
-              ),
-              GoRoute(
-                path: Routes.editAgenda,
-                builder: (context, state) {
-                  EventPlan eventPlan = state.extra as EventPlan;
-                  final agendaEditorViewmodel = AgendaEditorViewmodel(
-                      agendaRepository: context.read(),
-                      eventPlan: eventPlan,
-                      buildAgendaRepository: context.read());
-                  return AgendaEditorScreen(viewModel: agendaEditorViewmodel);
-                },
-              )
+                  path: Routes.agendas,
+                  builder: (context, state) {
+                    final listAgendasViewModel = ListAgendasViewModel(
+                        buildAgendaRepository: context.read(),
+                        agendaRepository: context.read());
+                    return ListAgendasScreen(
+                      viewmodel: listAgendasViewModel,
+                    );
+                  },
+                  // redirect: (context, state) {
+                  //   final user = FirebaseAuth.instance.currentUser;
+                  //   return user == null ? Routes.login : null;
+                  // },
+                  routes: [
+                    GoRoute(
+                      path: 'edit',
+                      builder: (context, state) {
+                        EventPlan eventPlan = state.extra as EventPlan;
+                        final agendaEditorViewmodel = AgendaEditorViewmodel(
+                            agendaRepository: context.read(),
+                            eventPlan: eventPlan,
+                            buildAgendaRepository: context.read());
+                        return AgendaEditorScreen(
+                            viewModel: agendaEditorViewmodel);
+                      },
+                    )
+                  ]),
             ],
           ),
         ]),

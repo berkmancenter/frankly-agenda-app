@@ -10,6 +10,8 @@ class AgendaRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Agenda> _userAgendas = [];
 
+  final List<EventPlan> _recentEventPlans = [];
+
   Future<void> init() async {
     final agendaItems = await getAgendas();
   }
@@ -17,7 +19,7 @@ class AgendaRepository {
   Future<Result<List<Agenda>>?> getAgendas() async {
     // TODO
     // get the actual user from a service I think
-    // 
+    //
     // return User.fromJson(doc.data()!);
 
     // final agendaDocs = await _firestore.collection(FirebaseCollections.agendas).get();
@@ -28,7 +30,12 @@ class AgendaRepository {
     return Result.ok(event);
   }
 
+  List<EventPlan> get getRecentEventPlans {
+    return _recentEventPlans;
+  }
 
-
-
+  void addRecentAgenda(EventPlan eventPlan) {
+    EventPlan newPlan = eventPlan.deepCopy();
+    _recentEventPlans.add(newPlan);
+  }
 }

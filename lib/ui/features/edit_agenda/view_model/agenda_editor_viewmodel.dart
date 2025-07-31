@@ -21,6 +21,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
       {required this.agendaRepository,
       required this.eventPlan,
       required this.buildAgendaRepository}) {
+    eventPlan = eventPlan.deepCopy();
     originalPlan = eventPlan.deepCopy();
   }
 
@@ -48,6 +49,12 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   Future<Result> updateAgenda(eventPlan) async {
     return await agendaRepository.updateEvent(eventPlan);
+  }
+
+  void saveCurrentEventPlanToHistory() {
+    if (editState == EditState.hasUpdated) {
+      agendaRepository.addRecentAgenda(eventPlan);
+    }
   }
 
   void resetEventPlan() {

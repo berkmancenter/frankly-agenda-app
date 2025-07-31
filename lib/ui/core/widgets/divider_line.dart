@@ -2,7 +2,8 @@ import 'package:agenda_wizard/ui/core/themes/styles.dart';
 import 'package:flutter/material.dart';
 
 class DividerLine extends StatelessWidget {
-  const DividerLine({super.key});
+  final double? padding;
+  const DividerLine({super.key, this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +19,12 @@ class DividerLine extends StatelessWidget {
                 ),
               ),
             ),
-            child: const SizedBox(
-              height: 20,
+            child: SizedBox(
+              height: padding ?? 20,
               width: double.infinity,
             )),
-        const SizedBox(
-          height: 20,
+        SizedBox(
+          height: padding ?? 20,
         ),
       ],
     );

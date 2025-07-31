@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
@@ -6,12 +7,15 @@ import 'package:agenda_wizard/utils/step_enums.dart';
 
 class BuildAgendaViewmodel {
   final BuildAgendaRepository _buildAgendaRepository;
+  final AgendaRepository _agendaRepository;
 
   /// Constructor
   BuildAgendaViewmodel(
       {required BuildAgendaRepository buildAgendaRepository,
+      required AgendaRepository agendaRepository,
       AgendaBuilder? agendaBuilder})
       : _buildAgendaRepository = buildAgendaRepository,
+        _agendaRepository = agendaRepository,
         builder = agendaBuilder ?? AgendaBuilder();
 
   AgendaBuilder builder;
@@ -68,6 +72,7 @@ class BuildAgendaViewmodel {
   Future<Result<EventPlan>> generateAgenda() async {
     _buildAgendaRepository.addAgendaBuild(builder);
     final eventResult = await _buildAgendaRepository.buildAgenda(builder);
+    _agendaRepository.addRecentAgenda(eventResult.value);
     builder = AgendaBuilder();
     return eventResult;
   }

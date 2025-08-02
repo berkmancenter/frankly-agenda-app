@@ -8,12 +8,12 @@ import 'package:cloud_functions/cloud_functions.dart';
 
 class BuildAgendaRepository {
   final List<AgendaBuilder> _userAgendaBuilds = [];
-
   List<AgendaBuilder> get userAgendaBuilds {
     return _userAgendaBuilds;
   }
 
   Future<CustomResult<EventPlan>> buildAgenda(AgendaBuilder builder) async {
+
     try {
       EventPlan agendas = await _readJson(builder);
       return CustomResult.ok(agendas);

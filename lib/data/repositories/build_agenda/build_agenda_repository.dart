@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
-import 'package:flutter/services.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 class BuildAgendaRepository {
@@ -29,9 +28,6 @@ class BuildAgendaRepository {
 
   Future<EventPlan> _readJson(AgendaBuilder builder) async {
     try {
-      // final String response =
-      //     await rootBundle.loadString('assets/sample_agenda.json');
-
       final HttpsCallable callable =
           FirebaseFunctions.instance.httpsCallable('createEventPlan');
       final HttpsCallableResult result = await callable.call(builder.toJson());

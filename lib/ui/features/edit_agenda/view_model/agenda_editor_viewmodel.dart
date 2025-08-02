@@ -7,7 +7,7 @@ import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_to_pdf/flutter_to_pdf.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,7 +47,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     },
   );
 
-  Future<Result> updateAgenda(eventPlan) async {
+  Future<CustomResult> updateAgenda(eventPlan) async {
     return await agendaRepository.updateEvent(eventPlan);
   }
 
@@ -194,7 +194,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     return height;
   }
 
-  Future<Result> buildPDF(List<String> frameIds) async {
+  Future<CustomResult> buildPDF(List<String> frameIds) async {
     try {
       final pdf = await exportDelegate.exportToPdfDocument(frameIds[0]);
 
@@ -204,12 +204,12 @@ class AgendaEditorViewmodel extends ChangeNotifier {
       }
       return await savePDF(pdf);
     } catch (e) {
-      return Result.error(
+      return CustomResult.error(
           Exception("Error building pdf: $e"), "Error building PDF.");
     }
   }
 
-  Future<Result> savePDF(var pdf) async {
+  Future<CustomResult> savePDF(var pdf) async {
     try {
       final bytes = await pdf.save();
 
@@ -222,20 +222,20 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         final params = SaveFileDialogParams(sourceFilePath: file.path);
         final savedPath = await FlutterFileDialog.saveFile(params: params);
         if (savedPath != null) {
-          return const Result.ok("Agenda saved.");
+          return const CustomResult.ok("Agenda saved.");
         } else {
-          return Result.error(Exception("Agenda was not saved anywhere."),
+          return CustomResult.error(Exception("Agenda was not saved anywhere."),
               "Agenda was not saved anywhere.");
         }
       } else {
         // TODO: implement something else
         print('flutter_file_dialog not supported on this platform.');
-        return Result.error(Exception("Unsupported platform for downloads."),
+        return CustomResult.error(Exception("Unsupported platform for downloads."),
             "Unsupported platform for downloads.");
       }
     } catch (e) {
       print(e);
-      return Result.error(
+      return CustomResult.error(
           Exception("Error saving pdf: {$e}"), "Error saving PDF.");
     }
   }

@@ -2,7 +2,7 @@ import 'package:agenda_wizard/ui/core/themes/styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf_widgets.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 
 enum AgendaSaveStates { agendaSaved, saveError, adjusting }
@@ -169,7 +169,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
   }
 
   Future<void> _buildPDF() async {
-    Result<void> result = await widget.viewModel.buildPDF(frameIDs);
+    CustomResult<void> result = await widget.viewModel.buildPDF(frameIDs);
 
     switch (result) {
       case Ok():

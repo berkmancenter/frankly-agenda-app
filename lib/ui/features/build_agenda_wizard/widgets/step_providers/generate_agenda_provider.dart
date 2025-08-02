@@ -2,7 +2,7 @@ import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum AgendaStatuses { isComplete, inProgress, notStarted, hasError }

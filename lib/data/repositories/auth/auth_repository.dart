@@ -1,6 +1,6 @@
 import 'package:agenda_wizard/data/repositories/user/user_repository.dart';
 import 'package:agenda_wizard/models/user/user.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +27,7 @@ class AuthRepository extends ChangeNotifier {
     });
   }
 
-  Future<Result> registerUserAuth(
+  Future<CustomResult> registerUserAuth(
       UserModel rawUser, String password) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
@@ -41,16 +41,16 @@ class AuthRepository extends ChangeNotifier {
       } else {
         message = 'Unknown error creating account.';
       }
-      return Result.error(Exception(e), message);
+      return CustomResult.error(Exception(e), message);
     } catch (e) {
       String message = 'Unknown error ocurred: $e';
-      return Result.error(Exception(e), message);
+      return CustomResult.error(Exception(e), message);
     }
     _userRepo.storeUserProfile(rawUser);
-    return const Result.ok(null);
+    return const CustomResult.ok(null);
   }
 
-  Future<Result> login(String email, String password) async {
+  Future<CustomResult> login(String email, String password) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -63,15 +63,15 @@ class AuthRepository extends ChangeNotifier {
       } else {
         message = 'Unknown error creating account.';
       }
-      return Result.error(Exception(e), message);
+      return CustomResult.error(Exception(e), message);
     } catch (e) {
       String message = 'Unknown error ocurred: $e';
-      return Result.error(Exception(e), message);
+      return CustomResult.error(Exception(e), message);
     }
-    return const Result.ok(null);
+    return const CustomResult.ok(null);
   }
 
-  Future<Result> logout() async {
+  Future<CustomResult> logout() async {
     try {
       await _firebaseAuth.signOut();
     } on FirebaseAuthException catch (e) {
@@ -81,12 +81,12 @@ class AuthRepository extends ChangeNotifier {
       } else {
         message = 'Unknown error creating account.';
       }
-      return Result.error(Exception(e), message);
+      return CustomResult.error(Exception(e), message);
     } catch (e) {
       String message = 'Unknown error ocurred: $e';
-      return Result.error(Exception(e), message);
+      return CustomResult.error(Exception(e), message);
     }
-    return const Result.ok(null);
+    return const CustomResult.ok(null);
     
   }
 }

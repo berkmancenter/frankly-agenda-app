@@ -2,7 +2,7 @@ import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/user/user_repository.dart';
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/user/user.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_command/flutter_command.dart';
 
@@ -13,13 +13,13 @@ class HomeViewmodel extends ChangeNotifier{
   HomeViewmodel({
     required UserRepository userRepository, required AgendaRepository agendaRepository
   }) : _userRepository = userRepository, _agendaRepository = agendaRepository {
-    loadHomeData = Command.createAsyncNoParam<Result?>(_loadHomeData, initialValue: null)..execute();
+    loadHomeData = Command.createAsyncNoParam<CustomResult?>(_loadHomeData, initialValue: null)..execute();
   }
 
   /// Class variables
   final UserRepository _userRepository;
   final AgendaRepository _agendaRepository;
-  late Command<void, Result?> loadHomeData;
+  late Command<void, CustomResult?> loadHomeData;
 
   UserModel? _user;
   UserModel? get user => _user;
@@ -27,7 +27,7 @@ class HomeViewmodel extends ChangeNotifier{
   final List<Agenda> _agendas = List.empty();
   List<Agenda> get agendas => _agendas;
 
-  Future<Result?> _loadHomeData() async {
+  Future<CustomResult?> _loadHomeData() async {
     _user = _userRepository.getCurrentUser();
     // try {
     //   final agendaResult = await _agendaRepository.getAgendas();
@@ -44,7 +44,7 @@ class HomeViewmodel extends ChangeNotifier{
     // }
     
     notifyListeners();
-    return const Result.ok(null);
+    return const CustomResult.ok(null);
    
   }
 

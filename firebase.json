@@ -1,1 +1,79 @@
-{"firestore":{"database":"(default)","location":"us-east1","rules":"firestore.rules","indexes":"firestore.indexes.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"agenda-wizard-dev","appId":"1:226360493782:android:299493a76c7e5bf3b2ab77","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"agenda-wizard-dev","appId":"1:226360493782:ios:992384fa3abe72c8b2ab77","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"agenda-wizard-dev","appId":"1:226360493782:ios:992384fa3abe72c8b2ab77","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"agenda-wizard-dev","configurations":{"android":"1:226360493782:android:299493a76c7e5bf3b2ab77","ios":"1:226360493782:ios:992384fa3abe72c8b2ab77","macos":"1:226360493782:ios:992384fa3abe72c8b2ab77","web":"1:226360493782:web:214d19a60a575a72b2ab77","windows":"1:226360493782:web:50fcc6b7e9bae883b2ab77"}}}}}}
+{
+  "firestore": {
+    "database": "(default)",
+    "location": "us-east1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "agenda-wizard-dev",
+          "appId": "1:226360493782:android:299493a76c7e5bf3b2ab77",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "agenda-wizard-dev",
+          "appId": "1:226360493782:ios:992384fa3abe72c8b2ab77",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "agenda-wizard-dev",
+          "appId": "1:226360493782:ios:992384fa3abe72c8b2ab77",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "agenda-wizard-dev",
+          "configurations": {
+            "android": "1:226360493782:android:299493a76c7e5bf3b2ab77",
+            "ios": "1:226360493782:ios:992384fa3abe72c8b2ab77",
+            "macos": "1:226360493782:ios:992384fa3abe72c8b2ab77",
+            "web": "1:226360493782:web:214d19a60a575a72b2ab77",
+            "windows": "1:226360493782:web:50fcc6b7e9bae883b2ab77"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  }
+}

@@ -5,17 +5,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:agenda_wizard/routing/router.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
   runApp(
-    MultiProvider(providers: [
-      ...providersLocal
-    ], child: const App()),
+    MultiProvider(providers: [...providersLocal], child: const App()),
   );
 }
 

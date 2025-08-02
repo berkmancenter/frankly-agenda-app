@@ -9,6 +9,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/generate_agenda_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/goal_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_overview.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/init_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/participant_count_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_event_length_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_step_provider.dart';
@@ -26,6 +27,7 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/gene
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/goal_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/topic_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/facilitate_step_widget.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/initial_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/participant_count_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/series_step_widget.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/topic_step_widget.dart';
@@ -65,6 +67,7 @@ class AgendaWizard extends StatelessWidget {
 
     return DefaultWizardController(
         stepControllers: [
+          WizardStepController(step: provider.initStepProvider),
           WizardStepController(
             step: provider.goalStepProvider,
           ),
@@ -142,13 +145,20 @@ class AgendaWizard extends StatelessWidget {
   }) {
     final wizard = Wizard(
       stepBuilder: (context, state) {
+        if (state is InitStepProvider) {
+          return InitialStepWidget(
+            provider: state,
+          );
+        }
         if (state is GoalStepProvider) {
           return GoalStepWidget(
             provider: state,
           );
         }
         if (state is ConcreteDecisionProvider) {
-          return ConcreteDecisionStepWidget(provider: state);
+          return ConcreteDecisionStepWidget(
+            provider: state,
+          );
         }
         if (state is TopicStepProvider) {
           return TopicStepWidget(
@@ -176,16 +186,26 @@ class AgendaWizard extends StatelessWidget {
           );
         }
         if (state is FacilitateBreakoutProvider) {
-          return FacilitatedStepWidget(provider: state, hasBreakouts: true);
+          return FacilitatedStepWidget(
+            provider: state,
+            hasBreakouts: true,
+          );
         }
         if (state is FacilitateSingleProvider) {
-          return FacilitatedStepWidget(provider: state, hasBreakouts: false);
+          return FacilitatedStepWidget(
+            provider: state,
+            hasBreakouts: false,
+          );
         }
         if (state is SeriesStepProvider) {
-          return SeriesStepWidget(provider: state);
+          return SeriesStepWidget(
+            provider: state,
+          );
         }
         if (state is EventCountProvider) {
-          return EventCountWidget(provider: state);
+          return EventCountWidget(
+            provider: state,
+          );
         }
         if (state is SingleEventLengthProvider) {
           return EventLengthWidget(
@@ -257,6 +277,7 @@ class AgendaWizardProvider {
 
   AgendaWizardProvider(this.viewModel, this.refreshWizardCallback) {
     stepProviderMap = {
+      Steps.initStep: InitStepProvider(viewModel),
       Steps.goalStep: GoalStepProvider(viewModel),
       Steps.concreteDecisionStep: ConcreteDecisionProvider(viewModel),
       Steps.topicStep: TopicStepProvider(viewModel),
@@ -275,7 +296,7 @@ class AgendaWizardProvider {
           closeShopCallback: dispose,
           refreshWizardCallback: refreshWizardCallback)
     };
-
+    initStepProvider = stepProviderMap[Steps.initStep]!;
     goalStepProvider = stepProviderMap[Steps.goalStep]!;
     concreteStepProvider = stepProviderMap[Steps.concreteDecisionStep]!;
     topicStepProvider = stepProviderMap[Steps.topicStep]!;
@@ -294,6 +315,7 @@ class AgendaWizardProvider {
     generateWizardStepProvider = stepProviderMap[Steps.generateWizardStep]!;
   }
 
+  late StepProvider initStepProvider;
   late StepProvider goalStepProvider;
   late StepProvider concreteStepProvider;
   late StepProvider topicStepProvider;
@@ -317,6 +339,7 @@ class AgendaWizardProvider {
   }
 
   Future<void> dispose() async {
+    initStepProvider.dispose();
     goalStepProvider.dispose();
     concreteStepProvider.dispose();
     topicStepProvider.dispose();

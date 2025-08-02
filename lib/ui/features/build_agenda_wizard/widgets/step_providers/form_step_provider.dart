@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum Steps {
+  initStep,
   goalStep,
   concreteDecisionStep,
   topicStep,

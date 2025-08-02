@@ -8,7 +8,6 @@ class BuildAgendaScreen extends StatefulWidget {
 
   @override
   State<BuildAgendaScreen> createState() => _BuildAgendaScreenState();
-  
 }
 
 class _BuildAgendaScreenState extends State<BuildAgendaScreen> {
@@ -16,12 +15,17 @@ class _BuildAgendaScreenState extends State<BuildAgendaScreen> {
 
   void refreshWizardCallback() {
     setState(() {
-       _childKey = UniqueKey();
+      _childKey = UniqueKey();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.viewModel.builder.topic != null) {
+      setState(() {
+        _childKey = UniqueKey();
+      });
+    }
     return AgendaWizard.provider(
         key: _childKey,
         pViewModel: widget.viewModel,

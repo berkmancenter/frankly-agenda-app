@@ -28,6 +28,18 @@ class BreakoutStepProvider extends FormStepProvider {
   }
 
   @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.hasBreakoutGroups != null) {
+      HasBreakoutGroups hasBreakouts =
+          viewModel.builder.hasBreakoutGroups == true
+              ? HasBreakoutGroups.breakoutGroups
+              : HasBreakoutGroups.noBreakoutGroups;
+      _breakoutStatus.add(hasBreakouts);
+      nextStepEnabled = true;
+    }
+  }
+
+  @override
   int calculateNextStep() {
     if (_breakoutStatus.value == HasBreakoutGroups.breakoutGroups) {
       return Steps.breakoutCountStep.index;

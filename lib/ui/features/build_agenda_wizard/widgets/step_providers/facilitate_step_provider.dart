@@ -18,6 +18,17 @@ class FacilitateStepProvider extends FormStepProvider {
       _facilitateStatus.stream;
   IsFacilitated? getFacilitatedRadioValue() => _facilitateStatus.value;
 
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.isFacilitated != null) {
+      IsFacilitated isFacilitated = viewModel.builder.isFacilitated == true
+          ? IsFacilitated.facilitated
+          : IsFacilitated.notFacilitated;
+      _facilitateStatus.add(isFacilitated);
+      nextStepEnabled = true;
+    }
+  }
+
   void toggleFacilitateStatus(IsFacilitated? newValue) {
     _facilitateStatus.add(newValue);
 

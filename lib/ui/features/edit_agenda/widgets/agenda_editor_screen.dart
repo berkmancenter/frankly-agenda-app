@@ -19,6 +19,9 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
   bool editMode = true;
 
   void toggleEditMode() {
+    if (editMode == true) {
+      widget.viewModel.saveCurrentEventPlanToHistory();
+    }
     setState(() {
       editMode = !editMode;
     });
@@ -38,12 +41,15 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                   width: 120,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: IconButton(
+                    child: TextButton.icon(
+                        label: const Text('Agenda List'),
                         onPressed: () => router.go(Routes.agendas),
                         icon: const Icon(Icons.view_agenda)),
                   ),
                 ),
-                editMode ? const Text("Agenda Editor") : const Text("Agenda Preview"),
+                editMode
+                    ? const Text("Agenda Editor")
+                    : const Text("Agenda Preview"),
                 SizedBox(
                   width: 120,
                   child: Align(

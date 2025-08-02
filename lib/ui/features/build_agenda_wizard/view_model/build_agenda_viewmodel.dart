@@ -1,61 +1,104 @@
+import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
+import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/utils/result.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
 
 class BuildAgendaViewmodel {
   final BuildAgendaRepository _buildAgendaRepository;
+  final AgendaRepository _agendaRepository;
 
   /// Constructor
-  BuildAgendaViewmodel({required BuildAgendaRepository buildAgendaRepository})
-      : _buildAgendaRepository = buildAgendaRepository;
+  BuildAgendaViewmodel(
+      {required BuildAgendaRepository buildAgendaRepository,
+      required AgendaRepository agendaRepository,
+      AgendaBuilder? agendaBuilder})
+      : _buildAgendaRepository = buildAgendaRepository,
+        _agendaRepository = agendaRepository,
+        builder = agendaBuilder ?? AgendaBuilder();
+
+  AgendaBuilder builder;
 
   void addGoal(List<Goals> goals) {
-    _buildAgendaRepository.addGoal(goals);
+    builder.goals = goals;
   }
 
   void addIsConcrete(IsConcrete isConcreteDecision) {
-    _buildAgendaRepository.addIsConcreteDecision(isConcreteDecision);
+    builder.isConcreteDecision = isConcreteDecision == IsConcrete.concrete;
   }
 
   void addTopic(String topic, String topicDescription) {
-    _buildAgendaRepository.addTopic(topic, topicDescription);
+    builder.topic = topic;
+    builder.topicDescription = topicDescription;
   }
 
   void addAudience(String audienceDescription) {
-    _buildAgendaRepository.addAudience(audienceDescription);
+    builder.audienceDescription = audienceDescription;
   }
 
   void addParticipantCount(ParticipantBatches count) {
-    _buildAgendaRepository.addParticipantCount(count);
+    builder.participantCount = count;
+    if (builder.hasBreakoutGroups == false) {
+      _addBatches(count);
+    }
   }
 
   void addBreakOutParticipantCount(ParticipantBatches count) {
-    _buildAgendaRepository.addBreakOutParticipantCount(count);
+    builder.participantBreakoutBatches = count;
+    _addBatches(count);
   }
 
   void addHasBreakoutGroups(HasBreakoutGroups hasGroups) {
-    _buildAgendaRepository.addHasBreakoutGroups(hasGroups);
+    builder.hasBreakoutGroups = hasGroups == HasBreakoutGroups.breakoutGroups;
   }
 
   void addIsFacilitated(IsFacilitated isFacilitated) {
-    _buildAgendaRepository.addIsFacilitated(isFacilitated);
+    builder.isFacilitated = isFacilitated == IsFacilitated.facilitated;
   }
 
   void addIsSeries(IsSeries isSeries) {
-    _buildAgendaRepository.addIsSeries(isSeries);
+    builder.isSeries = isSeries == IsSeries.series;
   }
 
   void addEventCount(int eventCount) {
-    _buildAgendaRepository.addEventCount(eventCount);
+    builder.eventCount = eventCount;
   }
 
   void addEventLength(Duration eventLength) {
-    _buildAgendaRepository.addEventLength(eventLength);
+    builder.eventLength = eventLength;
   }
 
   Future<Result<EventPlan>> generateAgenda() async {
-    final eventResult = await _buildAgendaRepository.buildAgenda();
+    _buildAgendaRepository.addAgendaBuild(builder);
+    final eventResult = await _buildAgendaRepository.buildAgenda(builder);
+    _agendaRepository.addRecentAgenda(eventResult.value);
+    builder = AgendaBuilder();
     return eventResult;
+  }
+
+  void _addBatches(ParticipantBatches count) {
+    if (count == ParticipantBatches.zeroToFive) {
+      builder.lowerParticipantCount = 1;
+      builder.upperParticipantCount = 5;
+    } else if (count == ParticipantBatches.fiveToTen) {
+      builder.lowerParticipantCount = 5;
+      builder.upperParticipantCount = 10;
+    } else if (count == ParticipantBatches.tenToFifteen) {
+      builder.lowerParticipantCount = 10;
+      builder.upperParticipantCount = 15;
+    } else if (count == ParticipantBatches.tenToTwentyFive) {
+      builder.lowerParticipantCount = 10;
+      builder.upperParticipantCount = 25;
+    } else if (count == ParticipantBatches.fifteenToTwentyFive) {
+      builder.lowerParticipantCount = 15;
+      builder.upperParticipantCount = 25;
+    } else if (count == ParticipantBatches.twentyFivetoFifty) {
+      builder.lowerParticipantCount = 25;
+      builder.upperParticipantCount = 50;
+    } else if (count == ParticipantBatches.fiftyPlus) {
+      builder.lowerParticipantCount = 50;
+      builder.upperParticipantCount = 75;
+    }
   }
 }

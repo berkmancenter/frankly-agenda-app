@@ -17,6 +17,17 @@ class SeriesStepProvider extends FormStepProvider {
   Stream<IsSeries?> getSeriesRadioStream() => _seriesStatus.stream;
   IsSeries? getSeriesRadioValue() => _seriesStatus.value;
 
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.isSeries != null) {
+      IsSeries isSeries = viewModel.builder.isSeries == true
+          ? IsSeries.series
+          : IsSeries.standalone;
+      _seriesStatus.add(isSeries);
+      nextStepEnabled = true;
+    }
+  }
+
   void toggleSeriesStatus(IsSeries? newValue) {
     _seriesStatus.add(newValue);
 

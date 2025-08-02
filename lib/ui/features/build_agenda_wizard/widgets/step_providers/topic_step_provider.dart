@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TopicStepProvider extends FormStepProvider {
-
   TopicStepProvider(BuildAgendaViewmodel viewModel)
       : super(isEnabled: false, viewModel: viewModel);
 
@@ -27,6 +26,16 @@ class TopicStepProvider extends FormStepProvider {
 
   @override
   Future<void> onShowing() async {
+    if (viewModel.builder.topic != null) {
+      _topic.add(viewModel.builder.topic!);
+      topicController.text = _topic.value;
+      nextStepEnabled = true;
+    }
+    if (viewModel.builder.topicDescription != null) {
+      _topic.add(viewModel.builder.topicDescription!);
+      topicDescriptionController.text = _topicDescription.value;
+    }
+
     if (_topic.value.isEmpty) {
       topicFocusNode.requestFocus();
     }
@@ -66,7 +75,7 @@ class TopicStepProvider extends FormStepProvider {
     topicFocusNode.dispose();
     super.dispose();
   }
-  
+
   @override
   void addData() {
     viewModel.addTopic(_topic.value, _topicDescription.value);

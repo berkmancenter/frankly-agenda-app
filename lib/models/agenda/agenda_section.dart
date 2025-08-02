@@ -10,7 +10,18 @@ class AgendaSection {
   AgendaSection(
       {required this.name, required this.description, required this.items});
 
-  factory AgendaSection.fromJson(Map<String, dynamic> json) => _$AgendaSectionFromJson(json);
+  factory AgendaSection.fromJson(Map<String, dynamic> json) =>
+      _$AgendaSectionFromJson(json);
 
   Map<String, dynamic> toJson() => _$AgendaSectionToJson(this);
+
+  AgendaSection deepCopy() {
+    List<AgendaItem> newItems = [];
+    for (AgendaItem item in items) {
+      newItems.add(item.deepCopy());
+    }
+    AgendaSection newSection =
+        AgendaSection(name: name, description: description, items: newItems);
+    return newSection;
+  }
 }

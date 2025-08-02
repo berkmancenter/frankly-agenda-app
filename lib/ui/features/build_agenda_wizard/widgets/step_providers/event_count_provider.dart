@@ -11,13 +11,18 @@ class EventCountProvider extends FormStepProvider {
 
   final TextEditingController countController = TextEditingController();
 
-  Stream<int?> getDurationRadioStream() => _eventCount.stream;
-  int? getDurationRadioValue() => _eventCount.value;
+  Stream<int?> getEventCountRadioStream() => _eventCount.stream;
+  int? getEventCountRadioValue() => _eventCount.value;
 
   final eventFocusNode = FocusNode();
 
   @override
   Future<void> onShowing() async {
+    if (viewModel.builder.eventCount != null) {
+      _eventCount.add(viewModel.builder.eventCount);
+      countController.text = viewModel.builder.eventCount.toString();
+      nextStepEnabled = true;
+    }
     if (_eventCount.value == null) {
       eventFocusNode.requestFocus();
     }

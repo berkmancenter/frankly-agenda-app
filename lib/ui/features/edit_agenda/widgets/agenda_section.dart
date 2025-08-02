@@ -5,6 +5,7 @@ import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_item.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 
 class AgendaSectionWidget extends StatefulWidget {
@@ -51,6 +52,18 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
     isEditing = false;
   }
 
+  void deleteSection() {
+    widget.viewmodel.deleteSection(
+      widget.agendaIndex,
+      widget.sectionIndex,
+    );
+  }
+
+  void addItem(String title, String content) {
+    widget.viewmodel
+        .addItem(widget.agendaIndex, widget.sectionIndex, title, content);
+  }
+
   @override
   Widget build(BuildContext context) {
     final agendaSectionFormKey = widget.formKey;
@@ -91,10 +104,15 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
                 maxLines: null,
                 minLines: 4,
               ),
-              TextButton.icon(
-                  label: const Text('Save'),
-                  onPressed: () => updateSection(),
-                  icon: const Icon(Icons.save)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                      label: const Text('Save'),
+                      onPressed: () => updateSection(),
+                      icon: const Icon(Icons.save)),
+                ],
+              ),
             ],
           ));
     } else {
@@ -104,11 +122,21 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${widget.sectionIndex + 1}. ${widget.section.name}",
-                  style: AppTextStyle.headline4),
-              IconButton(
-                  onPressed: () => toggleEditing(),
-                  icon: const Icon(Icons.edit)),
+              Expanded(
+                child: Text("${widget.sectionIndex + 1}. ${widget.section.name}",
+                    style: AppTextStyle.headline4),
+              ),
+              Row(
+                children: [
+                  DeleteIcon(
+                    deleteCallback: deleteSection,
+                    agendaPart: "section",
+                  ),
+                  IconButton(
+                      onPressed: () => toggleEditing(),
+                      icon: const Icon(Icons.edit)),
+                ],
+              ),
             ],
           ),
           const SizedBox(
@@ -144,6 +172,14 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
             height: 10,
           ),
           ..._generateAgendaItems(),
+          const SizedBox(
+            height: 20,
+          ),
+          AddAgendaPart(
+              addCallback: addItem,
+              agendaPart: "prompt",
+              titleLabel: "Prompt Title",
+              contentLabel: "Prompt Content"),
           const DividerLine(),
         ]));
   }

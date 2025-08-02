@@ -3,8 +3,8 @@ import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_provi
 import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ConcreteDecisionProvider extends FormStepProvider{
-   ConcreteDecisionProvider(BuildAgendaViewmodel viewModel)
+class ConcreteDecisionProvider extends FormStepProvider {
+  ConcreteDecisionProvider(BuildAgendaViewmodel viewModel)
       : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<IsConcrete?> _concreteStatus =
@@ -16,6 +16,17 @@ class ConcreteDecisionProvider extends FormStepProvider{
 
   Stream<IsConcrete?> getConcreteRadioStream() => _concreteStatus.stream;
   IsConcrete? getConcreteRadioValue() => _concreteStatus.value;
+
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.isConcreteDecision != null) {
+      IsConcrete isConcrete = viewModel.builder.isConcreteDecision == true
+          ? IsConcrete.concrete
+          : IsConcrete.nonConcrete;
+      _concreteStatus.add(isConcrete);
+      nextStepEnabled = true;
+    }
+  }
 
   void toggleConcreteStatus(IsConcrete? newValue) {
     _concreteStatus.add(newValue);
@@ -31,7 +42,6 @@ class ConcreteDecisionProvider extends FormStepProvider{
   int calculateNextStep() {
     return Steps.topicStep.index;
   }
-
 
   @override
   void dispose() {

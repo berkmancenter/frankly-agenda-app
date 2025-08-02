@@ -1,10 +1,13 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
+import 'package:agenda_wizard/routing/router.dart';
+import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_section.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/widgets/shared_widgets.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +37,39 @@ class AgendaEditor extends StatelessWidget {
       const SizedBox(
         height: 20,
       ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton.icon(
+              label: const Text('Update Event Details'),
+              onPressed: () => {
+                    router.go(Routes.buildAgenda,
+                        extra: viewModel.buildAgendaRepository
+                            .getLastAgendaBuild())
+                  },
+              icon: const Icon(Icons.update)),
+          if (viewModel.editState == EditState.hasUpdated)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                    label: const Text('Reset Event'),
+                    onPressed: () => {viewModel.resetEventPlan()},
+                    icon: const Icon(Icons.restore)),
+              ],
+            ),
+          if (viewModel.editState == EditState.hasReverted)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                    label: const Text('Undo Reset'),
+                    onPressed: () => {viewModel.undoReset()},
+                    icon: const Icon(Icons.undo)),
+              ],
+            ),
+        ],
+      ),
       EventDetails(
         viewModel: viewModel,
         event: viewModel.eventPlan,
@@ -43,8 +79,12 @@ class AgendaEditor extends StatelessWidget {
       ),
       ..._generateAgendas(viewModel.eventPlan, viewModel),
       const SizedBox(
-        height: 10,
+        height: 20,
       ),
+      TextButton.icon(
+          label: const Text('Add Agenda'),
+          onPressed: () => {viewModel.addAgenda()},
+          icon: const Icon(Icons.save)),
     ]);
   }
 }
@@ -108,10 +148,15 @@ class _EventDetailsState extends State<EventDetails> {
                 maxLines: null,
                 minLines: 4,
               ),
-              TextButton.icon(
-                  label: const Text('Save'),
-                  onPressed: () => updateEvent(),
-                  icon: const Icon(Icons.save)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                      label: const Text('Save'),
+                      onPressed: () => updateEvent(),
+                      icon: const Icon(Icons.save)),
+                ],
+              ),
             ],
           ));
     } else {
@@ -185,6 +230,9 @@ List<Widget> _generateAgendas(
         agendaIndex: i,
         viewmodel: viewmodel,
       ));
+      agendas.add(const SizedBox(
+        height: 30,
+      ));
     }
   } else {
     if (event.agendas.isEmpty) {
@@ -212,16 +260,30 @@ class AgendaWidget extends StatelessWidget {
       required this.viewmodel,
       required this.agendaIndex});
 
+  void deleteAgenda() {
+    viewmodel.deleteAgenda(agendaIndex);
+  }
+
+  void addSection(String title, String description) {
+    viewmodel.addSection(agendaIndex, title, description);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            viewmodel.eventPlan.isSeries == false
-                ? "Agenda"
-                : "Agenda ${numToString(agendaIndex + 1)}",
-            style: AppTextStyle.headlineSmall),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+              viewmodel.eventPlan.isSeries == false
+                  ? "Agenda"
+                  : "Agenda ${numToString(agendaIndex + 1)}",
+              style: AppTextStyle.headlineSmall),
+          DeleteIcon(
+            deleteCallback: deleteAgenda,
+            agendaPart: 'agenda',
+          ),
+        ]),
         const SizedBox(
           height: 20,
         ),
@@ -235,8 +297,14 @@ class AgendaWidget extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: Column(
-                  children: [..._generateAgendaSections(agendaIndex, agenda)]),
+              child: Column(children: [
+                ..._generateAgendaSections(agendaIndex, agenda),
+                AddAgendaPart(
+                    addCallback: addSection,
+                    agendaPart: "section",
+                    titleLabel: "Section Name",
+                    contentLabel: "Section Description")
+              ]),
             )),
       ],
     );

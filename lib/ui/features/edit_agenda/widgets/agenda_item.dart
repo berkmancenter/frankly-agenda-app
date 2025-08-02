@@ -2,6 +2,7 @@ import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/edit_agenda/widgets/shared_widgets.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -64,6 +65,11 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
     isEditing = false;
   }
 
+  void deleteItem() {
+    widget.viewmodel
+        .deleteItem(widget.agendaIndex, widget.sectionIndex, widget.itemIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
     final agendaSectionFormKey = widget.formKey;
@@ -98,7 +104,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
       for (int i = 0; i < widget.item.content.length; i++) {
         contentControllers.add(
           FormInput(
-            labelText: "Item Content ${numToString(i + 1)}",
+            labelText: "Prompt Content ${numToString(i + 1)}",
             fieldController: contentControllerList[i],
             isRequired: false,
             inputType: TextInputType.multiline,
@@ -133,15 +139,20 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 height: 10,
               ),
               FormInput(
-                labelText: 'Item Title',
+                labelText: 'Prompt Title',
                 fieldController: itemTitle,
                 isRequired: true,
               ),
               ...generateFormContentItems(),
-              TextButton.icon(
-                  label: const Text('Save'),
-                  onPressed: () => updateItem(),
-                  icon: const Icon(Icons.save)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                      label: const Text('Save'),
+                      onPressed: () => updateItem(),
+                      icon: const Icon(Icons.save)),
+                ],
+              ),
             ],
           ));
     } else {
@@ -155,9 +166,17 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 child: Text("${widget.itemIndex + 1}. ${widget.item.title}",
                     style: AppTextStyle.bodyMedium),
               ),
-              IconButton(
-                  onPressed: () => toggleEditing(),
-                  icon: const Icon(Icons.edit)),
+              Row(
+                children: [
+                  DeleteIcon(
+                    deleteCallback: deleteItem,
+                    agendaPart: "prompt",
+                  ),
+                  IconButton(
+                      onPressed: () => toggleEditing(),
+                      icon: const Icon(Icons.edit)),
+                ],
+              ),
             ],
           ),
           ...generateContentItems(),

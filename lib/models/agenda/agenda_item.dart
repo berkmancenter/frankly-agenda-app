@@ -20,4 +20,18 @@ class AgendaItem {
       _$AgendaItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$AgendaItemToJson(this);
+
+  AgendaItem deepCopy() {
+    CustomDuration? newDuration;
+    if (duration != null) {
+      newDuration = duration!.deepCopy();
+    }
+    AgendaItem newItem = AgendaItem(
+        title: title,
+        content: content,
+        duration: newDuration,
+        guidance: guidance);
+
+    return newItem;
+  }
 }

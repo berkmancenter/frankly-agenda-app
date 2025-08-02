@@ -21,6 +21,21 @@ class GoalStepProvider extends FormStepProvider {
   Stream<bool> getGoalCheckboxStream(Goals key) => _checkboxStates[key]!.stream;
   bool getGoalCheckboxValue(Goals key) => _checkboxStates[key]!.value;
 
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.goals != null &&
+        viewModel.builder.goals!.isNotEmpty) {
+      for (Goals goal in viewModel.builder.goals!) {
+        if (_checkboxStates[goal] != null) {
+          _checkboxStates[goal]!.add(true);
+        } else {
+          throw Exception("Unknown goal entered: $goal");
+        }
+      }
+      nextStepEnabled = true;
+    }
+  }
+
   void toggleCheckbox(Goals key, bool newValue) {
     _checkboxStates[key]!.add(newValue);
 

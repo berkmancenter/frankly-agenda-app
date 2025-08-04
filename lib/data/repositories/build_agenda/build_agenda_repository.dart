@@ -11,34 +11,35 @@ class BuildAgendaRepository {
     return _userAgendaBuilds;
   }
 
-  Future<CustomResult<EventPlan>> buildAgenda(AgendaBuilder builder) async {
-
-    try {
-      EventPlan agendas = await _readJson(builder);
-      return CustomResult.ok(agendas);
-    } on FirebaseFunctionsException catch (e) {
-      String message = "Cloud function error: ${e.code} - ${e.message}";
-      print('Cloud function error: ${e.code} - ${e.message}');
-      return CustomResult.error(
-          Exception(message), "Failed to parse agenda JSON.");
-    } catch (e) {
-      return CustomResult.error(Exception(e), "Failed to parse agenda JSON.");
-    }
-  }
-
-  Future<EventPlan> _readJson(AgendaBuilder builder) async {
+  Future<CustomResult<Object>> buildAgenda(AgendaBuilder builder) async {
     try {
       final HttpsCallable callable =
           FirebaseFunctions.instance.httpsCallable('createEventPlan');
       final HttpsCallableResult result = await callable.call(builder.toJson());
 
-      var rawEvent = await json.decode(result.data['eventPlan']);
-      EventPlan eventPlan = EventPlan.fromJson(rawEvent);
-
-      return eventPlan;
+      var agendaResult = await json.decode(result.data['eventPlan']);
+      if (agendaResult["isSuccess"] == true) {
+        EventPlan eventPlan = EventPlan.fromJson(agendaResult["eventPlan"]);
+        return CustomResult.ok(eventPlan);
+      } else {
+        return CustomResult.error(Exception(agendaResult["error"]),
+            getDisplayError(agendaResult["error"]["message"]));
+      }
+    } on FirebaseFunctionsException catch (e) {
+      String message = "Cloud function error: ${e.code} - ${e.message}";
+      print('Cloud function error: ${e.code} - ${e.message}');
+      return CustomResult.error(Exception(message), getDisplayError(null));
     } catch (e) {
-      print(e);
-      throw Exception("bad json decoding: $e");
+      return CustomResult.error(Exception(e), getDisplayError(null));
+    }
+  }
+
+  String? getDisplayError(String? errorType) {
+    if (errorType == "MissingInformation") {
+      // shouldn't happen, but just in case
+      return "We did not receive all required information. Please ensure you answer all the prompts so we can build the best agenda for you!";
+    } else {
+      return "We apologize- this error is on us. Please try again!";
     }
   }
 

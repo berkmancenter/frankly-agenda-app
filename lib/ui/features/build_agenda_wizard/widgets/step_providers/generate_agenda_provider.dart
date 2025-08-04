@@ -28,6 +28,8 @@ class GenerateAgendaProvider extends StepProvider {
 
   Stream<AgendaStatuses> getAgendaStatusStream() => agendaStatus.stream;
 
+  String? errorMessage;
+
   @override
   Future<void> onShowing() async {
     await _buildAgenda();
@@ -44,6 +46,7 @@ class GenerateAgendaProvider extends StepProvider {
           closeShop();
           router.go(Routes.editAgenda, extra: agendaResult.value);
         case Error():
+          errorMessage = agendaResult.displayError;
           _agendaStatus.add(AgendaStatuses.hasError);
       }
     } catch (e) {

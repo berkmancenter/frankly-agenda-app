@@ -1,5 +1,6 @@
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DeleteIcon extends StatelessWidget {
   const DeleteIcon(
@@ -44,12 +45,14 @@ class AddAgendaPart extends StatefulWidget {
       required this.addCallback,
       required this.agendaPart,
       required this.titleLabel,
-      required this.contentLabel});
+      required this.contentLabel,
+      required this.durationLabel});
 
   final Function addCallback;
   final String agendaPart;
   final String titleLabel;
   final String contentLabel;
+  final String durationLabel;
 
   @override
   State<AddAgendaPart> createState() => _AddAgendaPartState();
@@ -60,11 +63,13 @@ class _AddAgendaPartState extends State<AddAgendaPart> {
 
   final TextEditingController itemTitle = TextEditingController();
   final TextEditingController itemContent = TextEditingController();
+  final TextEditingController itemDuration = TextEditingController();
 
   @override
   void dispose() {
     itemTitle.dispose();
     itemContent.dispose();
+    itemDuration.dispose();
     super.dispose();
   }
 
@@ -88,6 +93,7 @@ class _AddAgendaPartState extends State<AddAgendaPart> {
       return Form(
           key: GlobalKey<FormState>(),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FormInput(
                 labelText: widget.titleLabel,
@@ -101,6 +107,14 @@ class _AddAgendaPartState extends State<AddAgendaPart> {
                 inputType: TextInputType.multiline,
                 maxLines: null,
                 minLines: 4,
+              ),
+              FormInput(
+                labelText: widget.durationLabel,
+                fieldController: itemDuration,
+                isRequired: true,
+                inputType: TextInputType.number,
+                width: 100,
+                typeFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

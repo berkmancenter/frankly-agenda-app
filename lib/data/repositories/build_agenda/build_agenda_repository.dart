@@ -13,10 +13,7 @@ class BuildAgendaRepository {
 
   Future<CustomResult<Object>> buildAgenda(AgendaBuilder builder) async {
     try {
-      final HttpsCallable callable =
-          FirebaseFunctions.instance.httpsCallable('createEventPlan');
-      final HttpsCallableResult result = await callable.call(builder.toJson());
-
+      HttpsCallableResult result = await callbuildAgendaCloudFunction(builder);
       var agendaResult = await json.decode(result.data['eventPlan']);
       if (agendaResult["isSuccess"] == true) {
         EventPlan eventPlan = EventPlan.fromJson(agendaResult["eventPlan"]);
@@ -30,8 +27,17 @@ class BuildAgendaRepository {
       print('Cloud function error: ${e.code} - ${e.message}');
       return CustomResult.error(Exception(message), getDisplayError(null));
     } catch (e) {
+      print('Other error: $e');
       return CustomResult.error(Exception(e), getDisplayError(null));
     }
+  }
+
+  Future<HttpsCallableResult> callbuildAgendaCloudFunction(
+      AgendaBuilder builder) async {
+    final HttpsCallable callable =
+        FirebaseFunctions.instance.httpsCallable('createEventPlan');
+    final HttpsCallableResult result = await callable.call(builder.toJson());
+    return result;
   }
 
   String? getDisplayError(String? errorType) {

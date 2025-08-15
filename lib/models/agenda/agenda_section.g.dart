@@ -13,6 +13,8 @@ AgendaSection _$AgendaSectionFromJson(Map<String, dynamic> json) =>
       items: (json['items'] as List<dynamic>)
           .map((e) => AgendaItem.fromJson(e as Map<String, dynamic>))
           .toList(),
+      duration:
+          CustomDuration.fromJson(json['duration'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AgendaSectionToJson(AgendaSection instance) =>
@@ -20,4 +22,5 @@ Map<String, dynamic> _$AgendaSectionToJson(AgendaSection instance) =>
       'name': instance.name,
       'description': instance.description,
       'items': instance.items,
+      'duration': instance.duration,
     };

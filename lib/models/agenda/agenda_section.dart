@@ -1,4 +1,5 @@
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
+import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'agenda_section.g.dart';
 
@@ -6,9 +7,13 @@ part 'agenda_section.g.dart';
 class AgendaSection {
   String name, description;
   final List<AgendaItem> items;
+  final CustomDuration duration;
 
   AgendaSection(
-      {required this.name, required this.description, required this.items});
+      {required this.name,
+      required this.description,
+      required this.items,
+      required this.duration});
 
   factory AgendaSection.fromJson(Map<String, dynamic> json) =>
       _$AgendaSectionFromJson(json);
@@ -20,8 +25,14 @@ class AgendaSection {
     for (AgendaItem item in items) {
       newItems.add(item.deepCopy());
     }
-    AgendaSection newSection =
-        AgendaSection(name: name, description: description, items: newItems);
+    CustomDuration newDuration;
+    newDuration = duration.deepCopy();
+
+    AgendaSection newSection = AgendaSection(
+        name: name,
+        description: description,
+        items: newItems,
+        duration: newDuration);
     return newSection;
   }
 }

@@ -57,6 +57,7 @@ class GenerateAgendaProvider extends StepProvider {
 
   Future<void> closeShop() async {
     print("Closing shop");
+    agendaStatus.add(AgendaStatuses.notStarted);
     _refreshWizardCallback();
   }
 

@@ -30,7 +30,8 @@ class AgendaItem {
         title: title,
         content: content,
         duration: newDuration,
-        guidance: guidance);
+        guidance: guidance,
+        importance: importance);
 
     return newItem;
   }

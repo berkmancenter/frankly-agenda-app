@@ -3,7 +3,7 @@ part 'custom_duration.g.dart';
 
 @JsonSerializable()
 class CustomDuration {
-  final int? hours, minutes, seconds;
+  final int hours, minutes, seconds;
 
   CustomDuration({
     required this.hours,
@@ -20,5 +20,11 @@ class CustomDuration {
     CustomDuration newDuration =
         CustomDuration(hours: hours, minutes: minutes, seconds: seconds);
     return newDuration;
+  }
+
+  double getMinutes() {
+    double minutesToReturn =
+        hours * 60 + minutes + seconds / 60;
+    return minutesToReturn;
   }
 }

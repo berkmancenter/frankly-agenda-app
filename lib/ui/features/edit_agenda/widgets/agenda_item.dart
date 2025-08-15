@@ -1,10 +1,13 @@
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
+import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/shared_widgets.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AgendaItemWidget extends StatefulWidget {
   final AgendaItem item;
@@ -13,15 +16,18 @@ class AgendaItemWidget extends StatefulWidget {
   final int agendaIndex;
   final GlobalKey<FormState> formKey;
   final AgendaEditorViewmodel viewmodel;
+  final CustomDuration parentDuration;
 
-  const AgendaItemWidget(
-      {super.key,
-      required this.item,
-      required this.itemIndex,
-      required this.sectionIndex,
-      required this.agendaIndex,
-      required this.formKey,
-      required this.viewmodel});
+  const AgendaItemWidget({
+    super.key,
+    required this.item,
+    required this.itemIndex,
+    required this.sectionIndex,
+    required this.agendaIndex,
+    required this.formKey,
+    required this.viewmodel,
+    required this.parentDuration,
+  });
 
   @override
   State<AgendaItemWidget> createState() => _AgendaItemWidgetState();
@@ -29,8 +35,10 @@ class AgendaItemWidget extends StatefulWidget {
 
 class _AgendaItemWidgetState extends State<AgendaItemWidget> {
   bool isEditing = false;
+  bool llmInfoOpen = false;
 
   final TextEditingController itemTitle = TextEditingController();
+  final TextEditingController itemDuration = TextEditingController();
 
   List<TextEditingController> contentControllerList = [];
 
@@ -39,6 +47,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
   @override
   void dispose() {
     itemTitle.dispose();
+    itemDuration.dispose();
     itemDescription.dispose();
 
     for (var controller in contentControllerList) {
@@ -51,6 +60,12 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
   void toggleEditing() {
     setState(() {
       isEditing = !isEditing;
+    });
+  }
+
+  void toggleLlmInfoOpen() {
+    setState(() {
+      llmInfoOpen = !llmInfoOpen;
     });
   }
 
@@ -74,7 +89,13 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
   Widget build(BuildContext context) {
     final agendaSectionFormKey = widget.formKey;
 
+    final isTopicBackground = widget.item.title == "Topic Background";
+
     itemTitle.value = TextEditingValue(text: widget.item.title);
+    if (widget.item.duration != null) {
+      itemDuration.value =
+          TextEditingValue(text: widget.item.duration!.minutes.toString());
+    }
 
     contentControllerList = [];
     for (String contentString in widget.item.content) {
@@ -85,9 +106,12 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
 
     List<Widget> generateContentItems() {
       List<Widget> contentStrings = [];
-      for (String item in widget.item.content) {
+      for (int i = 0; i < widget.item.content.length; i++) {
+        String itemContent = isTopicBackground
+            ? ("${i + 1}. ${widget.item.content[i]}")
+            : widget.item.content[i];
         contentStrings.add(Text(
-          item,
+          itemContent,
           style: AppTextStyle.body,
         ));
         contentStrings.add(
@@ -117,6 +141,100 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
       return contentControllers;
     }
 
+    Widget generateMLNotice() {
+      Widget childWidget = Container();
+      if (llmInfoOpen == true) {
+        childWidget = Column(
+          children: [
+            Row(children: [
+              const Icon(Icons.lightbulb_outline_rounded),
+              const SizedBox(
+                width: 10,
+              ),
+              const Expanded(
+                  child:
+                      Text("This content was generated with the help of AI.")),
+              IconButton(
+                  onPressed: toggleLlmInfoOpen,
+                  icon: const Icon(Icons.expand_less_rounded))
+            ]),
+            Text(widget.item.importance![0]),
+          ],
+        );
+      } else {
+        childWidget = Row(
+          children: [
+            const Icon(Icons.lightbulb_outline_rounded),
+            const SizedBox(
+              width: 10,
+            ),
+            const Expanded(
+                child: Text("This content was generated with the help of AI.")),
+            TextButton.icon(
+                label: const Text('Show AI Rationale'),
+                onPressed: toggleLlmInfoOpen,
+                icon: const Icon(Icons.expand_more_rounded)),
+          ],
+        );
+      }
+      Widget llmInfo = Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 211, 239, 226),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: childWidget,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          )
+        ],
+      );
+      return llmInfo;
+    }
+
+    Widget generateTopicBackground() {
+      Widget topicBackground = Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 211, 241, 255),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.info_outline_rounded),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Text(widget.item.guidance?[0] ?? "",
+                        style: context.theme.textTheme.labelLarge),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(widget.item.guidance?[1] ?? "",
+              style: context.theme.textTheme.bodyMedium),
+          const SizedBox(
+            height: 10,
+          )
+        ],
+      );
+      return topicBackground;
+    }
+
     if (isEditing) {
       itemWidget = Form(
           key: agendaSectionFormKey,
@@ -142,6 +260,14 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 labelText: 'Prompt Title',
                 fieldController: itemTitle,
                 isRequired: true,
+              ),
+              FormInput(
+                labelText: 'Prompt Duration (in minutes)',
+                fieldController: itemDuration,
+                isRequired: true,
+                inputType: TextInputType.number,
+                width: 100,
+                typeFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               ...generateFormContentItems(),
               Row(
@@ -179,6 +305,27 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
               ),
             ],
           ),
+          if (widget.item.duration != null &&
+              widget.item.duration!.getMinutes() !=
+                  widget.parentDuration.getMinutes())
+            Column(
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.timer_outlined),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text("${widget.item.duration!.minutes} minutes"),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          if (widget.item.importance != null) generateMLNotice(),
+          if (isTopicBackground) generateTopicBackground(),
           ...generateContentItems(),
         ],
       );

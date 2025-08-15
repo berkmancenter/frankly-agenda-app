@@ -5,6 +5,7 @@ import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_reposi
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
+import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
@@ -87,7 +88,8 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         name: "First Section",
         description:
             "This is the first section of your new agenda. Go ahead and edit, and don't forget to add prompts!",
-        items: []);
+        items: [],
+        duration: CustomDuration(hours: 0, minutes: 10, seconds: 0));
     Agenda newAgenda = Agenda(sections: [newSection]);
     eventPlan.agendas.add(newAgenda);
 
@@ -111,9 +113,13 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addSection(int agendaIndex, String title, String description) {
-    AgendaSection newSection =
-        AgendaSection(name: title, description: description, items: []);
+  void addSection(
+      int agendaIndex, String title, String description, int minutes) {
+    AgendaSection newSection = AgendaSection(
+        name: title,
+        description: description,
+        items: [],
+        duration: CustomDuration(hours: 0, minutes: minutes, seconds: 0));
     eventPlan.agendas[agendaIndex].sections.add(newSection);
     editState = EditState.hasUpdated;
     notifyListeners();
@@ -230,7 +236,8 @@ class AgendaEditorViewmodel extends ChangeNotifier {
       } else {
         // TODO: implement something else
         print('flutter_file_dialog not supported on this platform.');
-        return CustomResult.error(Exception("Unsupported platform for downloads."),
+        return CustomResult.error(
+            Exception("Unsupported platform for downloads."),
             "Unsupported platform for downloads.");
       }
     } catch (e) {

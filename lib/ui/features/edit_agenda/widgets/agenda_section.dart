@@ -7,6 +7,7 @@ import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_v
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_item.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AgendaSectionWidget extends StatefulWidget {
   final AgendaSection section;
@@ -32,11 +33,13 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
 
   final TextEditingController sectionName = TextEditingController();
   final TextEditingController sectionDescription = TextEditingController();
+  final TextEditingController itemDuration = TextEditingController();
 
   @override
   void dispose() {
     sectionName.dispose();
     sectionDescription.dispose();
+    itemDuration.dispose();
     super.dispose();
   }
 
@@ -71,6 +74,8 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
     sectionName.value = TextEditingValue(text: widget.section.name);
     sectionDescription.value =
         TextEditingValue(text: widget.section.description);
+    itemDuration.value =
+        TextEditingValue(text: widget.section.duration.minutes.toString());
 
     Widget sectionWidgets;
     if (isEditing) {
@@ -104,6 +109,14 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
                 maxLines: null,
                 minLines: 4,
               ),
+              FormInput(
+                labelText: 'Section Duration (in minutes)',
+                fieldController: itemDuration,
+                isRequired: true,
+                inputType: TextInputType.number,
+                width: 100,
+                typeFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -123,8 +136,7 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text("${widget.sectionIndex + 1}. ${widget.section.name}",
-                    style: AppTextStyle.headline4),
+                child: Text(widget.section.name, style: AppTextStyle.headline4),
               ),
               Row(
                 children: [
@@ -136,6 +148,22 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
                       onPressed: () => toggleEditing(),
                       icon: const Icon(Icons.edit)),
                 ],
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.timer_outlined),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text("${widget.section.duration.minutes} minutes"),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
               ),
             ],
           ),
@@ -164,22 +192,17 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
           const SizedBox(
             height: 20,
           ),
-          Text(
-            "Prompts:",
-            style: AppTextStyle.subhead,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
           ..._generateAgendaItems(),
           const SizedBox(
             height: 20,
           ),
           AddAgendaPart(
-              addCallback: addItem,
-              agendaPart: "prompt",
-              titleLabel: "Prompt Title",
-              contentLabel: "Prompt Content"),
+            addCallback: addItem,
+            agendaPart: "prompt",
+            titleLabel: "Prompt Title",
+            contentLabel: "Prompt Content",
+            durationLabel: 'How many minutes should this prompt take?',
+          ),
           const DividerLine(),
         ]));
   }
@@ -195,6 +218,7 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
         sectionIndex: widget.sectionIndex,
         agendaIndex: widget.agendaIndex,
         viewmodel: widget.viewmodel,
+        parentDuration: widget.section.duration,
       ));
     }
     return agendaItems;

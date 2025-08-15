@@ -8,9 +8,9 @@ part of 'custom_duration.dart';
 
 CustomDuration _$CustomDurationFromJson(Map<String, dynamic> json) =>
     CustomDuration(
-      hours: (json['hours'] as num?)?.toInt(),
-      minutes: (json['minutes'] as num?)?.toInt(),
-      seconds: (json['seconds'] as num?)?.toInt(),
+      hours: (json['hours'] as num).toInt(),
+      minutes: (json['minutes'] as num).toInt(),
+      seconds: (json['seconds'] as num).toInt(),
     );
 
 Map<String, dynamic> _$CustomDurationToJson(CustomDuration instance) =>

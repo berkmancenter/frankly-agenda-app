@@ -70,11 +70,13 @@ class BuildAgendaViewmodel {
     builder.eventLength = eventLength;
   }
 
-  Future<CustomResult<EventPlan>> generateAgenda() async {
+  Future<CustomResult<Object>> generateAgenda() async {
 
     _buildAgendaRepository.addAgendaBuild(builder);
     final eventResult = await _buildAgendaRepository.buildAgenda(builder);
-    _agendaRepository.addRecentAgenda(eventResult.value);
+    if (eventResult.value == Ok) {
+      _agendaRepository.addRecentAgenda(eventResult.value);
+    }
     builder = AgendaBuilder();
     return eventResult;
   }

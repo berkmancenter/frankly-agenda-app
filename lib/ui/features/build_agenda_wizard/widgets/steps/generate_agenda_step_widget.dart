@@ -29,7 +29,7 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
 
   void goHome() {
     widget.provider.closeShop();
-    router.go(Routes.home);
+    router.go(Routes.buildAgenda);
   }
 
   Widget _buildStatusContent(
@@ -54,7 +54,7 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
     } else if (agendaStatus == AgendaStatuses.isComplete) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children:[
+        children: [
           const Icon(
             Icons.check_circle_outline,
             size: 50,
@@ -101,15 +101,20 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
           const SizedBox(
             height: 20,
           ),
-          Text(
-            "Please try to build the agenda again!",
-            style: AppTextStyle.body,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+          if (widget.provider.errorMessage != null)
+            Column(
+              children: [
+                Text(
+                  widget.provider.errorMessage!,
+                  style: AppTextStyle.body,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ElevatedButton(
-              onPressed: () => goHome(), child: const Text("Go home")),
+              onPressed: () => goHome(), child: const Text("Build Agenda")),
           const SizedBox(
             height: 100,
           ),

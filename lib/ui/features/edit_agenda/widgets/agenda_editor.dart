@@ -1,5 +1,6 @@
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
+import 'package:agenda_wizard/models/agenda/warning.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
@@ -18,7 +19,9 @@ class AgendaEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    final ThemeData theme = Theme.of(context);
+
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       const SizedBox(
         height: 10,
       ),
@@ -34,14 +37,12 @@ class AgendaEditor extends StatelessWidget {
         'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
         style: AppTextStyle.eyebrowSmall,
       ),
-      const SizedBox(
-        height: 20,
-      ),
+      _generateWarningWidget(theme),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextButton.icon(
-              label: const Text('Update Event Details'),
+              label: const Text('Update Event'),
               onPressed: () => {
                     router.go(Routes.buildAgenda,
                         extra: viewModel.buildAgendaRepository
@@ -86,6 +87,47 @@ class AgendaEditor extends StatelessWidget {
           onPressed: () => {viewModel.addAgenda()},
           icon: const Icon(Icons.save)),
     ]);
+  }
+
+  Widget _generateWarningWidget(ThemeData theme) {
+    if (viewModel.eventPlan.warnings != null &&
+        viewModel.eventPlan.warnings!.isNotEmpty) {
+      List<Widget> warningWidgets = [];
+      for (Warning warning in viewModel.eventPlan.warnings!) {
+        warningWidgets.add(Column(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.orangeAccent,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                width: double.infinity,
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Warning: ${warning.message}",
+                          textAlign: TextAlign.left,
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ],
+                    ))),
+          ],
+        ));
+      }
+      return Column(
+        children: [...warningWidgets],
+      );
+    } else {
+      return const SizedBox(
+        height: 20,
+      );
+    }
   }
 }
 
@@ -264,8 +306,8 @@ class AgendaWidget extends StatelessWidget {
     viewmodel.deleteAgenda(agendaIndex);
   }
 
-  void addSection(String title, String description) {
-    viewmodel.addSection(agendaIndex, title, description);
+  void addSection(String title, String description, int minutes) {
+    viewmodel.addSection(agendaIndex, title, description, minutes);
   }
 
   @override
@@ -285,7 +327,7 @@ class AgendaWidget extends StatelessWidget {
           ),
         ]),
         const SizedBox(
-          height: 20,
+          height: 5,
         ),
         Container(
             decoration: BoxDecoration(
@@ -300,10 +342,12 @@ class AgendaWidget extends StatelessWidget {
               child: Column(children: [
                 ..._generateAgendaSections(agendaIndex, agenda),
                 AddAgendaPart(
-                    addCallback: addSection,
-                    agendaPart: "section",
-                    titleLabel: "Section Name",
-                    contentLabel: "Section Description")
+                  addCallback: addSection,
+                  agendaPart: "section",
+                  titleLabel: "Section Name",
+                  contentLabel: "Section Description",
+                  durationLabel: 'How many minutes should this section be?',
+                )
               ]),
             )),
       ],

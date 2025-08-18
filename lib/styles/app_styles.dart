@@ -8,6 +8,9 @@ const List<Color> kOdometerColors = [
   Color.fromARGB(255, 136, 197, 255),
 ];
 
+const Color accentColor = Color(0xffA1D0CA);
+const Color typeAccentColor = Color(0xff528D85);
+
 /// Class that holds custom [TextStyle]s.
 ///
 /// [height] is calculated by taking original [height] and dividing by [fontSize].
@@ -128,6 +131,33 @@ class AppTextStyle {
       fontStyle: FontStyle.normal,
       fontSize: 126,
       height: 1.2,
+    ),
+  );
+
+  static TextStyle agendaLogo = GoogleFonts.inter(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      height: 1.1,
+    ),
+  );
+
+  static TextStyle agendaLogoThick = GoogleFonts.inter(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.italic,
+      fontSize: 18,
+      height: 1.1,
+    ),
+  );
+
+  static TextStyle agendaByFrankly = GoogleFonts.inter(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w200,
+      fontStyle: FontStyle.normal,
+      fontSize: 14,
+      height: 1.1,
     ),
   );
 }

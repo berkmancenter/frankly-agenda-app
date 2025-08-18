@@ -1,6 +1,6 @@
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';

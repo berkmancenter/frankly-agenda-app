@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf_widgets.dart';

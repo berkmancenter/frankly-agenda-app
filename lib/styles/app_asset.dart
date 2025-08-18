@@ -1,4 +1,7 @@
 class AppAsset {
+  // builder only
+  static const AppAsset background = AppAsset('media/bg_image.png');
+
   static const AppAsset kXWhitePng = AppAsset('media/xWhite.png');
   static const AppAsset kExclamationSvg = AppAsset('media/exclamation.svg');
   static const AppAsset kCheckCircleSvg = AppAsset('media/checkCircle.svg');

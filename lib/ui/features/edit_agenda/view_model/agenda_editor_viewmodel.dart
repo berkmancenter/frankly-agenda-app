@@ -7,7 +7,7 @@ import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import '../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_to_pdf/flutter_to_pdf.dart';

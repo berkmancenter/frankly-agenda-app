@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:flutter/material.dart';
 

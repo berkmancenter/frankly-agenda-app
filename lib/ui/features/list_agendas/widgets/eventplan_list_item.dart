@@ -1,8 +1,8 @@
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import '../../../../../styles/app_styles.dart';
+import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:flutter/material.dart';
 

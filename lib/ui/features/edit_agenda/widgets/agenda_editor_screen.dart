@@ -1,6 +1,6 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_editor.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf_view.dart';

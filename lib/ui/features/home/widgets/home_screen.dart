@@ -1,7 +1,9 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import 'package:agenda_wizard/styles/app_asset.dart';
+import 'package:agenda_wizard/ui/core/widgets/main_button.dart';
+import '../../../../../styles/app_styles.dart';
+import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/features/home/view_model/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -10,84 +12,110 @@ class HomeScreen extends StatelessWidget {
 
   final HomeViewmodel viewModel;
 
+  void goToBuildAgenda() {
+    router.go(Routes.buildAgenda);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: context
-          .theme.colorScheme.surfaceContainer, // Example background color
-      child: Row(
-        children: [
-          //SafeArea(child: Navigation()),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ListenableBuilder(
-                    listenable: viewModel,
-                    builder: (BuildContext context, _) {
-                      if (viewModel.loadHomeData.isExecuting.value) {
-                        return const Text('Loading . . .');
-                      } else if (viewModel.loadHomeData.results.value.hasData) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
-                            color:
-                                context.theme.colorScheme.surfaceContainerLow,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(AppAsset.background.path),
+          alignment: Alignment.centerRight,
+          fit: BoxFit.contain,
+        ),
+        gradient: const LinearGradient(
+          colors: [
+            Color.fromRGBO(238, 240, 239, 1),
+            Colors.white
+          ], // Define your gradient colors
+          begin: Alignment.centerLeft, // Starting point of the gradient
+          end: Alignment.centerRight, // Ending point of the gradient
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ListenableBuilder(
+              listenable: viewModel,
+              builder: (BuildContext context, _) {
+                if (viewModel.loadHomeData.isExecuting.value) {
+                  return const Text('Loading . . .');
+                } else if (viewModel.loadHomeData.results.value.hasData) {
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: 450,
+                      minHeight: MediaQuery.of(context).size.height - 100,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 100, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Agenda Builder',
+                              style: AppTextStyle.agendaLogoThick.copyWith(
+                                  color: context.theme.colorScheme.tertiary)),
+                          const SizedBox(
+                            height: 10,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Welcome!',
-                                  style: AppTextStyle.headline2,
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 20),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    'Welcome to Agenda Builder. Here, you can create an agenda that will foster the type of dialogue you\'d like to have for your next event.',
-                                    style: AppTextStyle.eyebrow,
+                          Text('by Frankly',
+                              style: AppTextStyle.agendaByFrankly.copyWith(
+                                  color: context.theme.colorScheme.tertiary)),
+                          Container(
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: accentColor,
+                                    width: 5,
                                   ),
                                 ),
-                                const SizedBox(height: 20),
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          context.theme.colorScheme.primary,
-                                    ),
-                                    onPressed: () =>
-                                        router.go(Routes.buildAgenda),
-                                    child: Text('Create Agenda',
-                                        style: AppTextStyle.bodyMedium.copyWith(
-                                            color: context
-                                                .theme.colorScheme.onPrimary))),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
+                              ),
+                              child: const SizedBox(
+                                height: 30,
+                                width: 28,
+                              )),
+                          const SizedBox(
+                            height: 30,
                           ),
-                        );
-                      } else if (viewModel
-                          .loadHomeData.results.value.hasError) {
-                        return Text(
-                            'An error has ocurred: ${viewModel.loadHomeData.results.value.error}');
-                      }
-                      return const Text('A very unforseen error has ocurred.');
-                    },
-                  ),
-                ],
-              ),
+                          Text(
+                            'Welcome',
+                            style: context.theme.textTheme.displayLarge!
+                                .copyWith(
+                                    color: context.theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.left,
+                          ),
+                          const SizedBox(height: 30),
+                          Text(
+                            'Frankly’s Agenda Builder enables you to facilitate constructive dialogue. We help you create an agenda for whatever type of discussion you need.',
+                            style: context.theme.textTheme.bodySmall,
+                          ),
+                          const SizedBox(height: 40),
+                          MainButton(
+                            buttonText: 'Create Agenda',
+                            callBack: goToBuildAgenda,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (viewModel.loadHomeData.results.value.hasError) {
+                  return Text(
+                      'An error has ocurred: ${viewModel.loadHomeData.results.value.error}');
+                }
+                return const Text('A very unforseen error has ocurred.');
+              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

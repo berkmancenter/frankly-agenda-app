@@ -1,6 +1,8 @@
 import 'package:agenda_wizard/ui/core/widgets/app_header.dart';
+import 'package:agenda_wizard/ui/core/widgets/web_app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AppScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -9,27 +11,44 @@ class AppScaffold extends StatelessWidget {
       : super(key: key ?? const ValueKey('ScaffoldWithNestedNavigation'));
 
   void _goBranch(int index) {
-    print(index);
     navigationShell.goBranch(index,
         initialLocation: index == navigationShell.currentIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: const AppHeader(),
-        body: navigationShell,
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: navigationShell.currentIndex,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.create_rounded), label: "Create Agenda"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.view_agenda), label: "Previous Agendas"),
-          ],
-          onTap: _goBranch,
-        ));
+    if (kIsWeb) {
+      return DefaultTabController(
+          initialIndex: navigationShell.currentIndex,
+          length: 3,
+          child: Builder(builder: (context) {
+            final tabController = DefaultTabController.of(context);
+            tabController.addListener(() {
+              if (tabController.indexIsChanging) {
+                _goBranch(tabController.index);
+              }
+            });
+            return Scaffold(
+              appBar: WebAppHeader(tabCallback: _goBranch, currIndex: navigationShell.currentIndex ),
+              body: navigationShell,
+            );
+          }));
+    } else {
+      return Scaffold(
+          appBar: const AppHeader(),
+          body: navigationShell,
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: navigationShell.currentIndex,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.create_rounded), label: "Create Agenda"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.view_agenda), label: "Previous Agendas"),
+            ],
+            onTap: _goBranch,
+          ));
+    }
   }
 }
 

@@ -28,14 +28,14 @@ class EventPlanListItem extends StatelessWidget {
             children: [
               Text(
                 eventPlan.eventName,
-                style: AppTextStyle.bodyMedium,
+                style: context.theme.textTheme.bodyMedium,
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
                 eventPlan.eventDescription,
-                style: AppTextStyle.body,
+                style: context.theme.textTheme.bodyMedium,
               ),
               const SizedBox(
                 height: 15,
@@ -47,12 +47,12 @@ class EventPlanListItem extends StatelessWidget {
                     if (eventPlan.agendas.length > 1)
                       Text(
                         "${eventPlan.agendas.length} agendas",
-                        style: AppTextStyle.bodySmall,
+                        style: context.theme.textTheme.bodySmall,
                       )
                     else
                       Text(
                         "${eventPlan.agendas.length} agenda",
-                        style: AppTextStyle.bodySmall,
+                        style: context.theme.textTheme.bodySmall,
                       ),
                 ],
               ),

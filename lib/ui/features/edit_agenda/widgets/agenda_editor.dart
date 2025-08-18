@@ -27,7 +27,7 @@ class AgendaEditor extends StatelessWidget {
       ),
       Text(
         viewModel.eventPlan.eventName,
-        style: AppTextStyle.headline3,
+        style: context.theme.textTheme.headlineMedium,
         textAlign: TextAlign.center,
       ),
       const SizedBox(
@@ -209,19 +209,19 @@ class _EventDetailsState extends State<EventDetails> {
             height: 5,
             width: double.infinity,
           ),
-          Text("Event Name", style: AppTextStyle.bodyMedium),
+          Text("Event Name", style: context.theme.textTheme.bodyMedium),
           Text(
             widget.event.eventName,
-            style: AppTextStyle.body,
+            style: context.theme.textTheme.bodyMedium,
           ),
           const SizedBox(
             height: 15,
             width: double.infinity,
           ),
-          Text("Event Description", style: AppTextStyle.bodyMedium),
+          Text("Event Description", style: context.theme.textTheme.bodyMedium),
           Text(
             widget.event.eventDescription,
-            style: AppTextStyle.body,
+            style: context.theme.textTheme.bodyMedium,
           ),
           const SizedBox(
             height: 5,

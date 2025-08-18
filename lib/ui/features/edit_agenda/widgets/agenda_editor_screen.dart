@@ -33,59 +33,64 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
         color: context.theme.colorScheme.surfaceContainer,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: ListView(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 120,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                        label: const Text('Agenda List'),
-                        onPressed: () => router.go(Routes.agendas),
-                        icon: const Icon(Icons.view_agenda)),
-                  ),
-                ),
-                editMode
-                    ? const Text("Agenda Editor")
-                    : const Text("Agenda Preview"),
-                SizedBox(
-                  width: 120,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton.icon(
-                        label: editMode
-                            ? const Text('Export')
-                            : const Text('Edit'),
-                        onPressed: () => toggleEditMode(),
-                        icon: editMode
-                            ? const Icon(Icons.import_export)
-                            : const Icon(Icons.edit)),
-                  ),
-                ),
-              ],
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 300.0, // Set the maximum width here
             ),
-            ListenableBuilder(
-                listenable: widget.viewModel,
-                builder: (BuildContext context, _) {
-                  if (editMode) {
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: AgendaEditor(
-                        viewModel: widget.viewModel,
-                      ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: AgendaPdfView(
-                        viewModel: widget.viewModel,
-                      ),
-                    );
-                  }
-                }),
-          ]),
+            child: ListView(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                          label: const Text('Agenda List'),
+                          onPressed: () => router.go(Routes.agendas),
+                          icon: const Icon(Icons.view_agenda)),
+                    ),
+                  ),
+                  editMode
+                      ? const Text("Agenda Editor")
+                      : const Text("Agenda Preview"),
+                  SizedBox(
+                    width: 120,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                          label: editMode
+                              ? const Text('Export')
+                              : const Text('Edit'),
+                          onPressed: () => toggleEditMode(),
+                          icon: editMode
+                              ? const Icon(Icons.import_export)
+                              : const Icon(Icons.edit)),
+                    ),
+                  ),
+                ],
+              ),
+              ListenableBuilder(
+                  listenable: widget.viewModel,
+                  builder: (BuildContext context, _) {
+                    if (editMode) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: AgendaEditor(
+                          viewModel: widget.viewModel,
+                        ),
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: AgendaPdfView(
+                          viewModel: widget.viewModel,
+                        ),
+                      );
+                    }
+                  }),
+            ]),
+          ),
         ));
   }
 }

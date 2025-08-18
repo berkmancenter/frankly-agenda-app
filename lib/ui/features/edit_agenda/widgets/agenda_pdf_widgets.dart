@@ -139,7 +139,7 @@ class SectionInfoPDF extends StatelessWidget {
             height: 10,
           ),
           Text(section.description,
-              style: AppTextStyle.body
+              style: context.theme.textTheme.bodyMedium!
                   .merge(const TextStyle(fontStyle: FontStyle.italic)),
               textAlign: TextAlign.left),
           const SizedBox(
@@ -160,7 +160,7 @@ class ItemInfoPDF extends StatelessWidget {
   final int itemIndex;
   final int totalItems;
 
-  List<Widget> _generateContentItems() {
+  List<Widget> _generateContentItems(context) {
     List<Widget> contentStrings = [];
     for (var i = 0; i < item.content.length; i++) {
       contentStrings.add(
@@ -170,7 +170,7 @@ class ItemInfoPDF extends StatelessWidget {
       );
       contentStrings.add(Text(
         item.content[i],
-        style: AppTextStyle.body,
+        style: context.theme.textTheme.bodyMedium,
       ));
       contentStrings.add(
         const SizedBox(
@@ -190,15 +190,15 @@ class ItemInfoPDF extends StatelessWidget {
         totalItems > 1
             ? Text(
                 "${itemIndex + 1}. ${item.title}",
-                style: AppTextStyle.bodyMedium,
+                style: context.theme.textTheme.bodyMedium,
                 textAlign: TextAlign.left,
               )
             : Text(
                 item.title,
-                style: AppTextStyle.bodyMedium,
+                style: context.theme.textTheme.bodyMedium,
                 textAlign: TextAlign.left,
               ),
-        ..._generateContentItems(),
+        ..._generateContentItems(context),
         const SizedBox(
           height: 10,
         )

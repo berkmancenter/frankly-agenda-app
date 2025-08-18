@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/ui/core/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 
 class PreviousButton extends StatelessWidget {
@@ -7,9 +8,10 @@ class PreviousButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => returnFunc(),
-      child: const Text("Previous"),
-    );
+    return MainButton(
+            callBack: returnFunc,
+            buttonText: "Previous",
+            isSecondary: true,
+          );
   }
 }

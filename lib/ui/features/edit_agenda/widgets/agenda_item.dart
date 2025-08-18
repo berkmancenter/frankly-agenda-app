@@ -112,7 +112,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
             : widget.item.content[i];
         contentStrings.add(Text(
           itemContent,
-          style: AppTextStyle.body,
+          style: context.theme.textTheme.bodyMedium,
         ));
         contentStrings.add(
           const SizedBox(
@@ -246,7 +246,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 children: [
                   Expanded(
                     child: Text("${widget.itemIndex + 1}. ${widget.item.title}",
-                        style: AppTextStyle.bodyMedium),
+                        style: context.theme.textTheme.bodyMedium),
                   ),
                   IconButton(
                       onPressed: () => toggleEditing(),
@@ -290,7 +290,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
             children: [
               Expanded(
                 child: Text("${widget.itemIndex + 1}. ${widget.item.title}",
-                    style: AppTextStyle.bodyMedium),
+                    style: context.theme.textTheme.bodyMedium),
               ),
               Row(
                 children: [

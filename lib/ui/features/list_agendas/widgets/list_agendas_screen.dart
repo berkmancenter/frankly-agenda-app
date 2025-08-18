@@ -59,7 +59,7 @@ class ListAgendasScreen extends StatelessWidget {
             ),
             onPressed: () => router.go(Routes.buildAgenda),
             child: Text('Create Agenda',
-                style: AppTextStyle.bodyMedium
+                style: theme.textTheme.bodyMedium!
                     .copyWith(color: theme.colorScheme.onPrimaryFixed)))
       ]);
     } else {

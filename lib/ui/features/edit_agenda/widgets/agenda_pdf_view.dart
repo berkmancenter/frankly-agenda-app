@@ -70,7 +70,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
         ),
         Text(
           screenSubtext,
-          style: AppTextStyle.body,
+          style: context.theme.textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(

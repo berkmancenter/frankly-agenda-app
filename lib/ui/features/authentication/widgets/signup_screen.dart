@@ -184,7 +184,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   minimumSize: const Size(double.infinity, 50)),
               onPressed: submitSignIn,
               child: Text('Sign Up',
-                  style: AppTextStyle.bodyMedium
+                  style: context.theme.textTheme.bodyMedium!
                       .copyWith(color: context.theme.colorScheme.onPrimary))),
         ],
       ),

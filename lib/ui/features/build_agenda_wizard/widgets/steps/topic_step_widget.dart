@@ -1,3 +1,5 @@
+import 'package:agenda_wizard/styles/theme_util.dart';
+
 import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
@@ -31,7 +33,7 @@ class TopicStepWidget extends StatelessWidget {
         ),
         Text(
           'What is the topic of your event?',
-          style: AppTextStyle.headline3,
+          style: context.theme.textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(

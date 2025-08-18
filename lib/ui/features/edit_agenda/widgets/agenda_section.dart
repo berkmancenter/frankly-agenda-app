@@ -172,7 +172,7 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
           ),
           Text(
             widget.section.description,
-            style: AppTextStyle.body,
+            style: context.theme.textTheme.bodyMedium,
           ),
         ],
       );

@@ -1,3 +1,5 @@
+import 'package:agenda_wizard/styles/theme_util.dart';
+
 import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/event_length_provider.dart';
@@ -24,7 +26,7 @@ class EventLengthWidget extends StatelessWidget {
         ),
         Text(
           promptText,
-          style: AppTextStyle.headline3,
+          style: context.theme.textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(

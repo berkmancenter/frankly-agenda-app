@@ -158,7 +158,7 @@ class _LogInFormState extends State<LogInForm> {
                     minimumSize: const Size(double.infinity, 50)),
                 onPressed: submitLogin,
                 child: Text('Sign In',
-                    style: AppTextStyle.bodyMedium
+                    style: context.theme.textTheme.bodyMedium!
                         .copyWith(color: context.theme.colorScheme.onPrimary))),
           ],
         ));

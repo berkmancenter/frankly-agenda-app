@@ -1,3 +1,5 @@
+import 'package:agenda_wizard/styles/theme_util.dart';
+
 import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/concrete_decision_provider.dart';
@@ -18,7 +20,7 @@ class ConcreteDecisionStepWidget extends StatelessWidget {
         ),
         Text(
           'Do you hope to reach a specific decision?',
-          style: AppTextStyle.headline3,
+          style: context.theme.textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(

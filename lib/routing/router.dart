@@ -14,7 +14,7 @@ import 'package:agenda_wizard/ui/features/home/widgets/home_screen.dart';
 import 'package:agenda_wizard/ui/features/list_agendas/view_model/list_agendas_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/list_agendas/widgets/list_agendas_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -111,7 +111,7 @@ final router = GoRouter(
     GoRoute(
       path: Routes.profile,
       builder: (context, state) {
-        return const Placeholder(child: Text('Hi i\'m your profile'));
+        return const Text('Hi i\'m your profile');
       },
       redirect: (context, state) {
         final user = FirebaseAuth.instance.currentUser;

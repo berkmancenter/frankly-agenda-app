@@ -28,7 +28,7 @@ class ConcreteDecisionStepWidget extends StatelessWidget {
         ),
         Text(
           'In other words, are you more interested in concrete decision-making or in exploring and evaluating opportunities for action?',
-          style: AppTextStyle.eyebrow
+          style: context.theme.textTheme.bodyMedium!
               .merge(const TextStyle(fontStyle: FontStyle.italic)),
           textAlign: TextAlign.left,
         ),

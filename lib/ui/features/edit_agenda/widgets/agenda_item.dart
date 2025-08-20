@@ -324,8 +324,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 ),
               ],
             ),
-          if (widget.item.importance != null) generateMLNotice(),
           if (isTopicBackground) generateTopicBackground(),
+          if (widget.item.importance != null) generateMLNotice(),
           ...generateContentItems(),
         ],
       );

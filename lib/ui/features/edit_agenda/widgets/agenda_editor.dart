@@ -23,7 +23,7 @@ class AgendaEditor extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxWidth: 600.0, // Set the maximum width here
+        maxWidth: 800.0,
       ),
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         const SizedBox(

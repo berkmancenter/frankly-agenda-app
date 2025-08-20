@@ -19,36 +19,26 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   AgendaEditorViewmodel({
     required this.agendaRepository,
     required this.buildAgendaRepository,
-    this.eventPlan,
-  }): {
-    eventPlan ??= buildAgendaRepository.createSampleEventPlan();
-    eventPlan = eventPlan?.deepCopy();
-    originalPlan = eventPlan?.deepCopy();
+    this.optionalEventPlan,
+  }) {
+    optionalEventPlan != null
+        ? eventPlan = optionalEventPlan!
+        : eventPlan = buildAgendaRepository.createSampleEventPlan();
+
+    eventPlan = eventPlan.deepCopy();
+    originalPlan = eventPlan.deepCopy();
   }
 
   final AgendaRepository agendaRepository;
   final BuildAgendaRepository buildAgendaRepository;
 
-  EventPlan? eventPlan;
+  EventPlan? optionalEventPlan;
+  late EventPlan eventPlan;
+  late EventPlan originalPlan;
 
   EditState editState = EditState.original;
 
-  EventPlan? originalPlan;
-
   EventPlan? editedAndDisregarded;
-
-  Future<bool> loadEventPlans() async {
-    if (eventPlan == null) {
-      try {
-        eventPlan = await buildAgendaRepository.getSampleAgenda() as EventPlan;
-      } catch (e) {
-        print("Error getting sample: $e");
-        return false;
-      }
-    }
-
-    return true;
-  }
 
   String agendaPDFID = 'agendaId';
   final ExportDelegate exportDelegate = ExportDelegate(
@@ -67,13 +57,13 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   void saveCurrentEventPlanToHistory() {
     if (editState == EditState.hasUpdated) {
-      agendaRepository.addRecentAgenda(eventPlan!);
+      agendaRepository.addRecentAgenda(eventPlan);
     }
   }
 
   void resetEventPlan() {
-    editedAndDisregarded = eventPlan?.deepCopy();
-    eventPlan = originalPlan?.deepCopy();
+    editedAndDisregarded = eventPlan.deepCopy();
+    eventPlan = originalPlan.deepCopy();
 
     editState = EditState.hasReverted;
     notifyListeners();
@@ -90,7 +80,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   }
 
   void deleteAgenda(int agendaIndex) {
-    eventPlan?.agendas.removeAt(agendaIndex);
+    eventPlan.agendas.removeAt(agendaIndex);
 
     editState = EditState.hasUpdated;
     notifyListeners();
@@ -104,7 +94,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         items: [],
         duration: CustomDuration(hours: 0, minutes: 10, seconds: 0));
     Agenda newAgenda = Agenda(sections: [newSection]);
-    eventPlan?.agendas.add(newAgenda);
+    eventPlan.agendas.add(newAgenda);
 
     editState = EditState.hasUpdated;
     notifyListeners();
@@ -112,8 +102,8 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   void updateSectionInfo(int agendaIndex, int sectionIndex, String sectionName,
       String description) {
-    eventPlan?.agendas[agendaIndex].sections[sectionIndex].name = sectionName;
-    eventPlan?.agendas[agendaIndex].sections[sectionIndex].description =
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].name = sectionName;
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].description =
         description;
 
     editState = EditState.hasUpdated;
@@ -121,7 +111,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   }
 
   void deleteSection(int agendaIndex, int sectionIndex) {
-    eventPlan?.agendas[agendaIndex].sections.removeAt(sectionIndex);
+    eventPlan.agendas[agendaIndex].sections.removeAt(sectionIndex);
     editState = EditState.hasUpdated;
     notifyListeners();
   }
@@ -133,14 +123,14 @@ class AgendaEditorViewmodel extends ChangeNotifier {
         description: description,
         items: [],
         duration: CustomDuration(hours: 0, minutes: minutes, seconds: 0));
-    eventPlan?.agendas[agendaIndex].sections.add(newSection);
+    eventPlan.agendas[agendaIndex].sections.add(newSection);
     editState = EditState.hasUpdated;
     notifyListeners();
   }
 
   void updateEventInfo(String eventName, String description) {
-    eventPlan?.eventName = eventName;
-    eventPlan?.eventDescription = description;
+    eventPlan.eventName = eventName;
+    eventPlan.eventDescription = description;
     editState = EditState.hasUpdated;
     notifyListeners();
   }
@@ -148,14 +138,14 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   void updateItem(int agendaIndex, int sectionIndex, int itemIndex,
       String title, List<String> content) {
     AgendaItem newItem = AgendaItem(title: title, content: content);
-    eventPlan?.agendas[agendaIndex].sections[sectionIndex].items[itemIndex] =
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].items[itemIndex] =
         newItem;
     editState = EditState.hasUpdated;
     notifyListeners();
   }
 
   void deleteItem(int agendaIndex, int sectionIndex, int itemIndex) {
-    eventPlan?.agendas[agendaIndex].sections[sectionIndex].items
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].items
         .removeAt(itemIndex);
     editState = EditState.hasUpdated;
     notifyListeners();
@@ -164,7 +154,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   void addItem(
       int agendaIndex, int sectionIndex, String title, String content) {
     AgendaItem newItem = AgendaItem(title: title, content: [content]);
-    eventPlan?.agendas[agendaIndex].sections[sectionIndex].items.add(newItem);
+    eventPlan.agendas[agendaIndex].sections[sectionIndex].items.add(newItem);
     editState = EditState.hasUpdated;
     notifyListeners();
   }

@@ -58,7 +58,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
 
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxWidth: 600.0, // Set the maximum width here
+        maxWidth: 800.0, // Set the maximum width here
       ),
       child: Column(
         children: [

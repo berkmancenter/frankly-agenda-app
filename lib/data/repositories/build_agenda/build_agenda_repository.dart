@@ -4,6 +4,7 @@ import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/services.dart';
 
 class BuildAgendaRepository {
   final List<AgendaBuilder> _userAgendaBuilds = [];
@@ -56,5 +57,39 @@ class BuildAgendaRepository {
   AgendaBuilder getLastAgendaBuild() {
     AgendaBuilder returnBuilder = _userAgendaBuilds.last;
     return returnBuilder;
+  }
+
+  Future<CustomResult<EventPlan>> getSampleAgenda() async {
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      EventPlan agendas = await _readJson();
+      return CustomResult.ok(agendas);
+    } catch (e) {
+      return CustomResult.error(Exception(e), "Failed to parse agenda JSON.");
+    }
+  }
+
+  Future<EventPlan> _readJson() async {
+    try {
+      final String response =
+          await rootBundle.loadString('assets/sample_agenda.json');
+      var rawEvent = await json.decode(response);
+      EventPlan eventPlan = EventPlan.fromJson(rawEvent);
+
+      return eventPlan;
+    } catch (e) {
+      print(e);
+      throw Exception("bad json decoding: $e");
+    }
+  }
+
+  EventPlan createSampleEventPlan() {
+    EventPlan eventPlan = EventPlan(
+        eventName: "Test Event - Climate Change",
+        eventDescription:
+            "This is a discussion about climate change and climate change policy.",
+        agendas: [],
+        isSeries: false);
+    return eventPlan;
   }
 }

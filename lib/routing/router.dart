@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/ui/core/widgets/app_scaffold.dart';
@@ -75,11 +76,13 @@ final router = GoRouter(
                     GoRoute(
                       path: 'edit',
                       builder: (context, state) {
-                        EventPlan eventPlan = state.extra as EventPlan;
+                        EventPlan? eventPlan = state.extra as EventPlan?;
+                        BuildAgendaRepository buildAgendaRepository =
+                            context.read();
                         final agendaEditorViewmodel = AgendaEditorViewmodel(
                             agendaRepository: context.read(),
-                            eventPlan: eventPlan,
-                            buildAgendaRepository: context.read());
+                            buildAgendaRepository: buildAgendaRepository,
+                            optionalEventPlan: eventPlan);
                         return AgendaEditorScreen(
                             viewModel: agendaEditorViewmodel);
                       },

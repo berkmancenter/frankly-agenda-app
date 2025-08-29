@@ -11,6 +11,7 @@ List<SingleChildWidget> get providersLocal {
   final authRepo = AuthRepository(userRepo);
   final agendaRepo = AgendaRepository();
   final buildAgendaRepo = BuildAgendaRepository();
+  final agendaRepository = AgendaRepository();
   return [
     Provider(
       create: (context) =>
@@ -18,6 +19,7 @@ List<SingleChildWidget> get providersLocal {
     ),
     Provider(create: (context) => agendaRepo,),
     Provider(create: (context) => buildAgendaRepo,),
+    Provider(create: (context) => agendaRepository,),
     ChangeNotifierProvider(
       create: (context) => authRepo,
     )

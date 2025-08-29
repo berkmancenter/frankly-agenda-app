@@ -1,0 +1,66 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'agenda_builder.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+AgendaBuilder _$AgendaBuilderFromJson(Map<String, dynamic> json) =>
+    AgendaBuilder(
+      goals: (json['goals'] as List<dynamic>?)
+          ?.map((e) => $enumDecode(_$GoalsEnumMap, e))
+          .toList(),
+      isConcreteDecision: json['isConcreteDecision'] as bool?,
+      topic: json['topic'] as String?,
+      topicDescription: json['topicDescription'] as String?,
+      audienceDescription: json['audienceDescription'] as String?,
+      participantCount: $enumDecodeNullable(
+          _$ParticipantBatchesEnumMap, json['participantCount']),
+      upperParticipantCount: (json['upperParticipantCount'] as num?)?.toInt(),
+      lowerParticipantCount: (json['lowerParticipantCount'] as num?)?.toInt(),
+      hasBreakoutGroups: json['hasBreakoutGroups'] as bool?,
+      isFacilitated: json['isFacilitated'] as bool?,
+      isSeries: json['isSeries'] as bool?,
+      eventCount: (json['eventCount'] as num?)?.toInt(),
+      eventLength: json['eventLength'] == null
+          ? null
+          : Duration(microseconds: (json['eventLength'] as num).toInt()),
+    )..participantBreakoutBatches = $enumDecodeNullable(
+        _$ParticipantBatchesEnumMap, json['participantBreakoutBatches']);
+
+Map<String, dynamic> _$AgendaBuilderToJson(AgendaBuilder instance) =>
+    <String, dynamic>{
+      'goals': instance.goals?.map((e) => _$GoalsEnumMap[e]!).toList(),
+      'isConcreteDecision': instance.isConcreteDecision,
+      'topic': instance.topic,
+      'topicDescription': instance.topicDescription,
+      'audienceDescription': instance.audienceDescription,
+      'participantCount':
+          _$ParticipantBatchesEnumMap[instance.participantCount],
+      'participantBreakoutBatches':
+          _$ParticipantBatchesEnumMap[instance.participantBreakoutBatches],
+      'upperParticipantCount': instance.upperParticipantCount,
+      'lowerParticipantCount': instance.lowerParticipantCount,
+      'hasBreakoutGroups': instance.hasBreakoutGroups,
+      'isFacilitated': instance.isFacilitated,
+      'isSeries': instance.isSeries,
+      'eventCount': instance.eventCount,
+      'eventLength': instance.eventLength?.inMicroseconds,
+    };
+
+const _$GoalsEnumMap = {
+  Goals.dialogue: 'dialogue',
+  Goals.exploration: 'exploration',
+  Goals.deliberation: 'deliberation',
+};
+
+const _$ParticipantBatchesEnumMap = {
+  ParticipantBatches.zeroToFive: 'zeroToFive',
+  ParticipantBatches.fiveToTen: 'fiveToTen',
+  ParticipantBatches.tenToFifteen: 'tenToFifteen',
+  ParticipantBatches.tenToTwentyFive: 'tenToTwentyFive',
+  ParticipantBatches.fifteenToTwentyFive: 'fifteenToTwentyFive',
+  ParticipantBatches.twentyFivetoFifty: 'twentyFivetoFifty',
+  ParticipantBatches.fiftyPlus: 'fiftyPlus',
+};

@@ -6,4 +6,5 @@ abstract final class Routes {
   static const signup = '/signup';
   static const profile = '/profile';
   static const error = '/error';
+  static const editAgenda = '/agendas/edit';
 }

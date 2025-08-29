@@ -1,5 +1,5 @@
 import 'package:agenda_wizard/data/repositories/auth/auth_repository.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 
 class LogoutViewModel extends ChangeNotifier {
@@ -10,7 +10,7 @@ class LogoutViewModel extends ChangeNotifier {
 
   final AuthRepository _authRepository;
 
-  Future<Result> logOut() async {
+  Future<CustomResult> logOut() async {
     final result = await _authRepository.logout();
     return result;
   }

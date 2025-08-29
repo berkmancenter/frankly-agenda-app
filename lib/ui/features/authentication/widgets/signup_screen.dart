@@ -1,15 +1,15 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import '../../../../../styles/app_styles.dart';
+import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/auth_viewmodel.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SignupScreen extends StatelessWidget {
-  SignupScreen({super.key, required AuthViewModel authViewModel})
+  const SignupScreen({super.key, required AuthViewModel authViewModel})
       : _authViewModel = authViewModel;
 
   final AuthViewModel _authViewModel;
@@ -90,6 +90,15 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController _reenterPassword = TextEditingController();
 
   String _errorMessage = "";
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    _password.dispose();
+    _reenterPassword.dispose();
+    super.dispose();
+  }
 
   Future<void> submitSignIn() async {
     if (_formKey.currentState!.validate()) {
@@ -175,7 +184,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   minimumSize: const Size(double.infinity, 50)),
               onPressed: submitSignIn,
               child: Text('Sign Up',
-                  style: AppTextStyle.bodyMedium
+                  style: context.theme.textTheme.bodyMedium!
                       .copyWith(color: context.theme.colorScheme.onPrimary))),
         ],
       ),

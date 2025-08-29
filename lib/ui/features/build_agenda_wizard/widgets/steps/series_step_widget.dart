@@ -1,6 +1,9 @@
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/styles/theme_util.dart';
+
+import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/series_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:flutter/material.dart';
 
 class SeriesStepWidget extends StatelessWidget {
@@ -17,7 +20,7 @@ class SeriesStepWidget extends StatelessWidget {
         ),
         Text(
           'Will this event be part of a series, or is it a standalone?',
-          style: AppTextStyle.headline3,
+          style: context.theme.textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(

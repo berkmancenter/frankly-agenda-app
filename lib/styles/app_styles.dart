@@ -8,6 +8,9 @@ const List<Color> kOdometerColors = [
   Color.fromARGB(255, 136, 197, 255),
 ];
 
+const Color accentColor = Color(0xffA1D0CA);
+const Color typeAccentColor = Color(0xff528D85);
+
 /// Class that holds custom [TextStyle]s.
 ///
 /// [height] is calculated by taking original [height] and dividing by [fontSize].
@@ -15,7 +18,7 @@ const List<Color> kOdometerColors = [
 /// [height] will become 20/10 => 2.
 class AppTextStyle {
   static TextStyle headline1 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 40,
@@ -24,7 +27,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline2 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 30,
@@ -33,7 +36,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline2Light = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
       fontSize: 34,
@@ -42,7 +45,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline3 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 24,
@@ -51,7 +54,7 @@ class AppTextStyle {
   );
 
   static TextStyle headline4 = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 18,
@@ -60,7 +63,7 @@ class AppTextStyle {
   );
 
   static TextStyle headlineSmall = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 12,
@@ -69,7 +72,7 @@ class AppTextStyle {
   );
 
   static TextStyle subhead = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontSize: 18,
@@ -78,7 +81,7 @@ class AppTextStyle {
   );
 
   static TextStyle eyebrow = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 16,
@@ -87,7 +90,7 @@ class AppTextStyle {
   );
 
   static TextStyle eyebrowSmall = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 14,
@@ -96,7 +99,7 @@ class AppTextStyle {
   );
 
   static TextStyle body = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 16,
@@ -105,7 +108,7 @@ class AppTextStyle {
   );
 
   static TextStyle bodyMedium = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
       fontSize: 16,
@@ -114,7 +117,7 @@ class AppTextStyle {
   );
 
   static TextStyle bodySmall = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: 14,
@@ -123,11 +126,38 @@ class AppTextStyle {
   );
 
   static TextStyle timeLarge = GoogleFonts.inter(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontWeight: FontWeight.w200,
       fontStyle: FontStyle.normal,
       fontSize: 126,
       height: 1.2,
+    ),
+  );
+
+  static TextStyle agendaLogo = GoogleFonts.inter(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      height: 1.1,
+    ),
+  );
+
+  static TextStyle agendaLogoThick = GoogleFonts.inter(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.italic,
+      fontSize: 18,
+      height: 1.1,
+    ),
+  );
+
+  static TextStyle agendaByFrankly = GoogleFonts.inter(
+    textStyle: const TextStyle(
+      fontWeight: FontWeight.w200,
+      fontStyle: FontStyle.normal,
+      fontSize: 14,
+      height: 1.1,
     ),
   );
 }

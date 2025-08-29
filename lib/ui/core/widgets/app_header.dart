@@ -1,6 +1,6 @@
 import 'package:agenda_wizard/data/repositories/auth/auth_repository.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import '../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/logout_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/authentication/widgets/logout_button.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,9 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/auth_viewmodel.dart';
-import 'package:agenda_wizard/utils/result.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -83,6 +83,13 @@ class _LogInFormState extends State<LogInForm> {
   final TextEditingController _password = TextEditingController();
   String _errorMessage = "";
 
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   Future<void> submitLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -151,7 +158,7 @@ class _LogInFormState extends State<LogInForm> {
                     minimumSize: const Size(double.infinity, 50)),
                 onPressed: submitLogin,
                 child: Text('Sign In',
-                    style: AppTextStyle.bodyMedium
+                    style: context.theme.textTheme.bodyMedium!
                         .copyWith(color: context.theme.colorScheme.onPrimary))),
           ],
         ));

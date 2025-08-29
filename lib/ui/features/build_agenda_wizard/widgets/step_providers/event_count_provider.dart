@@ -1,21 +1,46 @@
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-class EventCountProvider extends StepProvider{
+class EventCountProvider extends FormStepProvider {
+  EventCountProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
-  EventCountProvider() : super(isEnabled: true);
-
-  final BehaviorSubject<int?> _eventCount =
-      BehaviorSubject<int?>.seeded(null);
+  final BehaviorSubject<int?> _eventCount = BehaviorSubject<int?>.seeded(null);
 
   final TextEditingController countController = TextEditingController();
 
-  Stream<int?> getDurationRadioStream() => _eventCount.stream;
-  int? getDurationRadioValue() => _eventCount.value;
+  Stream<int?> getEventCountRadioStream() => _eventCount.stream;
+  int? getEventCountRadioValue() => _eventCount.value;
+
+  final eventFocusNode = FocusNode();
+
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.eventCount != null) {
+      _eventCount.add(viewModel.builder.eventCount);
+      countController.text = viewModel.builder.eventCount.toString();
+      nextStepEnabled = true;
+    }
+    if (_eventCount.value == null) {
+      eventFocusNode.requestFocus();
+    }
+  }
+
+  @override
+  Future<void> onHiding() async {
+    if (eventFocusNode.hasFocus) {
+      eventFocusNode.unfocus();
+    }
+  }
 
   void updateCountValue(int newValue) {
     _eventCount.add(newValue);
+
+    if (_eventCount.value != null) {
+      nextStepEnabled = true;
+    }
   }
 
   @override
@@ -26,5 +51,16 @@ class EventCountProvider extends StepProvider{
   @override
   void dispose() {
     _eventCount.close();
+    countController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void addData() {
+    if (_eventCount.value != null) {
+      viewModel.addEventCount(_eventCount.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

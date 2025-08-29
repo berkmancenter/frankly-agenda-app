@@ -1,11 +1,11 @@
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum IsFacilitated { facilitated, notFacilitated }
-
-class FacilitateStepProvider extends StepProvider {
-
-  FacilitateStepProvider() : super(isEnabled: false);
+class FacilitateStepProvider extends FormStepProvider {
+  FacilitateStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<IsFacilitated?> _facilitateStatus =
       BehaviorSubject<IsFacilitated?>.seeded(null);
@@ -14,8 +14,20 @@ class FacilitateStepProvider extends StepProvider {
     return _facilitateStatus;
   }
 
-  Stream<IsFacilitated?> getFacilitatedRadioStream() => _facilitateStatus.stream;
+  Stream<IsFacilitated?> getFacilitatedRadioStream() =>
+      _facilitateStatus.stream;
   IsFacilitated? getFacilitatedRadioValue() => _facilitateStatus.value;
+
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.isFacilitated != null) {
+      IsFacilitated isFacilitated = viewModel.builder.isFacilitated == true
+          ? IsFacilitated.facilitated
+          : IsFacilitated.notFacilitated;
+      _facilitateStatus.add(isFacilitated);
+      nextStepEnabled = true;
+    }
+  }
 
   void toggleFacilitateStatus(IsFacilitated? newValue) {
     _facilitateStatus.add(newValue);
@@ -31,8 +43,19 @@ class FacilitateStepProvider extends StepProvider {
   int calculateNextStep() {
     return Steps.seriesStep.index;
   }
+
   @override
   void dispose() {
     _facilitateStatus.close();
+    super.dispose();
+  }
+
+  @override
+  void addData() {
+    if (_facilitateStatus.value != null) {
+      viewModel.addIsFacilitated(_facilitateStatus.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

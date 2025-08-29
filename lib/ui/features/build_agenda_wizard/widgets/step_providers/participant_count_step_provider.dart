@@ -1,10 +1,11 @@
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum ParticipantCounts { standalone }
-
-class ParticipantCountStepProvider extends StepProvider {
-  ParticipantCountStepProvider() : super(isEnabled: false);
+class ParticipantCountStepProvider extends FormStepProvider {
+  ParticipantCountStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final List<bool> _participantCountStates = [
     false,
@@ -14,36 +15,49 @@ class ParticipantCountStepProvider extends StepProvider {
     false,
   ];
 
-  final Map<int, String> _participantCountMap = {
-    1: '0-5',
-    2: '5-10',
-    3: '10-25',
-    4: '25-50',
-    5: '50+',
+  final Map<ParticipantBatches, String> _participantCountMap = {
+    ParticipantBatches.zeroToFive: '0-5',
+    ParticipantBatches.fiveToTen: '5-10',
+    ParticipantBatches.tenToTwentyFive: '10-25',
+    ParticipantBatches.twentyFivetoFifty: '25-50',
+    ParticipantBatches.fiftyPlus: '50+',
   };
 
-  final BehaviorSubject<int?> _currParticipantCount =
-      BehaviorSubject<int?>.seeded(null);
+  final BehaviorSubject<ParticipantBatches?> _currParticipantCount =
+      BehaviorSubject<ParticipantBatches?>.seeded(null);
 
-  Map<int, String> get participantCountMap {
+  Map<ParticipantBatches, String> get participantCountMap {
     return _participantCountMap;
   }
 
-  BehaviorSubject<int?> get currParticipantCount {
+  BehaviorSubject<ParticipantBatches?> get currParticipantCount {
     return _currParticipantCount;
   }
 
-  Stream<int?> getParticipantRadioStream() => _currParticipantCount.stream;
+  Stream<ParticipantBatches?> getParticipantRadioStream() =>
+      _currParticipantCount.stream;
   bool getParticipantRadioValue(int radioNum) =>
       _participantCountStates[radioNum];
 
-  String? getParticipantString(int key) {
+  String? getParticipantString(ParticipantBatches key) {
     return _participantCountMap[key];
   }
 
-  void updateParticipantCount(int? newValue) {
-    _currParticipantCount.add(newValue);
+  @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.participantCount != null) {
+      _currParticipantCount.add(viewModel.builder.participantCount);
+      nextStepEnabled = true;
+    }
+  }
 
+  void updateParticipantCount(int? newValue) {
+    // if (ParticipantBatches.values != null)
+    if (newValue != null) {
+      _currParticipantCount.add(ParticipantBatches.values[newValue]);
+    } else {
+      _currParticipantCount.add(null);
+    }
     if (_currParticipantCount.value != null) {
       nextStepEnabled = true;
     } else {
@@ -55,7 +69,7 @@ class ParticipantCountStepProvider extends StepProvider {
   int calculateNextStep() {
     // breakout group step
     int nextStep = Steps.breakoutStep.index;
-    if (_currParticipantCount.value == 1) {
+    if (_currParticipantCount.value == ParticipantBatches.zeroToFive) {
       // if it is a tiny amount, no participants
       // go to event facilitator step
       nextStep = Steps.facilitatedStep.index;
@@ -66,5 +80,15 @@ class ParticipantCountStepProvider extends StepProvider {
   @override
   void dispose() {
     _currParticipantCount.close();
+    super.dispose();
+  }
+
+  @override
+  void addData() {
+    if (_currParticipantCount.value != null) {
+      viewModel.addParticipantCount(_currParticipantCount.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

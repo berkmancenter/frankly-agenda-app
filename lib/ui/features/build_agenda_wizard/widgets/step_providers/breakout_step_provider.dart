@@ -1,10 +1,11 @@
-import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/form_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum HasBreakoutGroups { breakoutGroups, noBreakoutGroups }
-
-class BreakoutStepProvider extends StepProvider {
-  BreakoutStepProvider() : super(isEnabled: false);
+class BreakoutStepProvider extends FormStepProvider {
+  BreakoutStepProvider(BuildAgendaViewmodel viewModel)
+      : super(isEnabled: false, viewModel: viewModel);
 
   final BehaviorSubject<HasBreakoutGroups?> _breakoutStatus =
       BehaviorSubject<HasBreakoutGroups?>.seeded(null);
@@ -27,9 +28,21 @@ class BreakoutStepProvider extends StepProvider {
   }
 
   @override
+  Future<void> onShowing() async {
+    if (viewModel.builder.hasBreakoutGroups != null) {
+      HasBreakoutGroups hasBreakouts =
+          viewModel.builder.hasBreakoutGroups == true
+              ? HasBreakoutGroups.breakoutGroups
+              : HasBreakoutGroups.noBreakoutGroups;
+      _breakoutStatus.add(hasBreakouts);
+      nextStepEnabled = true;
+    }
+  }
+
+  @override
   int calculateNextStep() {
     if (_breakoutStatus.value == HasBreakoutGroups.breakoutGroups) {
-      return Steps.facilitatedBreakoutStep.index;
+      return Steps.breakoutCountStep.index;
     } else {
       return Steps.facilitatedStep.index;
     }
@@ -38,5 +51,15 @@ class BreakoutStepProvider extends StepProvider {
   @override
   void dispose() {
     _breakoutStatus.close();
+    super.dispose();
+  }
+
+  @override
+  void addData() {
+    if (_breakoutStatus.value != null) {
+      viewModel.addHasBreakoutGroups(_breakoutStatus.value!);
+    } else {
+      throw Exception("Sending null data from a radio button. Weird.");
+    }
   }
 }

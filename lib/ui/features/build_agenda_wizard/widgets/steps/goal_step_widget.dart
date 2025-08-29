@@ -1,7 +1,10 @@
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/styles/theme_util.dart';
+
+import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/checkbox.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/goal_step_provider.dart';
+import 'package:agenda_wizard/utils/step_enums.dart';
 import 'package:dart_casing/dart_casing.dart';
 import 'package:flutter/material.dart';
 
@@ -9,12 +12,12 @@ class GoalStepWidget extends StatelessWidget {
   GoalStepWidget({super.key, required this.provider});
   final GoalStepProvider provider;
 
-  final Map<String, String> _checkedBoxLabels = {
-    'dialogue': "To understand one another's values and build trust",
-    'exploration': "To generate ideas, questions, and unknowns about a topic",
-    'evaluation': "Coalescing around or making some type of decision(s)",
-    'deliberation':
-        "All of the above- find common ground and shared perspectives to make decisions",
+  final Map<Goals, String> _checkedBoxLabels = {
+    Goals.dialogue: "To understand one another's values and build trust",
+    Goals.exploration:
+        "To generate ideas, questions, and unknowns about a topic",
+    Goals.deliberation:
+        "Finding common ground and shared perspectives to make decisions",
   };
 
   @override
@@ -28,7 +31,7 @@ class GoalStepWidget extends StatelessWidget {
           ),
           Text(
             'What is the goal of your event?',
-            style: AppTextStyle.headline3,
+            style: context.theme.textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
           const SizedBox(
@@ -42,7 +45,7 @@ class GoalStepWidget extends StatelessWidget {
                   builder: (context, snapshot) {
                     return AgendaCheckBox(
                       label:
-                          '${Casing.titleCase(key)}: ${_checkedBoxLabels[key] ?? ""}',
+                          '${Casing.titleCase(key.name)}: ${_checkedBoxLabels[key] ?? ""}',
                       boxValue: snapshot.data,
                       onChangedFunction: (newValue) =>
                           provider.toggleCheckbox(key, newValue ?? false),
@@ -50,7 +53,7 @@ class GoalStepWidget extends StatelessWidget {
                   });
             }).toList(),
           ),
-          ProgressButtons(provider: provider, prevEnabled: false,),
+          ProgressButtons(provider: provider),
         ],
       ),
     );

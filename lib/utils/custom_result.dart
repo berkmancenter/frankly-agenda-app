@@ -1,15 +1,18 @@
-sealed class Result<T> {
-  const Result();
+sealed class CustomResult<T> {
+  const CustomResult();
 
-  const factory Result.ok(T value) = Ok._;
+  const factory CustomResult.ok(T value) = Ok._;
 
-  const factory Result.error(Exception error, [String? displayError]) = Error._;
+  const factory CustomResult.error(Exception error, [String? displayError]) = Error._;
+
+  get value => null;
 }
 
 /// Subclass of result - Ok
-final class Ok<T> extends Result<T> {
+final class Ok<T> extends CustomResult<T> {
   const Ok._(this.value);
 
+  @override
   final T value;
 
   @override
@@ -17,7 +20,7 @@ final class Ok<T> extends Result<T> {
 }
 
 /// Subclass of result - Error
-final class Error<T> extends Result<T> {
+final class Error<T> extends CustomResult<T> {
   const Error._(this.error, [this.displayError]);
 
   final Exception error;

@@ -1,4 +1,6 @@
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/styles/theme_util.dart';
+
+import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/progress_buttons.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/participant_count_step_provider.dart';
 import 'package:agenda_wizard/utils/step_enums.dart';
@@ -18,7 +20,7 @@ class ParticipantCountWidget extends StatelessWidget {
         ),
         Text(
           'How many participants do you anticipate attending the event?',
-          style: AppTextStyle.headline3,
+          style: context.theme.textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),
         const SizedBox(

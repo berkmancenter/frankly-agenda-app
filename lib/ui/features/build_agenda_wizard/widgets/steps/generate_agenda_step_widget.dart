@@ -1,6 +1,7 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/styles/theme_util.dart';
+import '../../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/generate_agenda_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,7 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
           ),
           Text(
             "Building agenda . . .",
-            style: AppTextStyle.headline3,
+            style: context.theme.textTheme.headlineMedium,
           ),
           const SizedBox(
             height: 100,
@@ -64,14 +65,14 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
           ),
           Text(
             "Agenda complete.",
-            style: AppTextStyle.headline3,
+            style: context.theme.textTheme.headlineMedium,
           ),
           const SizedBox(
             height: 20,
           ),
           Text(
             "Your agenda has been created!",
-            style: AppTextStyle.body,
+            style: context.theme.textTheme.bodyMedium,
           ),
           const SizedBox(
             height: 20,
@@ -96,7 +97,7 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
           ),
           Text(
             "Uh oh. An error ocurred.",
-            style: AppTextStyle.headline3,
+            style: context.theme.textTheme.headlineMedium,
           ),
           const SizedBox(
             height: 20,
@@ -106,7 +107,7 @@ class _GenerateAgendaStepWizardState extends State<GenerateAgendaStepWizard> {
               children: [
                 Text(
                   widget.provider.errorMessage!,
-                  style: AppTextStyle.body,
+                  style: context.theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(
                   height: 20,

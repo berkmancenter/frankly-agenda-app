@@ -1,6 +1,6 @@
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +139,7 @@ class SectionInfoPDF extends StatelessWidget {
             height: 10,
           ),
           Text(section.description,
-              style: AppTextStyle.body
+              style: AppTextStyle.bodySmall
                   .merge(const TextStyle(fontStyle: FontStyle.italic)),
               textAlign: TextAlign.left),
           const SizedBox(
@@ -160,7 +160,7 @@ class ItemInfoPDF extends StatelessWidget {
   final int itemIndex;
   final int totalItems;
 
-  List<Widget> _generateContentItems() {
+  List<Widget> _generateContentItems(theme) {
     List<Widget> contentStrings = [];
     for (var i = 0; i < item.content.length; i++) {
       contentStrings.add(
@@ -170,7 +170,7 @@ class ItemInfoPDF extends StatelessWidget {
       );
       contentStrings.add(Text(
         item.content[i],
-        style: AppTextStyle.body,
+        style: AppTextStyle.bodySmall,
       ));
       contentStrings.add(
         const SizedBox(
@@ -195,10 +195,10 @@ class ItemInfoPDF extends StatelessWidget {
               )
             : Text(
                 item.title,
-                style: AppTextStyle.bodyMedium,
+                style: AppTextStyle.bodySmall,
                 textAlign: TextAlign.left,
               ),
-        ..._generateContentItems(),
+        ..._generateContentItems(context.theme),
         const SizedBox(
           height: 10,
         )

@@ -1,6 +1,5 @@
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
-import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
 
@@ -74,7 +73,8 @@ class BuildAgendaViewmodel {
 
     _buildAgendaRepository.addAgendaBuild(builder);
     final eventResult = await _buildAgendaRepository.buildAgenda(builder);
-    if (eventResult.value == Ok) {
+    print(eventResult.value);
+    if (eventResult is Ok) {
       _agendaRepository.addRecentAgenda(eventResult.value);
     }
     builder = AgendaBuilder();

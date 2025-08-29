@@ -1,4 +1,6 @@
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import 'package:agenda_wizard/styles/theme_util.dart';
+
+import '../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/audience_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/breakout_participant_provider.dart';
@@ -95,8 +97,8 @@ class AgendaWizard extends StatelessWidget {
                   stream: context.wizardController.indexStream,
                   initialData: context.wizardController.index,
                   builder: (context, snapshot) {
-                    return Text("Creating Agenda",
-                        style: AppTextStyle.headline4);
+                    return Text("Create Agenda",
+                        style: context.theme.textTheme.titleMedium);
                   },
                 ),
               ),
@@ -235,16 +237,24 @@ class AgendaWizard extends StatelessWidget {
         ),
       ]);
     }
-    return Row(
-      children: [
-        const SizedBox(
-          width: 200,
-          child: StepOverview(),
-        ),
-        Expanded(
-          child: wizard,
-        ),
-      ],
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 700.0, // Set the maximum width here
+      ),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 40,
+            //child: StepOverview(),
+          ),
+          Expanded(
+            child: wizard,
+          ),
+          const SizedBox(
+            width: 40,
+          )
+        ],
+      ),
     );
   }
 

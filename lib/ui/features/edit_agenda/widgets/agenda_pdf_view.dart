@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/core/themes/styles.dart';
+import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf_widgets.dart';
@@ -56,91 +56,96 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
           "Double check that they look okay, and then go ahead and download them!";
     }
 
-    return Column(
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          screenTitle,
-          style: AppTextStyle.headline3,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Text(
-          screenSubtext,
-          style: AppTextStyle.body,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          child: agendaState == AgendaSaveStates.adjusting
-              ? ElevatedButton(
-                  child: const Text("Download"),
-                  onPressed: () => savePdF(),
-                )
-              : null,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Container(
-            decoration: BoxDecoration(
-              color: Colors.redAccent,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            width: double.infinity,
-            child: agendaState == AgendaSaveStates.saveError
-                ? Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Error: $errorMessage',
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () => setState(() {
-                                agendaState = AgendaSaveStates.adjusting;
-                              }),
-                          icon: const Icon(Icons.cancel))
-                    ],
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 800.0, // Set the maximum width here
+      ),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            screenTitle,
+            style: context.theme.textTheme.headlineMedium,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            screenSubtext,
+            style: context.theme.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: agendaState == AgendaSaveStates.adjusting
+                ? ElevatedButton(
+                    child: const Text("Download"),
+                    onPressed: () => savePdF(),
                   )
-                : null),
-        Container(
-            decoration: BoxDecoration(
-              color: Colors.lightGreen,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            width: double.infinity,
-            child: agendaState == AgendaSaveStates.agendaSaved
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Agenda downloaded!',
-                          textAlign: TextAlign.left,
+                : null,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              width: double.infinity,
+              child: agendaState == AgendaSaveStates.saveError
+                  ? Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Error: $errorMessage',
+                            textAlign: TextAlign.left,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                          onPressed: () => setState(() {
-                                agendaState = AgendaSaveStates.adjusting;
-                              }),
-                          icon: const Icon(Icons.cancel))
-                    ],
-                  )
-                : null),
-        const SizedBox(
-          height: 10,
-        ),
-        ...displayAgendas
-      ],
+                        IconButton(
+                            onPressed: () => setState(() {
+                                  agendaState = AgendaSaveStates.adjusting;
+                                }),
+                            icon: const Icon(Icons.cancel))
+                      ],
+                    )
+                  : null),
+          Container(
+              decoration: BoxDecoration(
+                color: Colors.lightGreen,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              width: double.infinity,
+              child: agendaState == AgendaSaveStates.agendaSaved
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Agenda downloaded!',
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () => setState(() {
+                                  agendaState = AgendaSaveStates.adjusting;
+                                }),
+                            icon: const Icon(Icons.cancel))
+                      ],
+                    )
+                  : null),
+          const SizedBox(
+            height: 10,
+          ),
+          ...displayAgendas
+        ],
+      ),
     );
   }
 

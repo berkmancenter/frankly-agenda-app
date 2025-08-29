@@ -3,8 +3,8 @@ import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/agenda/warning.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import '../../../../../styles/app_styles.dart';
+import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_section.dart';
@@ -21,72 +21,77 @@ class AgendaEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      const SizedBox(
-        height: 10,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 800.0,
       ),
-      Text(
-        viewModel.eventPlan.eventName,
-        style: AppTextStyle.headline3,
-        textAlign: TextAlign.center,
-      ),
-      const SizedBox(
-        height: 20,
-      ),
-      Text(
-        'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
-        style: AppTextStyle.eyebrowSmall,
-      ),
-      _generateWarningWidget(theme),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton.icon(
-              label: const Text('Update Event'),
-              onPressed: () => {
-                    router.go(Routes.buildAgenda,
-                        extra: viewModel.buildAgendaRepository
-                            .getLastAgendaBuild())
-                  },
-              icon: const Icon(Icons.update)),
-          if (viewModel.editState == EditState.hasUpdated)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton.icon(
-                    label: const Text('Reset Event'),
-                    onPressed: () => {viewModel.resetEventPlan()},
-                    icon: const Icon(Icons.restore)),
-              ],
-            ),
-          if (viewModel.editState == EditState.hasReverted)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton.icon(
-                    label: const Text('Undo Reset'),
-                    onPressed: () => {viewModel.undoReset()},
-                    icon: const Icon(Icons.undo)),
-              ],
-            ),
-        ],
-      ),
-      EventDetails(
-        viewModel: viewModel,
-        event: viewModel.eventPlan,
-      ),
-      const SizedBox(
-        height: 20,
-      ),
-      ..._generateAgendas(viewModel.eventPlan, viewModel),
-      const SizedBox(
-        height: 20,
-      ),
-      TextButton.icon(
-          label: const Text('Add Agenda'),
-          onPressed: () => {viewModel.addAgenda()},
-          icon: const Icon(Icons.save)),
-    ]);
+      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          viewModel.eventPlan.eventName,
+          style: context.theme.textTheme.headlineMedium,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
+          style: AppTextStyle.eyebrowSmall,
+        ),
+        _generateWarningWidget(theme),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+                label: const Text('Update Event'),
+                onPressed: () => {
+                      router.go(Routes.buildAgenda,
+                          extra: viewModel.buildAgendaRepository
+                              .getLastAgendaBuild())
+                    },
+                icon: const Icon(Icons.update)),
+            if (viewModel.editState == EditState.hasUpdated)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                      label: const Text('Reset Event'),
+                      onPressed: () => {viewModel.resetEventPlan()},
+                      icon: const Icon(Icons.restore)),
+                ],
+              ),
+            if (viewModel.editState == EditState.hasReverted)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                      label: const Text('Undo Reset'),
+                      onPressed: () => {viewModel.undoReset()},
+                      icon: const Icon(Icons.undo)),
+                ],
+              ),
+          ],
+        ),
+        EventDetails(
+          viewModel: viewModel,
+          event: viewModel.eventPlan,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ..._generateAgendas(viewModel.eventPlan, viewModel),
+        const SizedBox(
+          height: 20,
+        ),
+        TextButton.icon(
+            label: const Text('Add Agenda'),
+            onPressed: () => {viewModel.addAgenda()},
+            icon: const Icon(Icons.save)),
+      ]),
+    );
   }
 
   Widget _generateWarningWidget(ThemeData theme) {
@@ -209,19 +214,19 @@ class _EventDetailsState extends State<EventDetails> {
             height: 5,
             width: double.infinity,
           ),
-          Text("Event Name", style: AppTextStyle.bodyMedium),
+          Text("Event Name", style: context.theme.textTheme.bodyMedium),
           Text(
             widget.event.eventName,
-            style: AppTextStyle.body,
+            style: context.theme.textTheme.bodyMedium,
           ),
           const SizedBox(
             height: 15,
             width: double.infinity,
           ),
-          Text("Event Description", style: AppTextStyle.bodyMedium),
+          Text("Event Description", style: context.theme.textTheme.bodyMedium),
           Text(
             widget.event.eventDescription,
-            style: AppTextStyle.body,
+            style: context.theme.textTheme.bodyMedium,
           ),
           const SizedBox(
             height: 5,

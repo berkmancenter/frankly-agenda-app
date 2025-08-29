@@ -2,26 +2,29 @@ import 'dart:async';
 
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
+import 'package:agenda_wizard/helpers/PdfSaver.dart';
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
+import '../../../../../styles/app_styles.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_to_pdf/flutter_to_pdf.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 
 enum EditState { original, hasUpdated, hasReverted }
 
 class AgendaEditorViewmodel extends ChangeNotifier {
-  AgendaEditorViewmodel(
-      {required this.agendaRepository,
-      required this.eventPlan,
-      required this.buildAgendaRepository}) {
+  AgendaEditorViewmodel({
+    required this.agendaRepository,
+    required this.buildAgendaRepository,
+    this.optionalEventPlan,
+  }) {
+    optionalEventPlan != null
+        ? eventPlan = optionalEventPlan!
+        : eventPlan = buildAgendaRepository.createSampleEventPlan();
+
     eventPlan = eventPlan.deepCopy();
     originalPlan = eventPlan.deepCopy();
   }
@@ -29,11 +32,11 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   final AgendaRepository agendaRepository;
   final BuildAgendaRepository buildAgendaRepository;
 
-  EventPlan eventPlan;
+  EventPlan? optionalEventPlan;
+  late EventPlan eventPlan;
+  late EventPlan originalPlan;
 
   EditState editState = EditState.original;
-
-  late EventPlan originalPlan;
 
   EventPlan? editedAndDisregarded;
 
@@ -202,7 +205,9 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   Future<CustomResult> buildPDF(List<String> frameIds) async {
     try {
-      final pdf = await exportDelegate.exportToPdfDocument(frameIds[0]);
+      final pdf = await exportDelegate.exportToPdfDocument(
+        frameIds[0],
+      );
 
       for (var i = 1; i < frameIds.length; i++) {
         final newPage = await exportDelegate.exportToPdfPage(frameIds[i]);
@@ -219,27 +224,10 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     try {
       final bytes = await pdf.save();
 
-      String dir = (await getApplicationDocumentsDirectory()).path;
-      File file = File("$dir/${eventPlan.eventName}_discussion-guide.pdf");
-
-      await file.writeAsBytes(bytes);
-
-      if (Platform.isIOS || Platform.isMacOS) {
-        final params = SaveFileDialogParams(sourceFilePath: file.path);
-        final savedPath = await FlutterFileDialog.saveFile(params: params);
-        if (savedPath != null) {
-          return const CustomResult.ok("Agenda saved.");
-        } else {
-          return CustomResult.error(Exception("Agenda was not saved anywhere."),
-              "Agenda was not saved anywhere.");
-        }
-      } else {
-        // TODO: implement something else
-        print('flutter_file_dialog not supported on this platform.');
-        return CustomResult.error(
-            Exception("Unsupported platform for downloads."),
-            "Unsupported platform for downloads.");
-      }
+      final saver = getPdfSaver();
+      final result = await saver.savePdf(
+          bytes, "${eventPlan?.eventName}_discussion-guide.pdf");
+      return result;
     } catch (e) {
       print(e);
       return CustomResult.error(

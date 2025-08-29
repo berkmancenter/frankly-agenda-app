@@ -1,4 +1,4 @@
-import 'package:agenda_wizard/ui/core/themes/material_theme.dart';
+import 'material_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

@@ -1,7 +1,7 @@
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/custom_duration.dart';
-import 'package:agenda_wizard/ui/core/themes/app_styles.dart';
-import 'package:agenda_wizard/ui/core/themes/theme_util.dart';
+import '../../../../../styles/app_styles.dart';
+import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/shared_widgets.dart';
@@ -112,7 +112,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
             : widget.item.content[i];
         contentStrings.add(Text(
           itemContent,
-          style: AppTextStyle.body,
+          style: context.theme.textTheme.bodyMedium,
         ));
         contentStrings.add(
           const SizedBox(
@@ -246,7 +246,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 children: [
                   Expanded(
                     child: Text("${widget.itemIndex + 1}. ${widget.item.title}",
-                        style: AppTextStyle.bodyMedium),
+                        style: context.theme.textTheme.bodyMedium),
                   ),
                   IconButton(
                       onPressed: () => toggleEditing(),
@@ -290,7 +290,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
             children: [
               Expanded(
                 child: Text("${widget.itemIndex + 1}. ${widget.item.title}",
-                    style: AppTextStyle.bodyMedium),
+                    style: context.theme.textTheme.bodyMedium),
               ),
               Row(
                 children: [
@@ -324,8 +324,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 ),
               ],
             ),
-          if (widget.item.importance != null) generateMLNotice(),
           if (isTopicBackground) generateTopicBackground(),
+          if (widget.item.importance != null) generateMLNotice(),
           ...generateContentItems(),
         ],
       );

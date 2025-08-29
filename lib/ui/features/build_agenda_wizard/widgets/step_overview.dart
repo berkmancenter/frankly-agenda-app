@@ -1,5 +1,7 @@
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/goal_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/init_step_provider.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/step_providers/topic_step_provider.dart';
+import 'package:agenda_wizard/ui/features/build_agenda_wizard/widgets/steps/initial_step_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wizard/flutter_wizard.dart';
 
@@ -21,12 +23,15 @@ class StepOverview extends StatelessWidget {
               String title;
               switch (step.runtimeType) {
                 // ignore: type_literal_in_constant_pattern
-                case GoalStepProvider:
-                  title = "1";
+                case InitStepProvider:
+                  title = "Get Started";
                   break;
                 // ignore: type_literal_in_constant_pattern
-                case TopicStepProvider:
-                  title = "2";
+                case GoalStepProvider:
+                  title = "Event Goal";
+                  break;
+                case GoalStepProvider:
+                  title = "Event Goal";
                   break;
                 default:
                   title = "Unknown step description";

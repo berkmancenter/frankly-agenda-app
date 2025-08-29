@@ -36,7 +36,11 @@ class ListAgendasScreen extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                _generateAgendaListItems(theme),
+                ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 800.0,
+                    ),
+                    child: _generateAgendaListItems(theme)),
               ],
             )
           ]),

@@ -32,7 +32,7 @@ class TopicStepProvider extends FormStepProvider {
       nextStepEnabled = true;
     }
     if (viewModel.builder.topicDescription != null) {
-      _topic.add(viewModel.builder.topicDescription!);
+      _topicDescription.add(viewModel.builder.topicDescription!);
       topicDescriptionController.text = _topicDescription.value;
     }
 

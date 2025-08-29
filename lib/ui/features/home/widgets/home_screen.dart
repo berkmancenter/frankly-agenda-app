@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 30),
                           Text(
-                            'Frankly’s Agenda Builder enables you to facilitate constructive dialogue. We help you create an agenda for whatever type of discussion you need.',
+                            'Frankly’s Agenda Builder enables you to facilitate constructive discourse. We help you create an agenda for whatever type of discussion you need.',
                             style: context.theme.textTheme.bodyMedium,
                           ),
                           const SizedBox(height: 40),

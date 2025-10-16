@@ -75,5 +75,15 @@
       "enabled": true
     },
     "singleProjectMode": true
+  },
+  "hosting": {
+    "target": "frankly-agenda",
+    "public": "build/web",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }

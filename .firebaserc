@@ -1,5 +1,23 @@
 {
   "projects": {
-    "default": "agenda-wizard-dev"
-  }
+    "default": "gen-hls-bkc-7627",
+    "staging": "gen-hls-bkc-7627"
+  },
+  "targets": {
+    "gen-hls-bkc-7627": {
+      "hosting": {
+        "frankly-agenda": [
+          "frankly-agenda-builder"
+        ]
+      }
+    },
+    "agenda-wizard-dev": {
+      "hosting": {
+        "frankly-agenda": [
+          "agenda-wizard-dev"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

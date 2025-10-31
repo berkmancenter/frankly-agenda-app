@@ -10,6 +10,13 @@
           "frankly-agenda-builder"
         ]
       }
+    },
+    "agenda-wizard-dev": {
+      "hosting": {
+        "frankly-agenda": [
+          "agenda-wizard-dev"
+        ]
+      }
     }
   },
   "etags": {}

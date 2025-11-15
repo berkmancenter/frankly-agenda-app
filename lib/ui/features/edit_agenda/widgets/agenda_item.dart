@@ -143,6 +143,9 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
 
     Widget generateMLNotice() {
       Widget childWidget = Container();
+      String aiText = "This content was generated with the help of AI.";
+      if (isTopicBackground) aiText = "The recommendation to include background information was made by AI.";
+
       if (llmInfoOpen == true) {
         childWidget = Column(
           children: [
@@ -151,9 +154,9 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
               const SizedBox(
                 width: 10,
               ),
-              const Expanded(
+              Expanded(
                   child:
-                      Text("This content was generated with the help of AI.")),
+                      Text(aiText)),
               IconButton(
                   onPressed: toggleLlmInfoOpen,
                   icon: const Icon(Icons.expand_less_rounded))
@@ -168,8 +171,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
             const SizedBox(
               width: 10,
             ),
-            const Expanded(
-                child: Text("This content was generated with the help of AI.")),
+            Expanded(
+                child: Text(aiText)),
             TextButton.icon(
                 label: const Text('Show AI Rationale'),
                 onPressed: toggleLlmInfoOpen,
@@ -324,8 +327,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 ),
               ],
             ),
-          if (isTopicBackground) generateTopicBackground(),
           if (widget.item.importance != null) generateMLNotice(),
+          if (isTopicBackground) generateTopicBackground(),
           ...generateContentItems(),
         ],
       );

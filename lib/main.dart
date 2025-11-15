@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  if (kDebugMode) {
+    // Only use the emulator when debugging locally
+    FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  }
 
   runApp(
     MultiProvider(providers: [...providersLocal], child: const App()),

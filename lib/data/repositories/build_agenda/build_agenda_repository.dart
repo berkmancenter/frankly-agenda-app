@@ -36,7 +36,7 @@ class BuildAgendaRepository {
   Future<HttpsCallableResult> callbuildAgendaCloudFunction(
       AgendaBuilder builder) async {
     final HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('createEventPlan');
+        FirebaseFunctions.instance.httpsCallable('agendaBuildEventPlan');
     final HttpsCallableResult result = await callable.call(builder.toJson());
     return result;
   }

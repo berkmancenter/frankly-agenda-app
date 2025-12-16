@@ -144,7 +144,10 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
     Widget generateMLNotice() {
       Widget childWidget = Container();
       String aiText = "This content was generated with the help of AI.";
-      if (isTopicBackground) aiText = "The recommendation to include background information was made by AI.";
+      if (isTopicBackground) {
+        aiText =
+            "The recommendation to include background information was made by AI.";
+      }
 
       if (llmInfoOpen == true) {
         childWidget = Column(
@@ -154,9 +157,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
               const SizedBox(
                 width: 10,
               ),
-              Expanded(
-                  child:
-                      Text(aiText)),
+              Expanded(child: Text(aiText)),
               IconButton(
                   onPressed: toggleLlmInfoOpen,
                   icon: const Icon(Icons.expand_less_rounded))
@@ -171,8 +172,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
             const SizedBox(
               width: 10,
             ),
-            Expanded(
-                child: Text(aiText)),
+            Expanded(child: Text(aiText)),
             TextButton.icon(
                 label: const Text('Show AI Rationale'),
                 onPressed: toggleLlmInfoOpen,
@@ -225,6 +225,10 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
               ),
             ),
           ),
+          const SizedBox(
+            height: 5,
+          ),
+          generateMLNotice(),
           const SizedBox(
             height: 5,
           ),
@@ -327,8 +331,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                 ),
               ],
             ),
-          if (widget.item.importance != null) generateMLNotice(),
           if (isTopicBackground) generateTopicBackground(),
+          if (widget.item.importance != null && !isTopicBackground) generateMLNotice(),
           ...generateContentItems(),
         ],
       );

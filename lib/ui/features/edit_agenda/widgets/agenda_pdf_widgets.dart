@@ -78,6 +78,7 @@ class EventInfoPDF extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextScaler textScaler = const TextScaler.linear(.5);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,14 +86,15 @@ class EventInfoPDF extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Text(viewModel.eventPlan.eventName, style: AppTextStyle.headline3),
+        Text(viewModel.eventPlan.eventName,
+            style: AppTextStyle.headline3, textScaler: textScaler),
         const SizedBox(
           height: 10,
           width: double.infinity,
         ),
         viewModel.eventPlan.agendas.length > 1
             ? Text("Agenda ${numToString(agendaIndex + 1)}",
-                style: AppTextStyle.headlineSmall)
+                style: AppTextStyle.headlineSmall, textScaler: textScaler)
             : const Text(""),
         viewModel.eventPlan.agendas.length > 1
             ? const SizedBox(
@@ -102,10 +104,8 @@ class EventInfoPDF extends StatelessWidget {
             : const SizedBox(
                 height: 0,
               ),
-        Text(
-          viewModel.eventPlan.eventDescription,
-          style: AppTextStyle.subhead,
-        ),
+        Text(viewModel.eventPlan.eventDescription,
+            style: AppTextStyle.subhead, textScaler: textScaler),
         const SizedBox(
           height: 20,
           width: double.infinity,
@@ -123,6 +123,7 @@ class SectionInfoPDF extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextScaler textScaler = const TextScaler.linear(.5);
     return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -130,17 +131,17 @@ class SectionInfoPDF extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Text(
-            section.name,
-            style: AppTextStyle.headline4,
-            textAlign: TextAlign.left,
-          ),
+          Text(section.name,
+              style: AppTextStyle.headline4,
+              textAlign: TextAlign.left,
+              textScaler: textScaler),
           const SizedBox(
             height: 10,
           ),
           Text(section.description,
               style: AppTextStyle.bodySmall
                   .merge(const TextStyle(fontStyle: FontStyle.italic)),
+              textScaler: textScaler,
               textAlign: TextAlign.left),
           const SizedBox(
             height: 20,
@@ -183,6 +184,7 @@ class ItemInfoPDF extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextScaler textScaler = const TextScaler.linear(.5);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -192,11 +194,13 @@ class ItemInfoPDF extends StatelessWidget {
                 "${itemIndex + 1}. ${item.title}",
                 style: AppTextStyle.bodyMedium,
                 textAlign: TextAlign.left,
+                textScaler: textScaler,
               )
             : Text(
                 item.title,
                 style: AppTextStyle.bodySmall,
                 textAlign: TextAlign.left,
+                textScaler: textScaler,
               ),
         ..._generateContentItems(context.theme),
         const SizedBox(

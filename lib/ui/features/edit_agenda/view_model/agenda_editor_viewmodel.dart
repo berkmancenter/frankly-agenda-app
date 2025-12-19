@@ -41,15 +41,6 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   EventPlan? editedAndDisregarded;
 
   String agendaPDFID = 'agendaId';
-  final ExportDelegate exportDelegate = ExportDelegate(
-    ttfFonts: {
-      'Inter_500': 'assets/fonts/Inter/Inter_18pt-Medium.ttf',
-      'Inter_600': 'assets/fonts/Inter/Inter_18pt-SemiBold.ttf',
-      'Inter': 'assets/fonts/Inter/Inter_18pt-Regular.ttf',
-      'Inter_regular': 'assets/fonts/Inter/Inter_18pt-Regular.ttf',
-      'Inter_700': 'assets/fonts/Inter/Inter_18pt-Bold.ttf',
-    },
-  );
 
   Future<CustomResult> updateAgenda(eventPlan) async {
     return await agendaRepository.updateEvent(eventPlan);
@@ -204,6 +195,19 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   }
 
   Future<CustomResult> buildPDF(List<String> frameIds) async {
+    final ExportOptions pdfOptions =
+        ExportOptions(pageFormatOptions: PageFormatOptions.a4());
+
+    final ExportDelegate exportDelegate = ExportDelegate(
+      options: pdfOptions,
+      ttfFonts: {
+        'Inter_500': 'assets/fonts/Inter/Inter_18pt-Medium.ttf',
+        'Inter_600': 'assets/fonts/Inter/Inter_18pt-SemiBold.ttf',
+        'Inter': 'assets/fonts/Inter/Inter_18pt-Regular.ttf',
+        'Inter_regular': 'assets/fonts/Inter/Inter_18pt-Regular.ttf',
+        'Inter_700': 'assets/fonts/Inter/Inter_18pt-Bold.ttf',
+      },
+    );
     try {
       final pdf = await exportDelegate.exportToPdfDocument(
         frameIds[0],

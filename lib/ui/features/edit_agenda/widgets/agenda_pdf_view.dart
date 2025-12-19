@@ -21,9 +21,9 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
 
   List<String> frameIDs = [];
 
-  List<Widget> displayWidgets = [];
+  List<Widget> displayWidgets = []; // list of all agenda widgets for entire event (any type of widget) used for measuring
 
-  List<Widget> displayAgendas = [];
+  List<Widget> displayAgendas = []; // list of PDF Agenda Displays (AgendaPDFDisplay Widget)
 
   String screenTitle = "Here is your agenda.";
   String screenSubtext =
@@ -37,7 +37,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
 
   Future<void> savePdF() async {
     List<double> widgetHeights =
-        await _measureWidgets(displayWidgets, widget.viewModel);
+        await _measureWidgets(displayWidgets, widget.viewModel); // get added heights of all widgets 
 
     setState(() {
       displayAgendas = _generateAgendaPDFPages(widget.viewModel, widgetHeights);
@@ -150,7 +150,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
   }
 
   void _createDisplayWidgets() {
-    List<Widget> agendaPDFPages = [];
+    List<Widget> pdfAgendas = [];
 
     // Each agenda gets a new page
     int agendaIndex = 0;
@@ -158,11 +158,11 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
       List<Widget> agendaWidgets =
           _generateDisplayWidgets(widget.viewModel, agenda, agendaIndex);
       // build agenda displays
-      AgendaPDFDisplay newPage = AgendaPDFDisplay(
+      AgendaPDFDisplay newAgenda = AgendaPDFDisplay(
         pageWidgets: agendaWidgets,
         viewModel: widget.viewModel,
       );
-      agendaPDFPages.add(newPage);
+      pdfAgendas.add(newAgenda);
 
       agendaIndex = agendaIndex + 1;
 
@@ -170,7 +170,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
         displayWidgets.add(agendaWidget);
       }
     }
-    displayAgendas = agendaPDFPages;
+    displayAgendas = pdfAgendas;
   }
 
   Future<void> _buildPDF() async {

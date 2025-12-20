@@ -20,14 +20,6 @@ class DefaultFirebaseOptions {
       return web;
     }
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
-        return ios;
-      case TargetPlatform.macOS:
-        return macos;
-      case TargetPlatform.windows:
-        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -41,48 +33,12 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCNmR0zgdFXWNen7Yq2sY_k0Y-zm8jZ9ws',
-    appId: '1:226360493782:web:214d19a60a575a72b2ab77',
-    messagingSenderId: '226360493782',
-    projectId: 'agenda-wizard-dev',
-    authDomain: 'agenda-wizard-dev.firebaseapp.com',
-    storageBucket: 'agenda-wizard-dev.firebasestorage.app',
+    apiKey: 'AIzaSyCDVNRISh9aRVP3rnjyOrnp9GJPnebVzrs',
+    appId: '1:435762130630:web:cbd2b28eee051e122031c7',
+    messagingSenderId: '435762130630',
+    projectId: 'asml-agenda-builder-staging',
+    authDomain: 'asml-agenda-builder-staging.firebaseapp.com',
+    storageBucket: 'asml-agenda-builder-staging.firebasestorage.app',
     measurementId: 'G-9LWGQHEFSY',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyATj99TGIuaCBNKuo7cm3zBtmaeQtdmR2g',
-    appId: '1:226360493782:android:299493a76c7e5bf3b2ab77',
-    messagingSenderId: '226360493782',
-    projectId: 'agenda-wizard-dev',
-    storageBucket: 'agenda-wizard-dev.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB5b9fPsF0Crlo_9gfBT-JfZt9xM9Cv07w',
-    appId: '1:226360493782:ios:992384fa3abe72c8b2ab77',
-    messagingSenderId: '226360493782',
-    projectId: 'agenda-wizard-dev',
-    storageBucket: 'agenda-wizard-dev.firebasestorage.app',
-    iosBundleId: 'com.example.agendaWizard',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB5b9fPsF0Crlo_9gfBT-JfZt9xM9Cv07w',
-    appId: '1:226360493782:ios:992384fa3abe72c8b2ab77',
-    messagingSenderId: '226360493782',
-    projectId: 'agenda-wizard-dev',
-    storageBucket: 'agenda-wizard-dev.firebasestorage.app',
-    iosBundleId: 'com.example.agendaWizard',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCNmR0zgdFXWNen7Yq2sY_k0Y-zm8jZ9ws',
-    appId: '1:226360493782:web:50fcc6b7e9bae883b2ab77',
-    messagingSenderId: '226360493782',
-    projectId: 'agenda-wizard-dev',
-    authDomain: 'agenda-wizard-dev.firebaseapp.com',
-    storageBucket: 'agenda-wizard-dev.firebasestorage.app',
-    measurementId: 'G-NYMFB0F3FV',
   );
 }

@@ -6,7 +6,7 @@ An interactive tool to help people build discussion guides for use on or off Fra
 
 # Steps to deploy
 1. Run `flutter build web`
-2. Run `firebase deploy --only hosting:frankly-agenda`
+2. Run `firebase deploy --only hosting`
 
 # Steps to Deploy Cloud Function
 1. `cd functions`

@@ -42,6 +42,8 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   String agendaPDFID = 'agendaId';
 
+  ExportDelegate exportDelegate = ExportDelegate();
+
   Future<CustomResult> updateAgenda(eventPlan) async {
     return await agendaRepository.updateEvent(eventPlan);
   }
@@ -195,10 +197,10 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   }
 
   Future<CustomResult> buildPDF(List<String> frameIds) async {
-    final ExportOptions pdfOptions =
+    const ExportOptions pdfOptions =
         ExportOptions(pageFormatOptions: PageFormatOptions.a4());
 
-    final ExportDelegate exportDelegate = ExportDelegate(
+    exportDelegate = ExportDelegate(
       options: pdfOptions,
       ttfFonts: {
         'Inter_500': 'assets/fonts/Inter/Inter_18pt-Medium.ttf',

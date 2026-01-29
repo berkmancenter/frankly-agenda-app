@@ -48,21 +48,19 @@ class AgendaPDFPage extends StatelessWidget {
     return ExportFrame(
       frameId: frameID,
       exportDelegate: viewModel.exportDelegate,
-      child: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
+      child: Container(
+        decoration: BoxDecoration(
+          color: context.theme.colorScheme.onTertiary,
+          border: Border.all(
             color: context.theme.colorScheme.onTertiary,
-            border: Border.all(
-              color: context.theme.colorScheme.onTertiary,
-            ),
-            borderRadius: BorderRadius.circular(4),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [...pageWidgets]),
-          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [...pageWidgets]),
         ),
       ),
     );

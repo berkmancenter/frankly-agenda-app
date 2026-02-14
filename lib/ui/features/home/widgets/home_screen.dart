@@ -2,10 +2,12 @@ import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/styles/app_asset.dart';
 import 'package:agenda_wizard/ui/core/widgets/main_button.dart';
+import 'package:flutter/gestures.dart';
 import '../../../../../styles/app_styles.dart';
 import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/features/home/view_model/home_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.viewModel});
@@ -14,6 +16,10 @@ class HomeScreen extends StatelessWidget {
 
   void goToBuildAgenda() {
     router.go(Routes.buildAgenda);
+  }
+
+  Future<void> goBuildSampleAgenda() async {
+    await viewModel.buildSampleAgenda();
   }
 
   @override
@@ -102,6 +108,11 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(
                             height: 10,
+                          ),
+                          if (kDebugMode) MainButton(
+                            buttonText: 'Create Sample Agenda',
+                            callBack: goBuildSampleAgenda,
+                            isSecondary: true,
                           ),
                         ],
                       ),

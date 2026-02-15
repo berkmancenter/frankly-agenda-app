@@ -39,7 +39,7 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
   @override
   void initState() {
     super.initState();
-    _createDisplayWidgets();
+    // _createDisplayWidgets();
   }
 
   Future<void> savePdF() async {
@@ -47,8 +47,6 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
         await _measureWidgets(displayWidgets, widget.viewModel); // get added heights of all widgets 
 
     setState(() {
-      displayAgendas = _generateAgendaPDFPages(widget.viewModel, widgetHeights);
-
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await _buildPDF();
       });
@@ -146,34 +144,34 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
         const SizedBox(
           height: 10,
         ),
-        ...displayAgendas
+        AgendaPDF(viewModel: widget.viewModel),
       ],
     );
   }
 
-  void _createDisplayWidgets() {
-    List<Widget> pdfAgendas = [];
+  // void _createDisplayWidgets() {
+  //   List<Widget> pdfAgendas = [];
 
-    // Each agenda gets a new page
-    int agendaIndex = 0;
-    for (var agenda in widget.viewModel.eventPlan.agendas) {
-      List<Widget> agendaWidgets =
-          _generateDisplayWidgets(widget.viewModel, agenda, agendaIndex);
-      // build agenda displays
-      AgendaPDFDisplay newAgenda = AgendaPDFDisplay(
-        pageWidgets: agendaWidgets,
-        viewModel: widget.viewModel,
-      );
-      pdfAgendas.add(newAgenda);
+  //   // Each agenda gets a new page
+  //   int agendaIndex = 0;
+  //   for (var agenda in widget.viewModel.eventPlan.agendas) {
+  //     List<Widget> agendaWidgets =
+  //         _generateDisplayWidgets(widget.viewModel, agenda, agendaIndex);
+  //     // build agenda displays
+  //     AgendaPDFDisplay newAgenda = AgendaPDFDisplay(
+  //       pageWidgets: agendaWidgets,
+  //       viewModel: widget.viewModel,
+  //     );
+  //     pdfAgendas.add(newAgenda);
 
-      agendaIndex = agendaIndex + 1;
+  //     agendaIndex = agendaIndex + 1;
 
-      for (var agendaWidget in agendaWidgets) {
-        displayWidgets.add(agendaWidget);
-      }
-    }
-    displayAgendas = pdfAgendas;
-  }
+  //     for (var agendaWidget in agendaWidgets) {
+  //       displayWidgets.add(agendaWidget);
+  //     }
+  //   }
+  //   displayAgendas = pdfAgendas;
+  // }
 
   Future<void> _buildPDF() async {
     CustomResult<void> result = await widget.viewModel.buildPDF(frameIDs);
@@ -238,58 +236,58 @@ class _AgendaPdfViewState extends State<AgendaPdfView> {
   //   return agendaWidgets;
   // }
 
-  List<AgendaPDFDisplay2> _generateDisplayWidgets(AgendaEditorViewmodel viewModel, agenda, int agendaIndex) {
-    List<AgendaPDFDisplay2> agendaWidgets = [const AgendaPDFDisplay2()];
-    return agendaWidgets;
-  }
+  // List<AgendaPDFDisplay2> _generateDisplayWidgets(AgendaEditorViewmodel viewModel, agenda, int agendaIndex) {
+  //   List<AgendaPDFDisplay2> agendaWidgets = [const AgendaPDFDisplay2()];
+  //   return agendaWidgets;
+  // }
 
   
 
-  List<AgendaPDFDisplay2> _generateAgendaPDFPages(
-      AgendaEditorViewmodel viewModel, List<double> widgetHeights) {
-    frameIDs = [];
-    List<AgendaPDFDisplay2> agendaPDFPages = [];
-    const pageHeightLimit = 1100.0;
+  // List<AgendaPDFDisplay2> _generateAgendaPDFPages(
+  //     AgendaEditorViewmodel viewModel, List<double> widgetHeights) {
+  //   frameIDs = [];
+  //   List<AgendaPDFDisplay2> agendaPDFPages = [];
+  //   const pageHeightLimit = 1100.0;
 
-    // Each agenda gets a new page
-    int agendaIndex = 0;
-    for (var agenda in viewModel.eventPlan.agendas) {
-      agendaPDFPages.add(const AgendaPDFDisplay2());
-      // Rebuild our display widgets
-      // List<AgendaPDFDisplay2> agendaWidgets =
-      //     _generateDisplayWidgets(viewModel, agenda, agendaIndex);
+  //   // Each agenda gets a new page
+  //   int agendaIndex = 0;
+  //   for (var agenda in viewModel.eventPlan.agendas) {
+  //     agendaPDFPages.add();
+  //     // Rebuild our display widgets
+  //     // List<AgendaPDFDisplay2> agendaWidgets =
+  //     //     _generateDisplayWidgets(viewModel, agenda, agendaIndex);
 
-    //   List<Widget> currPageWidgets = [];
-    //   // build pages based on height
-    //   double currentHeight = 300;
-    //   int agendaWidgetCounter = 0;
-    //   for (var agendaWidget in agendaWidgets) {
-    //     double height = widgetHeights[agendaWidgetCounter];
-    //     currentHeight = currentHeight + height;
-    //     if (currentHeight > pageHeightLimit ||
-    //         agendaWidgetCounter == agendaWidgets.length - 1) {
-    //       // if it makes the page too tall, create a new page from previous widget list
-    //       String frameID =
-    //           "${viewModel.agendaPDFID}_page${agendaPDFPages.length}_${DateTime.now().microsecondsSinceEpoch}";
-    //       frameIDs.add(frameID);
-    //       AgendaPDFPage newPage = AgendaPDFPage(
-    //         frameID: frameID,
-    //         pageWidgets: currPageWidgets,
-    //         viewModel: viewModel,
-    //       );
-    //       // add to PDF page list
-    //       agendaPDFPages.add(newPage);
+  //   //   List<Widget> currPageWidgets = [];
+  //   //   // build pages based on height
+  //   //   double currentHeight = 300;
+  //   //   int agendaWidgetCounter = 0;
+  //   //   for (var agendaWidget in agendaWidgets) {
+  //   //     double height = widgetHeights[agendaWidgetCounter];
+  //   //     currentHeight = currentHeight + height;
+  //   //     if (currentHeight > pageHeightLimit ||
+  //   //         agendaWidgetCounter == agendaWidgets.length - 1) {
+  //   //       // if it makes the page too tall, create a new page from previous widget list
+  //   //       String frameID =
+  //   //           "${viewModel.agendaPDFID}_page${agendaPDFPages.length}_${DateTime.now().microsecondsSinceEpoch}";
+  //   //       frameIDs.add(frameID);
+  //   //       AgendaPDFPage newPage = AgendaPDFPage(
+  //   //         frameID: frameID,
+  //   //         pageWidgets: currPageWidgets,
+  //   //         viewModel: viewModel,
+  //   //       );
+  //   //       // add to PDF page list
+  //   //       agendaPDFPages.add(newPage);
 
-    //       // and reset curr page widgets
-    //       currPageWidgets = [];
-    //       currentHeight = 300 + height;
-    //     }
-    //     currPageWidgets.add(agendaWidget);
-    //     agendaWidgetCounter = agendaWidgetCounter + 1;
-    //   }
+  //   //       // and reset curr page widgets
+  //   //       currPageWidgets = [];
+  //   //       currentHeight = 300 + height;
+  //   //     }
+  //   //     currPageWidgets.add(agendaWidget);
+  //   //     agendaWidgetCounter = agendaWidgetCounter + 1;
+  //   //   }
 
-    //   agendaIndex = agendaIndex + 1;
-    }
-    return agendaPDFPages;
-  }
+  //   //   agendaIndex = agendaIndex + 1;
+  //   }
+  //   return agendaPDFPages;
+  // }
 }

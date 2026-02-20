@@ -2,70 +2,8 @@ import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/utils/helper_functions.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_to_pdf/flutter_to_pdf.dart';
-
-class AgendaPDFDisplay {
-  const AgendaPDFDisplay({
-    required this.viewModel,
-    required this.pageWidgets,
-  });
-  final AgendaEditorViewmodel viewModel;
-  final List<pw.Widget> pageWidgets;
-
-  pw.Widget build() {
-    return pw.Container(
-      decoration: pw.BoxDecoration(
-        color: PdfColor(1, 1, 1),
-        border: pw.Border.all(
-          color: PdfColor(1, 1, 1),
-        ),
-        borderRadius: pw.BorderRadius.circular(4),
-      ),
-      child: pw.Padding(
-        padding: const pw.EdgeInsets.all(15),
-        child: pw.Column(children: pageWidgets),
-      ),
-    );
-  }
-}
-
-// class AgendaPDFPage extends StatelessWidget {
-//   const AgendaPDFPage(
-//       {super.key,
-//       required this.viewModel,
-//       required this.pageWidgets,
-//       required this.frameID});
-//   final AgendaEditorViewmodel viewModel;
-//   final List<Widget> pageWidgets;
-//   final String frameID;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ExportFrame(
-//       frameId: frameID,
-//       exportDelegate: viewModel.exportDelegate,
-//       child: Container(
-//         decoration: BoxDecoration(
-//           color: context.theme.colorScheme.onTertiary,
-//           border: Border.all(
-//             color: context.theme.colorScheme.onTertiary,
-//           ),
-//           borderRadius: BorderRadius.circular(4),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(15),
-//           child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [...pageWidgets]),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class EventInfoPDF {
   const EventInfoPDF({required this.viewModel, required this.agendaIndex});
@@ -76,7 +14,7 @@ class EventInfoPDF {
   pw.Widget build() {
     return pw.Column(
       mainAxisSize: pw.MainAxisSize.min,
-      crossAxisAlignment: pw.CrossAxisAlignment.center,
+      crossAxisAlignment: pw.CrossAxisAlignment.stretch,
       children: [
         pw.SizedBox(
           height: 10,
@@ -85,19 +23,21 @@ class EventInfoPDF {
             style: pw.TextStyle(
               fontStyle: pw.FontStyle.normal,
               fontWeight: pw.FontWeight.bold,
-              fontSize: 24,
+              fontSize: 22,
               height: 1.1,
-            )),
+            ),
+            textAlign: pw.TextAlign.center),
         pw.SizedBox(
           height: 10,
         ),
         viewModel.eventPlan.agendas.length > 1
             ? pw.Text("Agenda ${numToString(agendaIndex + 1)}",
                 style: pw.TextStyle(
-                  fontStyle: pw.FontStyle.normal,
-                  fontSize: 12,
+                  fontSize: 10,
+                  fontStyle: pw.FontStyle.italic,
                   height: 1.2,
-                ))
+                ),
+                textAlign: pw.TextAlign.center)
             : pw.SizedBox.shrink(),
         viewModel.eventPlan.agendas.length > 1
             ? pw.SizedBox(
@@ -107,9 +47,10 @@ class EventInfoPDF {
         pw.Text(viewModel.eventPlan.eventDescription,
             style: pw.TextStyle(
               fontStyle: pw.FontStyle.normal,
-              fontSize: 18,
+              fontSize: 12,
               height: 1.5,
-            )),
+            ),
+            textAlign: pw.TextAlign.center),
         pw.SizedBox(
           height: 20,
         ),
@@ -128,16 +69,17 @@ class SectionInfoPDF {
         mainAxisSize: pw.MainAxisSize.min,
         crossAxisAlignment: pw.CrossAxisAlignment.stretch,
         children: [
+          PDFDividerChunk().build(),
           pw.SizedBox(
-            height: 20,
+            height: 15,
           ),
           pw.Text(
             section.name,
             style: pw.TextStyle(
-              fontStyle: pw.FontStyle.normal,
-              fontSize: 18,
-              height: 1.2,
-            ),
+                fontStyle: pw.FontStyle.normal,
+                fontSize: 16,
+                height: 1.2,
+                color: const PdfColor(.24, .27, .27)),
             textAlign: pw.TextAlign.left,
           ),
           pw.SizedBox(
@@ -146,7 +88,7 @@ class SectionInfoPDF {
           pw.Text(section.description,
               style: pw.TextStyle(
                 fontStyle: pw.FontStyle.italic,
-                fontSize: 14,
+                fontSize: 10,
                 height: 1,
               ),
               textAlign: pw.TextAlign.left),
@@ -177,7 +119,8 @@ class ItemInfoPDF {
                 "${itemIndex + 1}. ${item.title}",
                 style: pw.TextStyle(
                   fontStyle: pw.FontStyle.normal,
-                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 12,
                   height: 1.5,
                 ),
                 textAlign: pw.TextAlign.left,
@@ -186,7 +129,8 @@ class ItemInfoPDF {
                 item.title,
                 style: pw.TextStyle(
                   fontStyle: pw.FontStyle.normal,
-                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 12,
                   height: 1,
                 ),
                 textAlign: pw.TextAlign.left,
@@ -201,22 +145,26 @@ class ItemContentPDF {
   final String content;
 
   pw.Widget build() {
-    return pw.Column(children: [
-      pw.SizedBox(
-        height: 10,
-      ),
-      pw.Text(
-        content,
-        style: pw.TextStyle(
-          fontStyle: pw.FontStyle.normal,
-          fontSize: 14,
-          height: 1,
-        ),
-      ),
-      pw.SizedBox(
-        height: 10,
-      ),
-    ]);
+    return pw.Column(
+        mainAxisSize: pw.MainAxisSize.min,
+        crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+        children: [
+          pw.SizedBox(
+            height: 10,
+          ),
+          pw.Text(
+            content,
+            style: pw.TextStyle(
+              fontStyle: pw.FontStyle.normal,
+              fontSize: 12,
+              height: 1,
+            ),
+            textAlign: pw.TextAlign.left,
+          ),
+          pw.SizedBox(
+            height: 10,
+          ),
+        ]);
   }
 }
 
@@ -237,13 +185,37 @@ class PDFDividerLine {
               ),
             ),
             child: pw.SizedBox(
-              height: padding ?? 20,
+              height: padding ?? 10,
               width: double.infinity,
             )),
         pw.SizedBox(
-          height: padding ?? 20,
+          height: padding ?? 10,
         ),
       ],
     );
+  }
+}
+
+class PDFDividerChunk {
+  pw.Widget build() {
+    return pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Padding(
+              padding: const pw.EdgeInsets.only(left: 2.5),
+              child: pw.Container(
+                  decoration: const pw.BoxDecoration(
+                    border: pw.Border(
+                      bottom: pw.BorderSide(
+                        color: PdfColor(.63, .81, .79),
+                        width: 3,
+                      ),
+                    ),
+                  ),
+                  child: pw.SizedBox(
+                    height: 30,
+                    width: 14,
+                  )))
+        ]);
   }
 }

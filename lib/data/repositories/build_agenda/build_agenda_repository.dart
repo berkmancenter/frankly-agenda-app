@@ -61,7 +61,6 @@ class BuildAgendaRepository {
 
   Future<CustomResult<EventPlan>> getSampleAgenda() async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
       EventPlan agendas = await _readJson();
       return CustomResult.ok(agendas);
     } catch (e) {
@@ -74,7 +73,7 @@ class BuildAgendaRepository {
       final String response =
           await rootBundle.loadString('assets/sample_agenda.json');
       var rawEvent = await json.decode(response);
-      EventPlan eventPlan = EventPlan.fromJson(rawEvent);
+      EventPlan eventPlan = EventPlan.fromJson(rawEvent["eventPlan"]);
 
       return eventPlan;
     } catch (e) {

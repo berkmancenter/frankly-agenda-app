@@ -35,6 +35,7 @@ final router = GoRouter(
                   final viewModel = HomeViewmodel(
                     userRepository: context.read(),
                     agendaRepository: context.read(),
+                    buildAgendaRepository: context.read(),
                   );
                   return HomeScreen(viewModel: viewModel);
                 },

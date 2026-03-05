@@ -36,11 +36,18 @@ class _AgendaPDFState extends State<AgendaPDF> {
 
   void _filloutPDF(pdf) {
     List<pw.Widget> widgetList = [];
-    for (var displayAgenda in displayAgendas) {
-      for (var displayWidget in displayAgenda) {
-        widgetList.add(displayWidget);
+    for (int i = 0; i < displayAgendas.length; i++) {
+      try {
+        print('Adding agenda $i');
+        for (var displayWidget in displayAgendas[i]) {
+          widgetList.add(displayWidget);
+        }
+        widgetList.add(pw.NewPage());
+      } catch (e) {
+        print('Error adding agenda $i: $e');
+        // Skip this one or add a placeholder
+        widgetList.add(pw.Text('Error rendering agenda $i'));
       }
-      widgetList.add(pw.NewPage());
     }
 
     pdf.addPage(pw.MultiPage(
@@ -53,11 +60,17 @@ class _AgendaPDFState extends State<AgendaPDF> {
   }
 
   Future<void> downloadPDF() async {
-    final pdf = pw.Document();
-    _filloutPDF(pdf);
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-    );
+    try {
+      final pdf = pw.Document();
+      _filloutPDF(pdf);
+      await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => pdf.save(),
+      );
+    } catch (e, stackTrace) {
+      print('PDF Error: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
+    }
   }
 
   @override

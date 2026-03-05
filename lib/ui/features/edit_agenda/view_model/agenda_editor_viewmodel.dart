@@ -41,7 +41,10 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   EventPlan? editedAndDisregarded;
 
   String agendaPDFID = 'agendaId';
+
   final ExportDelegate exportDelegate = ExportDelegate(
+    options: const ExportOptions(
+        pageFormatOptions: PageFormatOptions.a4()),
     ttfFonts: {
       'Inter_500': 'assets/fonts/Inter/Inter_18pt-Medium.ttf',
       'Inter_600': 'assets/fonts/Inter/Inter_18pt-SemiBold.ttf',
@@ -157,81 +160,5 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     eventPlan.agendas[agendaIndex].sections[sectionIndex].items.add(newItem);
     editState = EditState.hasUpdated;
     notifyListeners();
-  }
-
-  Future<double> measureWidgetHeight(
-      BuildContext context, Widget widget) async {
-    final key = GlobalKey();
-
-    final overlay = OverlayEntry(
-      builder: (_) => Material(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            const Icon(
-              Icons.post_add,
-              size: 50,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Text(
-              "building PDF . . .",
-              style: AppTextStyle.headline4,
-            ),
-            Center(
-              child: IntrinsicHeight(
-                child: Column(
-                  key: key,
-                  children: [Opacity(opacity: 0, child: widget)],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlay);
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    final height = key.currentContext?.size?.height ?? 0;
-    overlay.remove();
-    return height;
-  }
-
-  Future<CustomResult> buildPDF(List<String> frameIds) async {
-    try {
-      final pdf = await exportDelegate.exportToPdfDocument(
-        frameIds[0],
-      );
-
-      for (var i = 1; i < frameIds.length; i++) {
-        final newPage = await exportDelegate.exportToPdfPage(frameIds[i]);
-        pdf.addPage(newPage);
-      }
-      return await savePDF(pdf);
-    } catch (e) {
-      return CustomResult.error(
-          Exception("Error building pdf: $e"), "Error building PDF.");
-    }
-  }
-
-  Future<CustomResult> savePDF(var pdf) async {
-    try {
-      final bytes = await pdf.save();
-
-      final saver = getPdfSaver();
-      final result = await saver.savePdf(
-          bytes, "${eventPlan?.eventName}_discussion-guide.pdf");
-      return result;
-    } catch (e) {
-      print(e);
-      return CustomResult.error(
-          Exception("Error saving pdf: {$e}"), "Error saving PDF.");
-    }
   }
 }

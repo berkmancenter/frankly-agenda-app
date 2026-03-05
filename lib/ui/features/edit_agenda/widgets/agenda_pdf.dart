@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/core/widgets/main_button.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf_widgets.dart';
@@ -83,18 +82,6 @@ class _AgendaPDFState extends State<AgendaPDF> {
           child: SizedBox(
               height: 1100,
               width: 900,
-              // child: Padding(
-              //   padding: const EdgeInsets.all(15),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(15),
-              //     child: Column(children: [
-              //       PdfPreview(
-              //         // 2. Display the PDF
-              //         build: (format) => displayPdf(),
-              //       )
-              //     ]),
-              //   ),
-              // ),
               child: PdfPreview(
                 // 2. Display the PDF
                 build: (format) => displayPdf(),

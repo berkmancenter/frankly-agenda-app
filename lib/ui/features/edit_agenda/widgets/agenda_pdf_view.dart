@@ -1,16 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf.dart';
-
 import '../../../../../styles/styles.dart';
-import 'package:agenda_wizard/ui/core/widgets/divider_line.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
-import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_pdf_widgets.dart';
-import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+
 
 enum AgendaSaveStates { agendaSaved, saveError, adjusting }
 

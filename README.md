@@ -7,8 +7,9 @@ See software architecture diagram to understand how the components go together.
 ## Getting Started
 
 # Steps to deploy
-1. Run `flutter build web`
-2. Run `firebase deploy --only hosting`
+1. Build: `flutter build web --release --no-tree-shake-icons` <-- the no tree shake ensures the pdf builds properly 
+2. Test locally: `python -m http.server 8000 -d build/web`
+2. Deploy: `firebase deploy --only hosting`
 
 # Steps to Deploy Cloud Function
 1. `cd functions`

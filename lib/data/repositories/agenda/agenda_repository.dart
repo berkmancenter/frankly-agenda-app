@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/data/repositories/user/user_repository.dart';
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/firebase_collections.dart';
@@ -34,8 +35,20 @@ class AgendaRepository {
     return _recentEventPlans;
   }
 
-  void addRecentAgenda(EventPlan eventPlan) {
+  Future<void> addRecentAgenda(EventPlan eventPlan, UserModel? currUser) async {
     EventPlan newPlan = eventPlan.deepCopy();
     _recentEventPlans.add(newPlan);
+
+    if (currUser != null) {
+      await storeAgenda(newPlan, currUser);
+    }
+  }
+
+  Future<void> storeAgenda(EventPlan eventPlan, UserModel currUser) async {
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection('users').doc(currUser.id);
+    await userRef
+        .collection(FirebaseCollections.agendas)
+        .add(eventPlan.toJson());
   }
 }

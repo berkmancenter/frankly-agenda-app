@@ -1,6 +1,8 @@
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
+import 'package:agenda_wizard/data/repositories/user/user_repository.dart';
 import 'package:agenda_wizard/models/builder/agenda_builder.dart';
+import 'package:agenda_wizard/models/user/user.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
 
 import 'package:agenda_wizard/utils/step_enums.dart';
@@ -8,14 +10,17 @@ import 'package:agenda_wizard/utils/step_enums.dart';
 class BuildAgendaViewmodel {
   final BuildAgendaRepository _buildAgendaRepository;
   final AgendaRepository _agendaRepository;
+  final UserRepository _userRepository;
 
   /// Constructor
   BuildAgendaViewmodel(
       {required BuildAgendaRepository buildAgendaRepository,
       required AgendaRepository agendaRepository,
+      required UserRepository userRepository,
       AgendaBuilder? agendaBuilder})
       : _buildAgendaRepository = buildAgendaRepository,
         _agendaRepository = agendaRepository,
+        _userRepository = userRepository,
         builder = agendaBuilder ?? AgendaBuilder();
 
   AgendaBuilder builder;
@@ -70,12 +75,12 @@ class BuildAgendaViewmodel {
   }
 
   Future<CustomResult<Object>> generateAgenda() async {
-
     _buildAgendaRepository.addAgendaBuild(builder);
     final eventResult = await _buildAgendaRepository.buildAgenda(builder);
     print(eventResult.value);
+    UserModel? currUser = _userRepository.currentUser;
     if (eventResult is Ok) {
-      _agendaRepository.addRecentAgenda(eventResult.value);
+      _agendaRepository.addRecentAgenda(eventResult.value, currUser);
     }
     builder = AgendaBuilder();
     return eventResult;

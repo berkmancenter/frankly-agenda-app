@@ -20,7 +20,7 @@ class AppScaffold extends StatelessWidget {
     if (kIsWeb) {
       return DefaultTabController(
           initialIndex: navigationShell.currentIndex,
-          length: 3,
+          length: 5,
           child: Builder(builder: (context) {
             final tabController = DefaultTabController.of(context);
             tabController.addListener(() {

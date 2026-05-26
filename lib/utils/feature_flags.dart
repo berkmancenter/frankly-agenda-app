@@ -1,3 +1,3 @@
 class FeatureFlagManager {
-  static bool isSignInEnabled = false;
+  static bool isSignInEnabled = true;
 }

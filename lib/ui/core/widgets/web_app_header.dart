@@ -1,6 +1,8 @@
 import 'package:agenda_wizard/data/repositories/auth/auth_repository.dart';
+import 'package:agenda_wizard/providers/userProvider.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/utils/feature_flags.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../styles/app_asset.dart';
 import '../../../../styles/app_styles.dart';
 import '../../../../styles/theme_util.dart';
@@ -26,121 +28,148 @@ class WebAppHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.theme.colorScheme.surfaceContainerLowest,
-        border: Border(
-          bottom: BorderSide(
-            color: context.theme.colorScheme.secondaryFixedDim,
-            width: 1,
-          ),
-        ),
-      ),
-      child: ConstrainedBox(
-        constraints:
-            const BoxConstraints(maxWidth: AppSize.kPageContentMaxWidthDesktop),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 10),
-          child: SizedBox(
-            height: AppSize.kNavBarHeight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Semantics(
-                      label: "Frankly Agenda Builder",
-                      child: Image.asset(
-                        AppAsset.kLogoIconPng.path,
-                        width: 50,
-                        height: 35,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(width: 2),
-                    Text("Agenda Builder",
-                        style: AppTextStyle.agendaLogo.copyWith(
-                            color: context.theme.colorScheme.tertiary)),
-                  ],
+    String userName = context.watch<UserProvider>().name;
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          User? user;
+          if (snapshot.connectionState == ConnectionState.active) {
+            user = snapshot.data;
+          }
+          return Container(
+            decoration: BoxDecoration(
+              color: context.theme.colorScheme.surfaceContainerLowest,
+              border: Border(
+                bottom: BorderSide(
+                  color: context.theme.colorScheme.secondaryFixedDim,
+                  width: 1,
                 ),
-                Row(
-                  children: [
-                    Tab(
-                      currIndex: currIndex,
-                      tabCallback: tabCallback,
-                      index: 0,
-                      tabLabel: 'Home',
-                      iconImage: Icons.home,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Tab(
-                      currIndex: currIndex,
-                      tabCallback: tabCallback,
-                      index: 1,
-                      tabLabel: 'Create Agenda',
-                      iconImage: Icons.create_rounded,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Tab(
-                      currIndex: currIndex,
-                      tabCallback: tabCallback,
-                      index: 2,
-                      tabLabel: 'Previous Agendas',
-                      iconImage: Icons.view_agenda,
-                    ),
-                    if (FeatureFlagManager.isSignInEnabled)
-                      Consumer<AuthRepository>(
-                          builder: (context, authState, _) => Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10.0, bottom: 10.0),
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            left: BorderSide(
-                                              color: context.theme.colorScheme
-                                                  .surfaceContainer, // Customize border color
-                                              width:
-                                                  1, // Customize border width
+              ),
+            ),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                  maxWidth: AppSize.kPageContentMaxWidthDesktop),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 10),
+                child: SizedBox(
+                  height: AppSize.kNavBarHeight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Semantics(
+                            label: "Frankly Agenda Builder",
+                            child: Image.asset(
+                              AppAsset.kLogoIconPng.path,
+                              width: 50,
+                              height: 35,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Text("Agenda Builder",
+                              style: AppTextStyle.agendaLogo.copyWith(
+                                  color: context.theme.colorScheme.tertiary)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Tab(
+                            currIndex: currIndex,
+                            tabCallback: tabCallback,
+                            index: 0,
+                            tabLabel: 'Home',
+                            iconImage: Icons.home,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Tab(
+                            currIndex: currIndex,
+                            tabCallback: tabCallback,
+                            index: 1,
+                            tabLabel: 'Create Agenda',
+                            iconImage: Icons.create_rounded,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          if (user != null)
+                            Tab(
+                              currIndex: currIndex,
+                              tabCallback: tabCallback,
+                              index: 2,
+                              tabLabel: 'Previous Agendas',
+                              iconImage: Icons.view_agenda,
+                            ),
+                          (user != null)
+                              ? Tab(
+                                  currIndex: currIndex,
+                                  tabCallback: tabCallback,
+                                  index: 4,
+                                  tabLabel: userName,
+                                  iconImage: Icons.view_agenda,
+                                )
+                              : Tab(
+                                  currIndex: currIndex,
+                                  tabCallback: tabCallback,
+                                  index: 3,
+                                  tabLabel: 'SignIn',
+                                  iconImage: Icons.view_agenda,
+                                ),
+                          if (FeatureFlagManager.isSignInEnabled)
+                            Consumer<AuthRepository>(
+                                builder: (context, authState, _) => Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10.0, bottom: 10.0),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border(
+                                                  left: BorderSide(
+                                                    color: context
+                                                        .theme
+                                                        .colorScheme
+                                                        .surfaceContainer, // Customize border color
+                                                    width:
+                                                        1, // Customize border width
+                                                  ),
+                                                ),
+                                              ),
+                                              child: const SizedBox(
+                                                height: double.infinity,
+                                                width: 5,
+                                              )),
+                                        ),
+                                        if (authState.loggedIn) ...[
+                                          SignOut(
+                                            logOutViewModel: LogoutViewModel(
+                                              authRepository: context.read(),
                                             ),
                                           ),
-                                        ),
-                                        child: const SizedBox(
-                                          height: double.infinity,
-                                          width: 5,
-                                        )),
-                                  ),
-                                  if (authState.loggedIn) ...[
-                                    SignOut(
-                                      logOutViewModel: LogoutViewModel(
-                                        authRepository: context.read(),
-                                      ),
-                                    ),
-                                  ] else ...[
-                                    TextButton.icon(
-                                        label: const Text('Login'),
-                                        onPressed: () =>
-                                            context.push(Routes.login),
-                                        icon: const Icon(Icons.login)),
-                                  ],
-                                ],
-                              )),
-                    const SizedBox(
-                      width: 20,
-                    )
-                  ],
+                                        ] else ...[
+                                          TextButton.icon(
+                                              label: const Text('Login'),
+                                              onPressed: () =>
+                                                  context.push(Routes.login),
+                                              icon: const Icon(Icons.login)),
+                                        ],
+                                      ],
+                                    )),
+                          const SizedBox(
+                            width: 20,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 }
 

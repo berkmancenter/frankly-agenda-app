@@ -15,6 +15,7 @@ class FormInput extends StatelessWidget {
       this.minLines,
       this.expands,
       this.width,
+      this.isObscured,
       this.typeFormatters = const []});
 
   final String labelText;
@@ -28,6 +29,7 @@ class FormInput extends StatelessWidget {
   final int? minLines;
   final bool? expands;
   final double? width;
+  final bool? isObscured;
   final List<TextInputFormatter> typeFormatters;
 
   @override
@@ -68,9 +70,10 @@ class FormInput extends StatelessWidget {
             },
             focusNode: focusNode,
             keyboardType: inputType,
-            maxLines: maxLines, // For a text field that can display up to 5 lines
+            maxLines: isObscured == true ? 1 : maxLines, // For a text field that can display up to 5 lines
             minLines: minLines,
             expands: expands ?? false,
+            obscureText: isObscured ?? false,
             inputFormatters: [...typeFormatters],
           ),
         ),

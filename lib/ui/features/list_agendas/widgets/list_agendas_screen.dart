@@ -1,7 +1,6 @@
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
-import '../../../../../styles/app_styles.dart';
 import '../../../../../styles/styles.dart';
 import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/features/list_agendas/view_model/list_agendas_viewmodel.dart';
@@ -17,34 +16,40 @@ class ListAgendasScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return Container(
-        color: context.theme.colorScheme.surfaceContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ListView(children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Previous Event Agendas",
-                  style: context.theme.textTheme.headlineMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 800.0,
-                    ),
-                    child: _generateAgendaListItems(theme)),
-              ],
-            )
-          ]),
-        ));
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+              color: context.theme.colorScheme.surfaceContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ListView(children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Previous Event Agendas",
+                        style: context.theme.textTheme.headlineMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            maxWidth: 800.0,
+                          ),
+                          child: _generateAgendaListItems(theme)),
+                    ],
+                  )
+                ]),
+              )),
+        ),
+      ],
+    );
   }
 
   Widget _generateAgendaListItems(theme) {

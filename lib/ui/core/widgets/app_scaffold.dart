@@ -44,7 +44,7 @@ class AppScaffold extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(Icons.create_rounded), label: "Create Agenda"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.view_agenda), label: "Previous Agendas"),
+                  icon: Icon(Icons.view_agenda), label: "Agenda List"),
             ],
             onTap: _goBranch,
           ));

@@ -20,7 +20,7 @@ EventPlan _$EventPlanFromJson(Map<String, dynamic> json) => EventPlan(
 Map<String, dynamic> _$EventPlanToJson(EventPlan instance) => <String, dynamic>{
       'eventName': instance.eventName,
       'eventDescription': instance.eventDescription,
-      'agendas': instance.agendas,
+      'agendas': instance.agendas.map((e) => e.toJson()).toList(),
       'isSeries': instance.isSeries,
-      'warnings': instance.warnings,
+      'warnings': instance.warnings?.map((e) => e.toJson()).toList(),
     };

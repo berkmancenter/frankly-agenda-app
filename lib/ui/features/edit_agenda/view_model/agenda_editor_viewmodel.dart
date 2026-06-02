@@ -68,6 +68,16 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     }
   }
 
+  Future<CustomResult<String>> saveAgenda() async {
+    UserModel? currUser = userRepository.currentUser;
+    if (currUser != null) {
+      CustomResult<String> res = await agendaRepository.storeAgenda(eventPlan, currUser);
+      return res; 
+    } else {
+      return CustomResult.error(Exception("No user logged in"), "Please log in to save your agenda.");
+    }
+  }
+
   void resetEventPlan() {
     editedAndDisregarded = eventPlan.deepCopy();
     eventPlan = originalPlan.deepCopy();

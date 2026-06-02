@@ -13,9 +13,10 @@ import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AgendaEditor extends StatelessWidget {
-  const AgendaEditor({super.key, required this.viewModel});
+  const AgendaEditor({super.key, required this.viewModel, required this.saveStatus});
 
   final AgendaEditorViewmodel viewModel;
+  final int saveStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,8 @@ class AgendaEditor extends StatelessWidget {
           'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
           style: AppTextStyle.eyebrowSmall,
         ),
+        const SizedBox(height: 10,),
+        _generateSaveInfoWidget(saveStatus),
         _generateWarningWidget(theme),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,6 +136,47 @@ class AgendaEditor extends StatelessWidget {
         height: 20,
       );
     }
+  }
+}
+
+Widget _generateSaveInfoWidget(int saveStatus) {
+  if (saveStatus == 0) {
+    return const SizedBox();
+  } else if (saveStatus == 1) {
+    return Container(
+        color: Colors.orangeAccent,
+        width: double.infinity,
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Saving agenda...',
+            textAlign: TextAlign.left,
+          ),
+        ));   
+  } 
+  else if (saveStatus == 2) {
+    return Container(
+        color: Colors.greenAccent,
+        width: double.infinity,
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Agenda saved successfully.',
+            textAlign: TextAlign.left,
+          ),
+        ));
+  }
+  else {
+    return Container(
+        color: Colors.redAccent,
+        width: double.infinity,
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Error saving agenda. Please try again.',
+            textAlign: TextAlign.left,
+          ),
+        ));
   }
 }
 

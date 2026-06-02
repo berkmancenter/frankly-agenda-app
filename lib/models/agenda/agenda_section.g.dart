@@ -21,6 +21,6 @@ Map<String, dynamic> _$AgendaSectionToJson(AgendaSection instance) =>
     <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
-      'items': instance.items,
-      'duration': instance.duration,
+      'items': instance.items.map((e) => e.toJson()).toList(),
+      'duration': instance.duration.toJson(),
     };

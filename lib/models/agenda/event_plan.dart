@@ -3,7 +3,7 @@ import 'package:agenda_wizard/models/agenda/warning.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'event_plan.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class EventPlan {
   String eventName, eventDescription;
   final List<Agenda> agendas;

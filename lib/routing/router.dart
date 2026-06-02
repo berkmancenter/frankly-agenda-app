@@ -5,6 +5,7 @@ import 'package:agenda_wizard/ui/core/widgets/app_scaffold.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/auth_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/logout_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/authentication/view_model/profile_agendas_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/authentication/widgets/login_screen.dart';
 import 'package:agenda_wizard/ui/features/authentication/widgets/profile.dart';
 import 'package:agenda_wizard/ui/features/authentication/widgets/signup_screen.dart';
@@ -117,7 +118,12 @@ final router = GoRouter(
                   final logoutViewModel = LogoutViewModel(
                     authRepository: context.read(),
                   );
-                  return Profile(logOutViewModel: logoutViewModel);
+                  final profileViewModel =
+                      ProfileViewModel(agendaRepository: context.read());
+                  return Profile(
+                    logOutViewModel: logoutViewModel,
+                    profileViewModel: profileViewModel,
+                  );
                 },
                 redirect: (context, state) {
                   final user = FirebaseAuth.instance.currentUser;

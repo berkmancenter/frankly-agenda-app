@@ -155,6 +155,7 @@ class _LogInFormState extends State<LogInForm> {
               labelText: 'Password',
               fieldController: _password,
               isRequired: true,
+              isObscured: true
             ),
             const SizedBox(
               height: 10,

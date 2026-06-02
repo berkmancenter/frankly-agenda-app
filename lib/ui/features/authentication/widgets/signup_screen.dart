@@ -108,6 +108,12 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> submitSignIn() async {
+    if (_reenterPassword.text != _password.text) {
+      setState(() {
+        _errorMessage = 'Passwords do not match.';
+      });
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       try {
         // Assume your async operation with server call
@@ -170,18 +176,18 @@ class _SignUpFormState extends State<SignUpForm> {
             isRequired: true,
           ),
           FormInput(
-            labelText: 'Password',
-            fieldController: _password,
-            isRequired: true,
-          ),
+              labelText: 'Password',
+              fieldController: _password,
+              isRequired: true,
+              isObscured: true),
           const SizedBox(
             height: 10,
           ),
           FormInput(
-            labelText: 'Re-enter Password',
-            fieldController: _reenterPassword,
-            isRequired: true,
-          ),
+              labelText: 'Re-enter Password',
+              fieldController: _reenterPassword,
+              isRequired: true,
+              isObscured: true),
           const SizedBox(
             height: 10,
           ),

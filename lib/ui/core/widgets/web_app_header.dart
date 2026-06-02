@@ -100,24 +100,9 @@ class WebAppHeader extends StatelessWidget implements PreferredSizeWidget {
                               currIndex: currIndex,
                               tabCallback: tabCallback,
                               index: 2,
-                              tabLabel: 'Previous Agendas',
+                              tabLabel: 'Agenda List',
                               iconImage: Icons.view_agenda,
                             ),
-                          (user != null)
-                              ? Tab(
-                                  currIndex: currIndex,
-                                  tabCallback: tabCallback,
-                                  index: 4,
-                                  tabLabel: userName,
-                                  iconImage: Icons.view_agenda,
-                                )
-                              : Tab(
-                                  currIndex: currIndex,
-                                  tabCallback: tabCallback,
-                                  index: 3,
-                                  tabLabel: 'SignIn',
-                                  iconImage: Icons.view_agenda,
-                                ),
                           if (FeatureFlagManager.isSignInEnabled)
                             Consumer<AuthRepository>(
                                 builder: (context, authState, _) => Row(
@@ -144,17 +129,21 @@ class WebAppHeader extends StatelessWidget implements PreferredSizeWidget {
                                               )),
                                         ),
                                         if (authState.loggedIn) ...[
-                                          SignOut(
-                                            logOutViewModel: LogoutViewModel(
-                                              authRepository: context.read(),
-                                            ),
+                                          Tab(
+                                            currIndex: currIndex,
+                                            tabCallback: tabCallback,
+                                            index: 4,
+                                            tabLabel: userName,
+                                            iconImage: Icons.account_circle,
                                           ),
                                         ] else ...[
-                                          TextButton.icon(
-                                              label: const Text('Login'),
-                                              onPressed: () =>
-                                                  context.push(Routes.login),
-                                              icon: const Icon(Icons.login)),
+                                          Tab(
+                                            currIndex: currIndex,
+                                            tabCallback: tabCallback,
+                                            index: 3,
+                                            tabLabel: 'Login',
+                                            iconImage: Icons.login,
+                                          ),
                                         ],
                                       ],
                                     )),

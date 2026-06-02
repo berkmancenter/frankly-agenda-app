@@ -1,5 +1,6 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../styles/styles.dart';
@@ -20,6 +21,8 @@ class AgendaEditorScreen extends StatefulWidget {
 class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
   bool editMode = true;
 
+  int saveStatus = 0; // 0 = not saved, 1 = saving, 2 = saved successfully, -1 = error
+
   void toggleEditMode() {
     if (editMode == true) {
       widget.viewModel.saveCurrentEventPlanToHistory();
@@ -27,6 +30,27 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
     setState(() {
       editMode = !editMode;
     });
+  }
+
+  Future<void> saveAgenda() async {
+    setState(() {
+      saveStatus = 1; // 1 = saving
+    });
+
+    CustomResult<String> result = await widget.viewModel.saveAgenda();
+
+    if (result is Ok) {
+      setState(() {
+        saveStatus = 2; // 2 = saved successfully
+      });
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
+      context.go(Routes.agendas);
+    } else {
+      setState(() {
+        saveStatus = -1; // -1 = error
+      });
+    }
   }
 
   @override
@@ -82,7 +106,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                           alignment: Alignment.centerRight,
                           child: TextButton.icon(
                               label: const Text('Save'),
-                              onPressed: () => toggleEditMode(),
+                              onPressed: () => saveAgenda(),
                               icon: editMode ? const Icon(Icons.save) : null),
                         ),
                       ),
@@ -94,7 +118,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                             label: editMode
                                 ? const Text('Export')
                                 : const Text('Edit'),
-                            onPressed: () => toggleEditMode(),
+                            onPressed: () => saveAgenda(),
                             icon: editMode
                                 ? const Icon(Icons.import_export)
                                 : const Icon(Icons.edit)),
@@ -113,6 +137,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                         padding: const EdgeInsets.all(10.0),
                         child: AgendaEditor(
                           viewModel: widget.viewModel,
+                          saveStatus: saveStatus,
                         ),
                       );
                     } else {

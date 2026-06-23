@@ -150,12 +150,15 @@ class _LogInFormState extends State<LogInForm> {
               labelText: 'Email',
               fieldController: _email,
               isRequired: true,
+              textInputAction: TextInputAction.next,
             ),
             FormInput(
               labelText: 'Password',
               fieldController: _password,
               isRequired: true,
-              isObscured: true
+              isObscured: true,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => submitLogin(),
             ),
             const SizedBox(
               height: 10,

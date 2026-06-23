@@ -169,17 +169,20 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: 'Name',
             fieldController: _name,
             isRequired: true,
+            textInputAction: TextInputAction.next,
           ),
           FormInput(
             labelText: 'Email',
             fieldController: _email,
             isRequired: true,
+            textInputAction: TextInputAction.next,
           ),
           FormInput(
               labelText: 'Password',
               fieldController: _password,
               isRequired: true,
-              isObscured: true),
+              isObscured: true,
+              textInputAction: TextInputAction.next),
           const SizedBox(
             height: 10,
           ),
@@ -187,7 +190,10 @@ class _SignUpFormState extends State<SignUpForm> {
               labelText: 'Re-enter Password',
               fieldController: _reenterPassword,
               isRequired: true,
-              isObscured: true),
+              isObscured: true,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => submitSignIn(),
+          ),
           const SizedBox(
             height: 10,
           ),

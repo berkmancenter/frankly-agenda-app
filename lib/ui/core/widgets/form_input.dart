@@ -16,7 +16,9 @@ class FormInput extends StatelessWidget {
       this.expands,
       this.width,
       this.isObscured,
-      this.typeFormatters = const []});
+      this.typeFormatters = const [],
+      this.textInputAction,
+      this.onFieldSubmitted});
 
   final String labelText;
   final TextEditingController fieldController;
@@ -31,6 +33,8 @@ class FormInput extends StatelessWidget {
   final double? width;
   final bool? isObscured;
   final List<TextInputFormatter> typeFormatters;
+  final TextInputAction? textInputAction;
+  final Function(String)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +79,8 @@ class FormInput extends StatelessWidget {
             expands: expands ?? false,
             obscureText: isObscured ?? false,
             inputFormatters: [...typeFormatters],
+            textInputAction: textInputAction,
+            onFieldSubmitted: onFieldSubmitted,
           ),
         ),
         const SizedBox(

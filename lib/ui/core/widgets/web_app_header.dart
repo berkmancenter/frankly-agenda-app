@@ -209,7 +209,7 @@ class Tab extends StatelessWidget {
                     .copyWith(color: context.theme.colorScheme.tertiary),
               ),
         onPressed: () {
-          tabCallback(index);
+          tabCallback(index, context);
         },
       ),
     );

@@ -21,7 +21,8 @@ class AgendaEditorScreen extends StatefulWidget {
 class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
   bool editMode = true;
 
-  int saveStatus = 0; // 0 = not saved, 1 = saving, 2 = saved successfully, -1 = error
+  int saveStatus =
+      0; // 0 = not saved, 1 = saving, 2 = saved successfully, -1 = error
 
   void toggleEditMode() {
     if (editMode == true) {
@@ -99,17 +100,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                     : const Text("Agenda Preview"),
                 Row(
                   children: [
-                    if (editMode && user != null)
-                      SizedBox(
-                        width: 100,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton.icon(
-                              label: const Text('Save'),
-                              onPressed: () => saveAgenda(),
-                              icon: editMode ? const Icon(Icons.save) : null),
-                        ),
-                      ),
+                    if (editMode && user != null) ..._generateSaveButton(),
                     SizedBox(
                       width: 100,
                       child: Align(
@@ -152,5 +143,43 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
             ),
           ]),
         ));
+  }
+
+  List<Widget> _generateSaveButton() {
+    List<Widget> saveButtons = [];
+    Widget saveCopyText = const Text("");
+    Widget saveCopyIcon = const Icon(Icons.copy);
+
+    if (widget.viewModel.eventPlan.id == null) {
+      saveCopyText = const Text('Save');
+      saveCopyIcon = const Icon(Icons.save);
+    } else {
+      Widget saveButton = SizedBox(
+          width: 90,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              label: const Text('Save'),
+              onPressed: () => saveAgenda(),
+              icon: const Icon(Icons.save),
+            ),
+          ));
+
+      saveButtons.add(saveButton);
+      saveCopyText = const Text('Save Copy');
+    }
+
+    Widget saveCopyButton = SizedBox(
+        width: 150,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(
+            label: saveCopyText,
+            onPressed: () => saveAgenda(),
+            icon: saveCopyIcon,
+          ),
+        ));
+    saveButtons.add(saveCopyButton);
+    return saveButtons;
   }
 }

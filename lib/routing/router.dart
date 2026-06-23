@@ -68,7 +68,8 @@ final router = GoRouter(
                   builder: (context, state) {
                     final listAgendasViewModel = ListAgendasViewModel(
                         buildAgendaRepository: context.read(),
-                        agendaRepository: context.read());
+                        agendaRepository: context.read(),
+                        userRepository: context.read());
                     return ListAgendasScreen(
                       viewmodel: listAgendasViewModel,
                     );

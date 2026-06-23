@@ -8,13 +8,15 @@ class EventPlan {
   String eventName, eventDescription;
   final List<Agenda> agendas;
   final bool isSeries;
+  String? id;
   List<Warning>? warnings;
 
   EventPlan(
       {required this.eventName,
       required this.eventDescription,
       required this.agendas,
-      required this.isSeries});
+      required this.isSeries,
+      this.id});
 
   factory EventPlan.fromJson(Map<String, dynamic> json) =>
       _$EventPlanFromJson(json);
@@ -31,7 +33,8 @@ class EventPlan {
         eventName: eventName,
         eventDescription: eventDescription,
         agendas: newAgendas,
-        isSeries: isSeries);
+        isSeries: isSeries,
+        id:id);
 
     if (warnings != null) {
       List<Warning> newWarnings = [];

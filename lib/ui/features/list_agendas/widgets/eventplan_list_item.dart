@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 
 class EventPlanListItem extends StatelessWidget {
   final EventPlan eventPlan;
-  const EventPlanListItem({super.key, required this.eventPlan});
+  
+  final dynamic onDelete;
+  const EventPlanListItem({super.key, required this.eventPlan, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,11 @@ class EventPlanListItem extends StatelessWidget {
                       onPressed: () =>
                           router.go(Routes.editAgenda, extra: eventPlan),
                       icon: const Icon(Icons.edit)),
+                       TextButton.icon(
+                      label: const Text('Delete'),
+                      onPressed: () =>
+                          onDelete(),
+                      icon: const Icon(Icons.delete)),
                 ],
               ),
             ],

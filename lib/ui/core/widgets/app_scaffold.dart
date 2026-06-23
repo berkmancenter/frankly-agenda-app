@@ -1,8 +1,11 @@
+import 'package:agenda_wizard/providers/agendaProvider.dart';
+import 'package:agenda_wizard/providers/userProvider.dart';
 import 'package:agenda_wizard/ui/core/widgets/app_header.dart';
 import 'package:agenda_wizard/ui/core/widgets/web_app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
 
 class AppScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -10,9 +13,16 @@ class AppScaffold extends StatelessWidget {
   const AppScaffold({Key? key, required this.navigationShell})
       : super(key: key ?? const ValueKey('ScaffoldWithNestedNavigation'));
 
-  void _goBranch(int index) {
+  void _goBranch(int index, BuildContext context) {
     navigationShell.goBranch(index,
         initialLocation: index == navigationShell.currentIndex);
+
+    if (index == 2) {
+      final user = context.read<UserProvider>().currentUser;
+      if (user != null) {
+        context.read<AgendaProvider>().loadEventPlans(user);
+      }
+    }
   }
 
   @override
@@ -25,11 +35,13 @@ class AppScaffold extends StatelessWidget {
             final tabController = DefaultTabController.of(context);
             tabController.addListener(() {
               if (tabController.indexIsChanging) {
-                _goBranch(tabController.index);
+                _goBranch(tabController.index, context);
               }
             });
             return Scaffold(
-              appBar: WebAppHeader(tabCallback: _goBranch, currIndex: navigationShell.currentIndex ),
+              appBar: WebAppHeader(
+                  tabCallback: _goBranch,
+                  currIndex: navigationShell.currentIndex),
               body: navigationShell,
             );
           }));
@@ -46,7 +58,7 @@ class AppScaffold extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(Icons.view_agenda), label: "Agenda List"),
             ],
-            onTap: _goBranch,
+            onTap: (int index) => _goBranch(index, context),
           ));
     }
   }

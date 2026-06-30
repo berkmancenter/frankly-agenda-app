@@ -33,7 +33,28 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
     });
   }
 
-  Future<void> saveAgenda() async {
+  Future<void> updateAgenda() async {
+    setState(() {
+      saveStatus = 1; // 1 = saving
+    });
+
+    CustomResult<void> result = await widget.viewModel.updateAgenda(widget.viewModel.eventPlan);
+
+    if (result is Ok) {
+      setState(() {
+        saveStatus = 2; // 2 = saved successfully
+      });
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
+      context.go(Routes.agendas);
+    } else {
+      setState(() {
+        saveStatus = -1; // -1 = error
+      });
+    }
+  }
+
+  Future<void>saveAgendaCopy() async {
     setState(() {
       saveStatus = 1; // 1 = saving
     });
@@ -109,7 +130,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                             label: editMode
                                 ? const Text('Export')
                                 : const Text('Edit'),
-                            onPressed: () => saveAgenda(),
+                            onPressed: () => {},
                             icon: editMode
                                 ? const Icon(Icons.import_export)
                                 : const Icon(Icons.edit)),
@@ -160,7 +181,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
             alignment: Alignment.centerRight,
             child: TextButton.icon(
               label: const Text('Save'),
-              onPressed: () => saveAgenda(),
+              onPressed: () => updateAgenda(),
               icon: const Icon(Icons.save),
             ),
           ));
@@ -175,7 +196,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
           alignment: Alignment.centerRight,
           child: TextButton.icon(
             label: saveCopyText,
-            onPressed: () => saveAgenda(),
+            onPressed: () => saveAgendaCopy(),
             icon: saveCopyIcon,
           ),
         ));

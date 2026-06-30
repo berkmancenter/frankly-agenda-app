@@ -44,10 +44,6 @@ class AgendaRepository extends ChangeNotifier {
     }
   }
 
-  Future<CustomResult<EventPlan>> updateEvent(EventPlan event) async {
-    return CustomResult.ok(event);
-  }
-
   List<EventPlan> get getRecentEventPlans {
     return _recentEventPlans;
   }
@@ -100,6 +96,49 @@ class AgendaRepository extends ChangeNotifier {
     return const CustomResult.ok("Agenda stored successfully.");
   }
 
+   Future<CustomResult<void>> updateEventPlan(EventPlan eventPlan) async {
+    User? firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser == null) {
+      return CustomResult.error(
+          Exception("No user logged in"), "Please log in to update agendas.");
+    }
+    try {
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('users').doc(firebaseUser.uid);
+
+      QuerySnapshot snapshot = await userRef
+          .collection(FirebaseCollections.agendas)
+          .where('id', isEqualTo: eventPlan.id)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        return CustomResult.error(
+            Exception("Agenda not found"), "Could not find agenda to update.");
+      }
+
+      await snapshot.docs.first.reference.set({...eventPlan.toJson()});
+
+      int agendaIndex = _userEventPlans.indexWhere((agenda) => agenda.id == eventPlan.id);
+
+      _userEventPlans[agendaIndex] = eventPlan;
+
+      notifyListeners();
+      return const CustomResult.ok(null);
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        print("Access denied: Check your security rules.");
+      } else if (e.code == 'unavailable') {
+        print("Network issue: Firestore is currently unreachable.");
+      } else {
+        print("Firestore error: ${e.message}");
+      }
+      return CustomResult.error(Exception(e.message), "Error deleting agenda.");
+    } catch (e) {
+      return CustomResult.error(
+          Exception("Unknown error"), "Error deleting agenda.");
+    }
+  }
+
   Future<CustomResult<void>> deleteEventPlan(EventPlan eventPlan) async {
     User? firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) {
@@ -137,4 +176,5 @@ class AgendaRepository extends ChangeNotifier {
           Exception("Unknown error"), "Error deleting agenda.");
     }
   }
+  
 }

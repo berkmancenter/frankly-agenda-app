@@ -55,9 +55,6 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     },
   );
 
-  Future<CustomResult> updateAgenda(eventPlan) async {
-    return await agendaRepository.updateEvent(eventPlan);
-  }
 
   void saveCurrentEventPlanToHistory() {
     if (editState == EditState.hasUpdated) {
@@ -69,11 +66,17 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   Future<CustomResult<String>> saveAgenda() async {
     UserModel? currUser = userRepository.currentUser;
     if (currUser != null) {
-      CustomResult<String> res = await agendaRepository.storeAgenda(eventPlan, currUser);
-      return res; 
+      CustomResult<String> res =
+          await agendaRepository.storeAgenda(eventPlan, currUser);
+      return res;
     } else {
-      return CustomResult.error(Exception("No user logged in"), "Please log in to save your agenda.");
+      return CustomResult.error(
+          Exception("No user logged in"), "Please log in to save your agenda.");
     }
+  }
+
+  Future<CustomResult<void>> updateAgenda(EventPlan eventPlan) async {
+    return await agendaRepository.updateEventPlan(eventPlan);
   }
 
   void resetEventPlan() {

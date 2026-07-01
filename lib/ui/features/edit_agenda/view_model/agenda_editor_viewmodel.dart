@@ -55,7 +55,6 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     },
   );
 
-
   void saveCurrentEventPlanToHistory() {
     if (editState == EditState.hasUpdated) {
       UserModel? currUser = userRepository.currentUser;
@@ -63,9 +62,12 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     }
   }
 
-  Future<CustomResult<String>> saveAgenda() async {
+  Future<CustomResult<String>> saveAgenda(bool isCopy) async {
     UserModel? currUser = userRepository.currentUser;
     if (currUser != null) {
+      if (isCopy) {
+        await agendaRepository.updateEventPlan(originalPlan);
+      }
       CustomResult<String> res =
           await agendaRepository.storeAgenda(eventPlan, currUser);
       return res;
@@ -75,13 +77,17 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     }
   }
 
-  Future<CustomResult<void>> updateAgenda(EventPlan eventPlan) async {
+  Future<CustomResult<void>> updateAgenda() async {
     return await agendaRepository.updateEventPlan(eventPlan);
   }
 
   void resetEventPlan() {
     editedAndDisregarded = eventPlan.deepCopy();
     eventPlan = originalPlan.deepCopy();
+
+    if (eventPlan.id != null) {
+      updateAgenda();
+    }
 
     editState = EditState.hasReverted;
     notifyListeners();
@@ -92,6 +98,10 @@ class AgendaEditorViewmodel extends ChangeNotifier {
       throw Exception("No event plan to revert to.");
     }
     eventPlan = editedAndDisregarded!.deepCopy();
+
+    if (eventPlan.id != null) {
+      updateAgenda();
+    }
 
     editState = EditState.hasUpdated;
     notifyListeners();

@@ -25,9 +25,9 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
       0; // 0 = not saved, 1 = saving, 2 = saved successfully, -1 = error
 
   void toggleEditMode() {
-    if (editMode == true) {
-      widget.viewModel.saveCurrentEventPlanToHistory();
-    }
+    // if (editMode == true) {
+    //   widget.viewModel.saveCurrentEventPlanToHistory();
+    // }
     setState(() {
       editMode = !editMode;
     });
@@ -38,7 +38,8 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
       saveStatus = 1; // 1 = saving
     });
 
-    CustomResult<void> result = await widget.viewModel.updateAgenda(widget.viewModel.eventPlan);
+    CustomResult<void> result =
+        await widget.viewModel.updateAgenda();
 
     if (result is Ok) {
       setState(() {
@@ -54,12 +55,12 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
     }
   }
 
-  Future<void>saveAgendaCopy() async {
+  Future<void> saveAgendaCopy() async {
     setState(() {
       saveStatus = 1; // 1 = saving
     });
 
-    CustomResult<String> result = await widget.viewModel.saveAgenda();
+    CustomResult<String> result = await widget.viewModel.saveAgenda(widget.viewModel.eventPlan.id != null);
 
     if (result is Ok) {
       setState(() {
@@ -95,18 +96,19 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                           child: TextButton.icon(
                               label: const Text('Agenda List'),
                               onPressed: () => router.go(Routes.agendas),
-                              icon: const Icon(Icons.view_agenda)),
+                              icon: const Icon(Icons.arrow_back)),
                         ),
                       )
                     : Row(
                         children: [
-                          TextButton(
+                          TextButton.icon(
                               style: TextButton.styleFrom(
-                                padding: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(10),
                                 minimumSize: Size.zero,
                               ),
                               onPressed: () => context.push(Routes.login),
-                              child: const Text('Login')),
+                              label: const Text('Login'),
+                              icon: const Icon(Icons.login)),
                           const SizedBox(
                             width: 140,
                             child: Align(
@@ -130,7 +132,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                             label: editMode
                                 ? const Text('Export')
                                 : const Text('Edit'),
-                            onPressed: () => {},
+                            onPressed: () => toggleEditMode(),
                             icon: editMode
                                 ? const Icon(Icons.import_export)
                                 : const Icon(Icons.edit)),
@@ -172,21 +174,21 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
     Widget saveCopyIcon = const Icon(Icons.copy);
 
     if (widget.viewModel.eventPlan.id == null) {
-      saveCopyText = const Text('Save');
+      saveCopyText = const Text('Save Agenda');
       saveCopyIcon = const Icon(Icons.save);
     } else {
-      Widget saveButton = SizedBox(
-          width: 90,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              label: const Text('Save'),
-              onPressed: () => updateAgenda(),
-              icon: const Icon(Icons.save),
-            ),
-          ));
+      // Widget saveButton = SizedBox(
+      //     width: 90,
+      //     child: Align(
+      //       alignment: Alignment.centerRight,
+      //       child: TextButton.icon(
+      //         label: const Text('Save'),
+      //         onPressed: () => updateAgenda(),
+      //         icon: const Icon(Icons.save),
+      //       ),
+      //     ));
 
-      saveButtons.add(saveButton);
+      // saveButtons.add(saveButton);
       saveCopyText = const Text('Save Copy');
     }
 

@@ -22,6 +22,17 @@ class AppScaffold extends StatelessWidget {
       if (user != null) {
         context.read<AgendaProvider>().loadEventPlans(user);
       }
+
+      if (index == navigationShell.currentIndex) {
+        navigationShell.route.branches[index].navigatorKey.currentState
+            ?.popUntil((route) => route.isFirst);
+      } else {
+        // Switch to the new tab and force its initial root location
+        navigationShell.goBranch(
+          index,
+          initialLocation: true, // Crucial: forces root route on switch
+        );
+      }
     }
   }
 

@@ -13,7 +13,8 @@ import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AgendaEditor extends StatelessWidget {
-  const AgendaEditor({super.key, required this.viewModel, required this.saveStatus});
+  const AgendaEditor(
+      {super.key, required this.viewModel, required this.saveStatus});
 
   final AgendaEditorViewmodel viewModel;
   final int saveStatus;
@@ -42,20 +43,22 @@ class AgendaEditor extends StatelessWidget {
           'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
           style: AppTextStyle.eyebrowSmall,
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         _generateSaveInfoWidget(saveStatus),
         _generateWarningWidget(theme),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton.icon(
-                label: const Text('Update Event'),
-                onPressed: () => {
-                      router.go(Routes.buildAgenda,
-                          extra: viewModel.buildAgendaRepository
-                              .getLastAgendaBuild())
-                    },
-                icon: const Icon(Icons.update)),
+            // TextButton.icon(
+            //     label: const Text('Update Event'),
+            //     onPressed: () => {
+            //           router.go(Routes.buildAgenda,
+            //               extra: viewModel.buildAgendaRepository
+            //                   .getLastAgendaBuild())
+            //         },
+            //     icon: const Icon(Icons.update)),
             if (viewModel.editState == EditState.hasUpdated)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -152,9 +155,8 @@ Widget _generateSaveInfoWidget(int saveStatus) {
             'Saving agenda...',
             textAlign: TextAlign.left,
           ),
-        ));   
-  } 
-  else if (saveStatus == 2) {
+        ));
+  } else if (saveStatus == 2) {
     return Container(
         color: Colors.greenAccent,
         width: double.infinity,
@@ -165,8 +167,7 @@ Widget _generateSaveInfoWidget(int saveStatus) {
             textAlign: TextAlign.left,
           ),
         ));
-  }
-  else {
+  } else {
     return Container(
         color: Colors.redAccent,
         width: double.infinity,
@@ -212,6 +213,10 @@ class _EventDetailsState extends State<EventDetails> {
 
   void updateEvent() {
     widget.viewModel.updateEventInfo(_name.text, _description.text);
+    // Update agenda if we already have it saved
+    if (widget.viewModel.eventPlan.id != null) {
+      widget.viewModel.updateAgenda();
+    }
     isEditing = false;
   }
 

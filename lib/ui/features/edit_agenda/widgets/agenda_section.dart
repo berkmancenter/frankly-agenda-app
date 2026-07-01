@@ -52,6 +52,11 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
   void updateSection() {
     widget.viewmodel.updateSectionInfo(widget.agendaIndex, widget.sectionIndex,
         sectionName.text, sectionDescription.text);
+
+    // Update agenda if we already have it saved
+    if (widget.viewmodel.eventPlan.id != null) {
+      widget.viewmodel.updateAgenda();
+    }
     isEditing = false;
   }
 
@@ -60,6 +65,11 @@ class _AgendaSectionWidgetState extends State<AgendaSectionWidget> {
       widget.agendaIndex,
       widget.sectionIndex,
     );
+
+    // Update agenda if we already have it saved
+    if (widget.viewmodel.eventPlan.id != null) {
+      widget.viewmodel.updateAgenda();
+    }
   }
 
   void addItem(String title, String content) {

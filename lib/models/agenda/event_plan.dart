@@ -9,6 +9,8 @@ class EventPlan {
   final List<Agenda> agendas;
   final bool isSeries;
   String? id;
+  String? created;
+  String? modified;
   List<Warning>? warnings;
 
   EventPlan(
@@ -16,6 +18,8 @@ class EventPlan {
       required this.eventDescription,
       required this.agendas,
       required this.isSeries,
+      this.created,
+      this.modified,
       this.id});
 
   factory EventPlan.fromJson(Map<String, dynamic> json) =>
@@ -34,7 +38,7 @@ class EventPlan {
         eventDescription: eventDescription,
         agendas: newAgendas,
         isSeries: isSeries,
-        id:id);
+        id: id);
 
     if (warnings != null) {
       List<Warning> newWarnings = [];

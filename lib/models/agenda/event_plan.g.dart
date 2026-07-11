@@ -13,6 +13,8 @@ EventPlan _$EventPlanFromJson(Map<String, dynamic> json) => EventPlan(
           .map((e) => Agenda.fromJson(e as Map<String, dynamic>))
           .toList(),
       isSeries: json['isSeries'] as bool,
+      created: json['created'] as String?,
+      modified: json['modified'] as String?,
       id: json['id'] as String?,
     )..warnings = (json['warnings'] as List<dynamic>?)
         ?.map((e) => Warning.fromJson(e as Map<String, dynamic>))
@@ -24,5 +26,7 @@ Map<String, dynamic> _$EventPlanToJson(EventPlan instance) => <String, dynamic>{
       'agendas': instance.agendas.map((e) => e.toJson()).toList(),
       'isSeries': instance.isSeries,
       'id': instance.id,
+      'created': instance.created,
+      'modified': instance.modified,
       'warnings': instance.warnings?.map((e) => e.toJson()).toList(),
     };

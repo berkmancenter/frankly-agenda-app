@@ -71,7 +71,12 @@ class AgendaRepository extends ChangeNotifier {
       DocumentReference agendaRef =
           userRef.collection(FirebaseCollections.agendas).doc();
 
-      await agendaRef.set({...eventPlan.toJson(), 'id': agendaRef.id});
+      await agendaRef.set({
+        ...eventPlan.toJson(),
+        'id': agendaRef.id,
+        'created': FieldValue.serverTimestamp(),
+        'modified': FieldValue.serverTimestamp()
+      });
 
       eventPlan.id = agendaRef.id;
       _userEventPlans.add(eventPlan);
@@ -96,7 +101,7 @@ class AgendaRepository extends ChangeNotifier {
     return const CustomResult.ok("Agenda stored successfully.");
   }
 
-   Future<CustomResult<void>> updateEventPlan(EventPlan eventPlan) async {
+  Future<CustomResult<void>> updateEventPlan(EventPlan eventPlan) async {
     User? firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) {
       return CustomResult.error(
@@ -116,9 +121,10 @@ class AgendaRepository extends ChangeNotifier {
             Exception("Agenda not found"), "Could not find agenda to update.");
       }
 
-      await snapshot.docs.first.reference.set({...eventPlan.toJson()});
+      await snapshot.docs.first.reference.set({...eventPlan.toJson(), 'modified': FieldValue.serverTimestamp()});
 
-      int agendaIndex = _userEventPlans.indexWhere((agenda) => agenda.id == eventPlan.id);
+      int agendaIndex =
+          _userEventPlans.indexWhere((agenda) => agenda.id == eventPlan.id);
 
       _userEventPlans[agendaIndex] = eventPlan;
 
@@ -176,5 +182,4 @@ class AgendaRepository extends ChangeNotifier {
           Exception("Unknown error"), "Error deleting agenda.");
     }
   }
-  
 }

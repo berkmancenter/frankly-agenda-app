@@ -56,7 +56,7 @@ class _ListAgendasScreenState extends State<ListAgendasScreen> {
     final provider = context.watch<AgendaProvider>();
 
     if (user != null) {
-       eventPlanList = provider.userEventPlans ?? [];
+      eventPlanList = provider.userEventPlans ?? [];
     } else {
       eventPlanList = widget.viewmodel.getRecentEventPlans();
     }
@@ -97,7 +97,10 @@ class _ListAgendasScreenState extends State<ListAgendasScreen> {
                             constraints: const BoxConstraints(
                               maxWidth: 800.0,
                             ),
-                            child: _generateAgendaListItems(theme, context))
+                            child: _generateAgendaListItems(theme, context)),
+                      const SizedBox(
+                        height: 100,
+                      ),
                     ],
                   )
                 ]),

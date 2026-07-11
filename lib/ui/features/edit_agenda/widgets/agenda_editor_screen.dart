@@ -177,18 +177,6 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
       saveCopyText = const Text('Save Agenda');
       saveCopyIcon = const Icon(Icons.save);
     } else {
-      // Widget saveButton = SizedBox(
-      //     width: 90,
-      //     child: Align(
-      //       alignment: Alignment.centerRight,
-      //       child: TextButton.icon(
-      //         label: const Text('Save'),
-      //         onPressed: () => updateAgenda(),
-      //         icon: const Icon(Icons.save),
-      //       ),
-      //     ));
-
-      // saveButtons.add(saveButton);
       saveCopyText = const Text('Save Copy');
     }
 

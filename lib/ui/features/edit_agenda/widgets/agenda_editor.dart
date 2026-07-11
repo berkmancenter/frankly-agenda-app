@@ -196,28 +196,31 @@ class _EventDetailsState extends State<EventDetails> {
 
   bool isEditing = false;
 
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _description = TextEditingController();
+  late final TextEditingController _name;
+  late final TextEditingController _description;
   int saveStatus =
       0; // 0 nothing to save, 1 saving, 2 saved, 3 unsaved, -1 error
 
   @override
   void initState() {
     super.initState();
-    // Register your listener function
+    _name = TextEditingController();
+    _description = TextEditingController();
     _name.addListener(_handleTextChanges);
     _description.addListener(_handleTextChanges);
   }
 
   @override
   void dispose() {
+    _name.removeListener(_handleTextChanges); // Good practice to remove first
+    _description.removeListener(_handleTextChanges);
     _name.dispose();
     _description.dispose();
     super.dispose();
   }
 
   void _handleTextChanges() {
-    if (isEditing && widget.viewModel.eventPlan.id != null) {
+    if (isEditing && widget.viewModel.eventPlan.id != null && saveStatus != 3) {
       setState(() {
         saveStatus = 3; // 3 = unsaved changes
       });
@@ -243,6 +246,11 @@ class _EventDetailsState extends State<EventDetails> {
       if (result is Ok) {
         setState(() {
           saveStatus = 2; // 2 = saved successfully
+        });
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            saveStatus = 0; // 0 = nothing to save
+          });
         });
       } else {
         setState(() {
@@ -324,7 +332,10 @@ class _EventDetailsState extends State<EventDetails> {
       savedIndicateIcon = const Icon(Icons.save);
     } else if (saveStatus == 2) {
       savedIndicateText = "Saved";
-      savedIndicateIcon = const Icon(Icons.check);
+      savedIndicateIcon = const Icon(
+        Icons.check,
+        color: Colors.green,
+      );
     } else if (saveStatus == -1) {
       savedIndicateText = "Error";
       savedIndicateIcon = const Icon(Icons.error);
@@ -338,19 +349,27 @@ class _EventDetailsState extends State<EventDetails> {
           children: [
             Text("Event Details", style: AppTextStyle.headlineSmall),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
                     width: 160,
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           savedIndicateIcon ?? const SizedBox(width: 20),
-                          const SizedBox(width: 10),
-                          Text(savedIndicateText),
+                          const SizedBox(width: 5),
+                          Text(
+                            savedIndicateText,
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
                         ],
                       ),
                     )),
+                const SizedBox(width: 10),
                 IconButton(
                     onPressed: () => toggleEditing(),
                     icon: isEditing

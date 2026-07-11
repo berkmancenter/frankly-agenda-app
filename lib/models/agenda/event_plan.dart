@@ -9,8 +9,8 @@ class EventPlan {
   final List<Agenda> agendas;
   final bool isSeries;
   String? id;
-  String? created;
-  String? modified;
+  Object? created;
+  Object? modified;
   List<Warning>? warnings;
 
   EventPlan(

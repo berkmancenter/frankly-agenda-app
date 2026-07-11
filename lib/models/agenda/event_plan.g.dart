@@ -13,8 +13,8 @@ EventPlan _$EventPlanFromJson(Map<String, dynamic> json) => EventPlan(
           .map((e) => Agenda.fromJson(e as Map<String, dynamic>))
           .toList(),
       isSeries: json['isSeries'] as bool,
-      created: json['created'] as String?,
-      modified: json['modified'] as String?,
+      created: json['created'],
+      modified: json['modified'],
       id: json['id'] as String?,
     )..warnings = (json['warnings'] as List<dynamic>?)
         ?.map((e) => Warning.fromJson(e as Map<String, dynamic>))

@@ -66,7 +66,8 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     UserModel? currUser = userRepository.currentUser;
     if (currUser != null) {
       if (isCopy) {
-        await agendaRepository.updateEventPlan(originalPlan);
+        await agendaRepository.updateEventPlan(originalPlan); // return the original agenda to its original state before saving a copy
+        eventPlan.eventName = "${eventPlan.eventName} (Copy)";
       }
       CustomResult<String> res =
           await agendaRepository.storeAgenda(eventPlan, currUser);

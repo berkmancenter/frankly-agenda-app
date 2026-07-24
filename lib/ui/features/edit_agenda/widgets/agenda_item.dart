@@ -1,5 +1,6 @@
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/custom_duration.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
@@ -36,24 +37,50 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
   bool isEditing = false;
   bool llmInfoOpen = false;
 
-  final TextEditingController itemTitle = TextEditingController();
-  final TextEditingController itemDuration = TextEditingController();
+  late final TextEditingController itemTitle;
+  late final TextEditingController itemDuration;
+  late final TextEditingController itemDescription;
+
+  int saveStatus =
+      0; // 0 nothing to save, 1 saving, 2 saved, 3 unsaved, -1 error
 
   List<TextEditingController> contentControllerList = [];
 
-  final TextEditingController itemDescription = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    itemTitle = TextEditingController();
+    itemDescription = TextEditingController();
+    itemDuration = TextEditingController();
+    itemTitle.addListener(_handleTextChanges);
+    itemDescription.addListener(_handleTextChanges);
+    itemDuration.addListener(_handleTextChanges);
+  }
 
   @override
   void dispose() {
+    itemTitle
+        .removeListener(_handleTextChanges); // Good practice to remove first
+    itemDescription.removeListener(_handleTextChanges);
+    itemDuration.removeListener(_handleTextChanges);
     itemTitle.dispose();
     itemDuration.dispose();
     itemDescription.dispose();
 
     for (var controller in contentControllerList) {
+      controller.removeListener(_handleTextChanges);
       controller.dispose();
     }
 
     super.dispose();
+  }
+
+  void _handleTextChanges() {
+    if (isEditing && widget.viewmodel.eventPlan.id != null && saveStatus != 3) {
+      setState(() {
+        saveStatus = 3; // 3 = unsaved changes
+      });
+    }
   }
 
   void toggleEditing() {
@@ -68,7 +95,7 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
     });
   }
 
-  void updateItem() {
+  Future<void> updateItem() async {
     List<String> contentControllerStrings = [];
     for (TextEditingController controller in contentControllerList) {
       contentControllerStrings.add(controller.text);
@@ -76,12 +103,52 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
     widget.viewmodel.updateItem(widget.agendaIndex, widget.sectionIndex,
         widget.itemIndex, itemTitle.text, contentControllerStrings);
 
-    isEditing = false;
+    // Update agenda if we already have it saved
+    if (widget.viewmodel.eventPlan.id != null) {
+      CustomResult<void> result = await widget.viewmodel.updateAgenda();
+
+      if (result is Ok) {
+        setState(() {
+          saveStatus = 2; // 2 = saved successfully
+        });
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            saveStatus = 0;
+            isEditing = false; // 0 = nothing to save
+          });
+        });
+      } else {
+        setState(() {
+          saveStatus = -1; // -1 = error
+        });
+      }
+    }
   }
 
-  void deleteItem() {
+  Future<void> deleteItem() async {
     widget.viewmodel
         .deleteItem(widget.agendaIndex, widget.sectionIndex, widget.itemIndex);
+
+    // Update agenda if we already have it saved
+    if (widget.viewmodel.eventPlan.id != null) {
+      CustomResult<void> result = await widget.viewmodel.updateAgenda();
+
+      if (result is Ok) {
+        setState(() {
+          saveStatus = 2; // 2 = saved successfully
+        });
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            saveStatus = 0;
+            isEditing = false; // 0 = nothing to save
+          });
+        });
+      } else {
+        setState(() {
+          saveStatus = -1; // -1 = error
+        });
+      }
+    }
   }
 
   @override
@@ -97,8 +164,29 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
     }
 
     contentControllerList = [];
+    int ind = 0;
     for (String contentString in widget.item.content) {
       contentControllerList.add(TextEditingController(text: contentString));
+      contentControllerList[ind].addListener(_handleTextChanges);
+      ind++;
+    }
+
+    String savedIndicateText = "";
+    Widget? savedIndicateIcon;
+    if (saveStatus == 1) {
+      savedIndicateText = "Saving...";
+      savedIndicateIcon = const Icon(Icons.save);
+    } else if (saveStatus == 2) {
+      savedIndicateText = "Saved";
+      savedIndicateIcon = const Icon(
+        Icons.check,
+        color: Colors.green,
+      );
+    } else if (saveStatus == -1) {
+      savedIndicateText = "Error";
+      savedIndicateIcon = const Icon(Icons.error);
+    } else if (saveStatus == 3) {
+      savedIndicateText = "Unsaved changes";
     }
 
     Widget itemWidget;
@@ -254,6 +342,19 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
                     child: Text("${widget.itemIndex + 1}. ${widget.item.title}",
                         style: context.theme.textTheme.bodyMedium),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      savedIndicateIcon ?? const SizedBox(width: 20),
+                      const SizedBox(width: 5),
+                      Text(
+                        savedIndicateText,
+                        style: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
                   IconButton(
                       onPressed: () => toggleEditing(),
                       icon: const Icon(Icons.close)),
@@ -331,7 +432,8 @@ class _AgendaItemWidgetState extends State<AgendaItemWidget> {
               ],
             ),
           if (isTopicBackground) generateTopicBackground(),
-          if (widget.item.importance != null && !isTopicBackground) generateMLNotice(),
+          if (widget.item.importance != null && !isTopicBackground)
+            generateMLNotice(),
           ...generateContentItems(),
         ],
       );

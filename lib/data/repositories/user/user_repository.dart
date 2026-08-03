@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:agenda_wizard/models/firebase_collections.dart';
 import 'package:agenda_wizard/models/user/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserRepository extends ChangeNotifier{
+class UserRepository extends ChangeNotifier {
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   UserModel? _currentUser;
 
   UserModel? get currentUser => _currentUser;
+
+  StreamSubscription<DocumentSnapshot>? _userSub;
 
   void setCurrentUser(UserModel? user) {
     _currentUser = user;
@@ -39,5 +43,11 @@ class UserRepository extends ChangeNotifier{
             ? setCurrentUser(
                 UserModel.fromJson(doc.data() as Map<String, Object?>))
             : null);
+  }
+
+  void clearUser() {
+    _userSub?.cancel();
+    _userSub = null;
+    setCurrentUser(null);
   }
 }

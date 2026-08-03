@@ -49,16 +49,12 @@ class AgendaRepository extends ChangeNotifier {
   }
 
   int getEventPlanCount() {
-    return _recentEventPlans.length;
+    return _userEventPlans.length;
   }
 
   Future<void> addRecentAgenda(EventPlan eventPlan, UserModel? currUser) async {
     EventPlan newPlan = eventPlan.deepCopy();
     _recentEventPlans.add(newPlan);
-
-    if (currUser != null) {
-      await storeAgenda(newPlan, currUser);
-    }
   }
 
   Future<CustomResult<String>> storeAgenda(

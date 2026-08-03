@@ -17,7 +17,7 @@ class AppScaffold extends StatelessWidget {
     navigationShell.goBranch(index,
         initialLocation: index == navigationShell.currentIndex);
 
-    if (index == 2) {
+    if (index == 2 || index == 4) {
       final user = context.read<UserProvider>().currentUser;
       if (user != null) {
         context.read<AgendaProvider>().loadEventPlans(user);
@@ -74,31 +74,3 @@ class AppScaffold extends StatelessWidget {
     }
   }
 }
-
-// int _calculateSelectedIndex(BuildContext context) {
-//     final GoRouter route = GoRouter.of(context);
-//     final String location = route.location();
-//     if (location.startsWith('/home')) {
-//       return 0;
-//     }
-//     if (location.startsWith('/search')) {
-//       return 1;
-//     }
-//     if (location.startsWith('/account')) {
-//       return 2;
-//     }
-//     return 0;
-//   }
-//   void onTap(int value) {
-//     switch (value) {
-//       case 0:
-//         return context.go('/home');
-//       case 1:
-//         return context.go('/search');
-//       case 2:
-//         return context.go('/account');
-//       default:
-//         return context.go('/home');
-//     }
-//   }
-// }

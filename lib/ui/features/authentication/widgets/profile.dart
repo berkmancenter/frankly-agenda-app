@@ -1,3 +1,4 @@
+import 'package:agenda_wizard/providers/agendaProvider.dart';
 import 'package:agenda_wizard/providers/userProvider.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
@@ -24,20 +25,11 @@ class _ProfileState extends State<Profile> {
   int agendaCount = 0;
 
   @override
-  void initState() {
-    super.initState(); // Always call super.initState first
-    _updateAgendaCount(); // Your logic here
-  }
-
-  void _updateAgendaCount() {
-    setState(() {
-      agendaCount = widget.profileViewModel.getEventPlanCount();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     String userName = context.watch<UserProvider>().name;
+    final agendaCount =
+        context.watch<AgendaProvider>().userEventPlans?.length ?? 0;
+
     final ThemeData theme = Theme.of(context);
     return Container(
         color: context.theme.colorScheme.surfaceContainer,

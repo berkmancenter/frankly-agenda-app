@@ -6,16 +6,21 @@ See software architecture diagram to understand how the components go together.
 
 ## Getting Started
 
-# Steps to deploy
-1. Build: `flutter build web --release --no-tree-shake-icons` <-- the no tree shake ensures the pdf builds properly 
-2. Test locally: `python -m http.server 8000 -d build/web`
-2. Deploy: `firebase deploy --only hosting`
+# Steps to deploy application
+1. Update variables in your .env to point to the correct firebase project (or, currently, remove the requirement for .env in assets and in main.dart)
+2. Build: `flutter build web --release --no-tree-shake-icons` <-- the no tree shake ensures the pdf builds properly 
+3. Test locally: `python -m http.server 8000 -d build/web`
+4. Deploy: `firebase deploy --only hosting`
 
 # Steps to Deploy Cloud Function
 1. `cd functions`
 2. `npm install` (if you need to update packages)
 3. `firebase deploy --only functions:agendaBuildEventPlan`
 Note: In debug mode, app will use local emulators. If built with flutter web build, then local emulators not used. 
+
+# Firestore 
+- To deploy rules, run `firebase deploy --only firestore:rules`
+- To deploy firestore, run `firebase deploy --only firestore`
 
 # Steps to Run Locally with Local Builder Package
 

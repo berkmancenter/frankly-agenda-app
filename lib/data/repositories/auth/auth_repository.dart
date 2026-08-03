@@ -39,6 +39,10 @@ class AuthRepository extends ChangeNotifier {
         email: rawUser.email,
         password: password,
       );
+      await _userRepo.storeUserProfile(rawUser);
+      _userRepo.loadUserProfile(_firebaseAuth.currentUser!); // then load
+      _isRegistering = false;
+      return const CustomResult.ok(null);
     } on FirebaseAuthException catch (e) {
       _isRegistering = false;
       String message = "";
@@ -53,10 +57,8 @@ class AuthRepository extends ChangeNotifier {
       String message = 'Unknown error ocurred: $e';
       return CustomResult.error(Exception(e), message);
     }
-    await _userRepo.storeUserProfile(rawUser);
-    _userRepo.loadUserProfile(_firebaseAuth.currentUser!);  // then load
-    _isRegistering = false;
-    return const CustomResult.ok(null);
+
+    
   }
 
   Future<CustomResult> login(String email, String password) async {
@@ -83,6 +85,7 @@ class AuthRepository extends ChangeNotifier {
   Future<CustomResult> logout() async {
     try {
       await _firebaseAuth.signOut();
+      _userRepo.clearUser();
     } on FirebaseAuthException catch (e) {
       String message = "";
       if (e.message != null) {

@@ -3,6 +3,7 @@ import 'package:agenda_wizard/models/agenda/event_plan.dart';
 import 'package:agenda_wizard/models/agenda/warning.dart';
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
 import '../../../../../styles/app_styles.dart';
 import '../../../../../styles/theme_util.dart';
 import 'package:agenda_wizard/ui/core/widgets/form_input.dart';
@@ -13,9 +14,11 @@ import 'package:agenda_wizard/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AgendaEditor extends StatelessWidget {
-  const AgendaEditor({super.key, required this.viewModel});
+  const AgendaEditor(
+      {super.key, required this.viewModel, required this.saveStatus});
 
   final AgendaEditorViewmodel viewModel;
+  final int saveStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +44,22 @@ class AgendaEditor extends StatelessWidget {
           'We\'ve got an agenda started for you. Take a look and feel free to edit it to suit your needs! When you\'re done, you can save or export it.',
           style: AppTextStyle.eyebrowSmall,
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        _generateSaveInfoWidget(saveStatus),
         _generateWarningWidget(theme),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton.icon(
-                label: const Text('Update Event'),
-                onPressed: () => {
-                      router.go(Routes.buildAgenda,
-                          extra: viewModel.buildAgendaRepository
-                              .getLastAgendaBuild())
-                    },
-                icon: const Icon(Icons.update)),
+            // TextButton.icon(
+            //     label: const Text('Update Event'),
+            //     onPressed: () => {
+            //           router.go(Routes.buildAgenda,
+            //               extra: viewModel.buildAgendaRepository
+            //                   .getLastAgendaBuild())
+            //         },
+            //     icon: const Icon(Icons.update)),
             if (viewModel.editState == EditState.hasUpdated)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -136,6 +143,45 @@ class AgendaEditor extends StatelessWidget {
   }
 }
 
+Widget _generateSaveInfoWidget(int saveStatus) {
+  if (saveStatus == 0) {
+    return const SizedBox();
+  } else if (saveStatus == 1) {
+    return Container(
+        color: Colors.orangeAccent,
+        width: double.infinity,
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Saving agenda...',
+            textAlign: TextAlign.left,
+          ),
+        ));
+  } else if (saveStatus == 2) {
+    return Container(
+        color: Colors.greenAccent,
+        width: double.infinity,
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Agenda saved successfully.',
+            textAlign: TextAlign.left,
+          ),
+        ));
+  } else {
+    return Container(
+        color: Colors.redAccent,
+        width: double.infinity,
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Error saving agenda. Please try again.',
+            textAlign: TextAlign.left,
+          ),
+        ));
+  }
+}
+
 class EventDetails extends StatefulWidget {
   final AgendaEditorViewmodel viewModel;
   final EventPlan event;
@@ -150,14 +196,35 @@ class _EventDetailsState extends State<EventDetails> {
 
   bool isEditing = false;
 
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _description = TextEditingController();
+  late final TextEditingController _name;
+  late final TextEditingController _description;
+  int saveStatus =
+      0; // 0 nothing to save, 1 saving, 2 saved, 3 unsaved, -1 error
+
+  @override
+  void initState() {
+    super.initState();
+    _name = TextEditingController();
+    _description = TextEditingController();
+    _name.addListener(_handleTextChanges);
+    _description.addListener(_handleTextChanges);
+  }
 
   @override
   void dispose() {
+    _name.removeListener(_handleTextChanges); // Good practice to remove first
+    _description.removeListener(_handleTextChanges);
     _name.dispose();
     _description.dispose();
     super.dispose();
+  }
+
+  void _handleTextChanges() {
+    if (isEditing && widget.viewModel.eventPlan.id != null && saveStatus != 3) {
+      setState(() {
+        saveStatus = 3; // 3 = unsaved changes
+      });
+    }
   }
 
   void toggleEditing() {
@@ -166,8 +233,31 @@ class _EventDetailsState extends State<EventDetails> {
     });
   }
 
-  void updateEvent() {
+  Future<void> updateEvent() async {
+    setState(() {
+      saveStatus = 1; // 1 = saving
+    });
+
     widget.viewModel.updateEventInfo(_name.text, _description.text);
+    // Update agenda if we already have it saved
+    if (widget.viewModel.eventPlan.id != null) {
+      CustomResult<void> result = await widget.viewModel.updateAgenda();
+
+      if (result is Ok) {
+        setState(() {
+          saveStatus = 2; // 2 = saved successfully
+        });
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            saveStatus = 0; // 0 = nothing to save
+          });
+        });
+      } else {
+        setState(() {
+          saveStatus = -1; // -1 = error
+        });
+      }
+    }
     isEditing = false;
   }
 
@@ -235,17 +325,58 @@ class _EventDetailsState extends State<EventDetails> {
         ],
       );
     }
+    String savedIndicateText = "";
+    Widget? savedIndicateIcon;
+    if (saveStatus == 1) {
+      savedIndicateText = "Saving...";
+      savedIndicateIcon = const Icon(Icons.save);
+    } else if (saveStatus == 2) {
+      savedIndicateText = "Saved";
+      savedIndicateIcon = const Icon(
+        Icons.check,
+        color: Colors.green,
+      );
+    } else if (saveStatus == -1) {
+      savedIndicateText = "Error";
+      savedIndicateIcon = const Icon(Icons.error);
+    } else if (saveStatus == 3) {
+      savedIndicateText = "Unsaved changes";
+    }
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Event Details", style: AppTextStyle.headlineSmall),
-            IconButton(
-                onPressed: () => toggleEditing(),
-                icon: isEditing
-                    ? const Icon(Icons.close)
-                    : const Icon(Icons.edit)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                    width: 160,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          savedIndicateIcon ?? const SizedBox(width: 20),
+                          const SizedBox(width: 5),
+                          Text(
+                            savedIndicateText,
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                const SizedBox(width: 10),
+                IconButton(
+                    onPressed: () => toggleEditing(),
+                    icon: isEditing
+                        ? const Icon(Icons.close)
+                        : const Icon(Icons.edit)),
+              ],
+            ),
           ],
         ),
         Container(

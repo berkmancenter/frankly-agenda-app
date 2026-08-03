@@ -17,53 +17,60 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            Navigator.canPop(context)
-                ? IconButton(
-                    onPressed: () => GoRouter.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back))
-                : IconButton(
-                    onPressed: () => router.go(Routes.home),
-                    icon: const Icon(Icons.home_filled)),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Welcome',
-                    style: AppTextStyle.headline2,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'We\'re glad to have you! You can create your account here.',
-                    style: AppTextStyle.eyebrowSmall,
-                  ),
-                  SignUpForm(
-                    authViewModel: _authViewModel,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 800.0,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50),
+                Navigator.canPop(context)
+                    ? IconButton(
+                        onPressed: () => GoRouter.of(context).pop(),
+                        icon: const Icon(Icons.arrow_back))
+                    : IconButton(
+                        onPressed: () => router.go(Routes.home),
+                        icon: const Icon(Icons.home_filled)),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Already have an account?'),
-                      TextButton(
-                          onPressed: () => context.push(Routes.login),
-                          child: const Text('Login'))
+                      Text(
+                        'Welcome',
+                        style: AppTextStyle.headline2,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'We\'re glad to have you! You can create your account here.',
+                        style: AppTextStyle.eyebrowSmall,
+                      ),
+                      SignUpForm(
+                        authViewModel: _authViewModel,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          const Text('Already have an account?'),
+                          TextButton(
+                              onPressed: () => context.push(Routes.login),
+                              child: const Text('Login'))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -101,6 +108,12 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> submitSignIn() async {
+    if (_reenterPassword.text != _password.text) {
+      setState(() {
+        _errorMessage = 'Passwords do not match.';
+      });
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       try {
         // Assume your async operation with server call
@@ -156,24 +169,30 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: 'Name',
             fieldController: _name,
             isRequired: true,
+            textInputAction: TextInputAction.next,
           ),
           FormInput(
             labelText: 'Email',
             fieldController: _email,
             isRequired: true,
+            textInputAction: TextInputAction.next,
           ),
           FormInput(
-            labelText: 'Password',
-            fieldController: _password,
-            isRequired: true,
-          ),
+              labelText: 'Password',
+              fieldController: _password,
+              isRequired: true,
+              isObscured: true,
+              textInputAction: TextInputAction.next),
           const SizedBox(
             height: 10,
           ),
           FormInput(
-            labelText: 'Re-enter Password',
-            fieldController: _reenterPassword,
-            isRequired: true,
+              labelText: 'Re-enter Password',
+              fieldController: _reenterPassword,
+              isRequired: true,
+              isObscured: true,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => submitSignIn(),
           ),
           const SizedBox(
             height: 10,

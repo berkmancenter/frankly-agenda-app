@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'custom_duration.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class CustomDuration {
   final int hours, minutes, seconds;
 

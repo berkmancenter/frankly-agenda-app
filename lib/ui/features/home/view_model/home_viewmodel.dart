@@ -38,7 +38,7 @@ class HomeViewmodel extends ChangeNotifier {
   List<Agenda> get agendas => _agendas;
 
   Future<CustomResult?> _loadHomeData() async {
-    _user = _userRepository.getCurrentUser();
+    _user = _userRepository.currentUser;
     // try {
     //   final agendaResult = await _agendaRepository.getAgendas();
     //   switch (agendaResult) {

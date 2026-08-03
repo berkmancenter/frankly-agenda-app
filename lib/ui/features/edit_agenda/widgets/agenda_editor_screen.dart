@@ -1,5 +1,8 @@
 import 'package:agenda_wizard/routing/router.dart';
 import 'package:agenda_wizard/routing/routes.dart';
+import 'package:agenda_wizard/utils/custom_result.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../styles/styles.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/view_model/agenda_editor_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/edit_agenda/widgets/agenda_editor.dart';
@@ -18,17 +21,65 @@ class AgendaEditorScreen extends StatefulWidget {
 class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
   bool editMode = true;
 
+  int saveStatus =
+      0; // 0 = not saved, 1 = saving, 2 = saved successfully, -1 = error
+
   void toggleEditMode() {
-    if (editMode == true) {
-      widget.viewModel.saveCurrentEventPlanToHistory();
-    }
+    // if (editMode == true) {
+    //   widget.viewModel.saveCurrentEventPlanToHistory();
+    // }
     setState(() {
       editMode = !editMode;
     });
   }
 
+  Future<void> updateAgenda() async {
+    setState(() {
+      saveStatus = 1; // 1 = saving
+    });
+
+    CustomResult<void> result =
+        await widget.viewModel.updateAgenda();
+
+    if (result is Ok) {
+      setState(() {
+        saveStatus = 2; // 2 = saved successfully
+      });
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
+      context.go(Routes.agendas);
+    } else {
+      setState(() {
+        saveStatus = -1; // -1 = error
+      });
+    }
+  }
+
+  Future<void> saveAgendaCopy() async {
+    setState(() {
+      saveStatus = 1; // 1 = saving
+    });
+
+    CustomResult<String> result = await widget.viewModel.saveAgenda(widget.viewModel.eventPlan.id != null);
+
+    if (result is Ok) {
+      setState(() {
+        saveStatus = 2; // 2 = saved successfully
+      });
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
+      context.go(Routes.agendas);
+    } else {
+      setState(() {
+        saveStatus = -1; // -1 = error
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
     return Container(
         color: context.theme.colorScheme.surfaceContainer,
         child: Padding(
@@ -37,32 +88,57 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: 200,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                        label: const Text('Agenda List'),
-                        onPressed: () => router.go(Routes.agendas),
-                        icon: const Icon(Icons.view_agenda)),
-                  ),
-                ),
+                (user != null)
+                    ? SizedBox(
+                        width: 200,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                              label: const Text('Agenda List'),
+                              onPressed: () => router.go(Routes.agendas),
+                              icon: const Icon(Icons.arrow_back)),
+                        ),
+                      )
+                    : Row(
+                        children: [
+                          TextButton.icon(
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.all(10),
+                                minimumSize: Size.zero,
+                              ),
+                              onPressed: () => context.push(Routes.login),
+                              label: const Text('Login'),
+                              icon: const Icon(Icons.login)),
+                          const SizedBox(
+                            width: 140,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('to save agendas.'),
+                            ),
+                          ),
+                        ],
+                      ),
                 editMode
                     ? const Text("Agenda Editor")
                     : const Text("Agenda Preview"),
-                SizedBox(
-                  width: 120,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton.icon(
-                        label: editMode
-                            ? const Text('Export')
-                            : const Text('Edit'),
-                        onPressed: () => toggleEditMode(),
-                        icon: editMode
-                            ? const Icon(Icons.import_export)
-                            : const Icon(Icons.edit)),
-                  ),
+                Row(
+                  children: [
+                    if (editMode && user != null) ..._generateSaveButton(),
+                    SizedBox(
+                      width: 100,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton.icon(
+                            label: editMode
+                                ? const Text('Export')
+                                : const Text('Edit'),
+                            onPressed: () => toggleEditMode(),
+                            icon: editMode
+                                ? const Icon(Icons.import_export)
+                                : const Icon(Icons.edit)),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -75,6 +151,7 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
                         padding: const EdgeInsets.all(10.0),
                         child: AgendaEditor(
                           viewModel: widget.viewModel,
+                          saveStatus: saveStatus,
                         ),
                       );
                     } else {
@@ -89,5 +166,31 @@ class _AgendaEditorScreenState extends State<AgendaEditorScreen> {
             ),
           ]),
         ));
+  }
+
+  List<Widget> _generateSaveButton() {
+    List<Widget> saveButtons = [];
+    Widget saveCopyText = const Text("");
+    Widget saveCopyIcon = const Icon(Icons.copy);
+
+    if (widget.viewModel.eventPlan.id == null) {
+      saveCopyText = const Text('Save Agenda');
+      saveCopyIcon = const Icon(Icons.save);
+    } else {
+      saveCopyText = const Text('Save Copy');
+    }
+
+    Widget saveCopyButton = SizedBox(
+        width: 150,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(
+            label: saveCopyText,
+            onPressed: () => saveAgendaCopy(),
+            icon: saveCopyIcon,
+          ),
+        ));
+    saveButtons.add(saveCopyButton);
+    return saveButtons;
   }
 }

@@ -7,6 +7,7 @@ abstract class UserModel with _$UserModel {
   const factory UserModel({
     required String name,
     required String email,
+    String? id,
   }) = _User;
 
   factory UserModel.fromJson(Map<String, Object?> json) => _$UserFromJson(json);

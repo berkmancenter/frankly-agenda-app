@@ -32,13 +32,9 @@ class _SignOutState extends State<SignOut> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-            onPressed: submitLogOut,
-            icon: const Icon(Icons.logout)),
-        const Text('Logout')
-      ],
-    );
+    return TextButton.icon(
+        label: Text("Logout"),
+        onPressed: submitLogOut,
+        icon: const Icon(Icons.logout));
   }
 }

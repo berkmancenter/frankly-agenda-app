@@ -17,7 +17,8 @@ Agenda _$AgendaFromJson(Map<String, dynamic> json) => Agenda(
     );
 
 Map<String, dynamic> _$AgendaToJson(Agenda instance) => <String, dynamic>{
-      'sections': instance.sections,
+      'sections': instance.sections.map((e) => e.toJson()).toList(),
       'eventNumber': instance.eventNumber,
-      'additionalInformation': instance.additionalInformation,
+      'additionalInformation':
+          instance.additionalInformation?.map((e) => e.toJson()).toList(),
     };

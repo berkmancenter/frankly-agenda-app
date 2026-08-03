@@ -20,6 +20,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String get name;
   String get email;
+  String? get id;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -37,16 +38,17 @@ mixin _$UserModel {
         (other.runtimeType == runtimeType &&
             other is UserModel &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, name, email);
+  int get hashCode => Object.hash(runtimeType, name, email, id);
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email)';
+    return 'UserModel(name: $name, email: $email, id: $id)';
   }
 }
 
@@ -55,7 +57,7 @@ abstract mixin class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) =
       _$UserModelCopyWithImpl;
   @useResult
-  $Res call({String name, String email});
+  $Res call({String name, String email, String? id});
 }
 
 /// @nodoc
@@ -72,6 +74,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   $Res call({
     Object? name = null,
     Object? email = null,
+    Object? id = freezed,
   }) {
     return _then(_self.copyWith(
       name: null == name
@@ -82,6 +85,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _self.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -89,13 +96,15 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _User implements UserModel {
-  const _User({required this.name, required this.email});
+  const _User({required this.name, required this.email, this.id});
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   @override
   final String name;
   @override
   final String email;
+  @override
+  final String? id;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -118,16 +127,17 @@ class _User implements UserModel {
         (other.runtimeType == runtimeType &&
             other is _User &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, name, email);
+  int get hashCode => Object.hash(runtimeType, name, email, id);
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email)';
+    return 'UserModel(name: $name, email: $email, id: $id)';
   }
 }
 
@@ -137,7 +147,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       __$UserCopyWithImpl;
   @override
   @useResult
-  $Res call({String name, String email});
+  $Res call({String name, String email, String? id});
 }
 
 /// @nodoc
@@ -154,6 +164,7 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
   $Res call({
     Object? name = null,
     Object? email = null,
+    Object? id = freezed,
   }) {
     return _then(_User(
       name: null == name
@@ -164,6 +175,10 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
           ? _self.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }

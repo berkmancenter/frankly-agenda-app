@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:agenda_wizard/data/repositories/agenda/agenda_repository.dart';
 import 'package:agenda_wizard/data/repositories/build_agenda/build_agenda_repository.dart';
-import 'package:agenda_wizard/helpers/PdfSaver.dart';
+import 'package:agenda_wizard/data/repositories/user/user_repository.dart';
 import 'package:agenda_wizard/models/agenda/agenda.dart';
 import 'package:agenda_wizard/models/agenda/agenda_item.dart';
 import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:agenda_wizard/models/agenda/event_plan.dart';
-import '../../../../../styles/app_styles.dart';
+import 'package:agenda_wizard/models/user/user.dart';
 import 'package:agenda_wizard/utils/custom_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_to_pdf/flutter_to_pdf.dart';
@@ -19,6 +19,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   AgendaEditorViewmodel({
     required this.agendaRepository,
     required this.buildAgendaRepository,
+    required this.userRepository,
     this.optionalEventPlan,
   }) {
     optionalEventPlan != null
@@ -31,6 +32,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
 
   final AgendaRepository agendaRepository;
   final BuildAgendaRepository buildAgendaRepository;
+  final UserRepository userRepository;
 
   EventPlan? optionalEventPlan;
   late EventPlan eventPlan;
@@ -43,8 +45,7 @@ class AgendaEditorViewmodel extends ChangeNotifier {
   String agendaPDFID = 'agendaId';
 
   final ExportDelegate exportDelegate = ExportDelegate(
-    options: const ExportOptions(
-        pageFormatOptions: PageFormatOptions.a4()),
+    options: const ExportOptions(pageFormatOptions: PageFormatOptions.a4()),
     ttfFonts: {
       'Inter_500': 'assets/fonts/Inter/Inter_18pt-Medium.ttf',
       'Inter_600': 'assets/fonts/Inter/Inter_18pt-SemiBold.ttf',
@@ -54,19 +55,40 @@ class AgendaEditorViewmodel extends ChangeNotifier {
     },
   );
 
-  Future<CustomResult> updateAgenda(eventPlan) async {
-    return await agendaRepository.updateEvent(eventPlan);
-  }
-
   void saveCurrentEventPlanToHistory() {
     if (editState == EditState.hasUpdated) {
-      agendaRepository.addRecentAgenda(eventPlan);
+      UserModel? currUser = userRepository.currentUser;
+      agendaRepository.addRecentAgenda(eventPlan, currUser);
     }
+  }
+
+  Future<CustomResult<String>> saveAgenda(bool isCopy) async {
+    UserModel? currUser = userRepository.currentUser;
+    if (currUser != null) {
+      if (isCopy) {
+        await agendaRepository.updateEventPlan(originalPlan); // return the original agenda to its original state before saving a copy
+        eventPlan.eventName = "${eventPlan.eventName} (Copy)";
+      }
+      CustomResult<String> res =
+          await agendaRepository.storeAgenda(eventPlan, currUser);
+      return res;
+    } else {
+      return CustomResult.error(
+          Exception("No user logged in"), "Please log in to save your agenda.");
+    }
+  }
+
+  Future<CustomResult<void>> updateAgenda() async {
+    return await agendaRepository.updateEventPlan(eventPlan);
   }
 
   void resetEventPlan() {
     editedAndDisregarded = eventPlan.deepCopy();
     eventPlan = originalPlan.deepCopy();
+
+    if (eventPlan.id != null) {
+      updateAgenda();
+    }
 
     editState = EditState.hasReverted;
     notifyListeners();
@@ -77,6 +99,10 @@ class AgendaEditorViewmodel extends ChangeNotifier {
       throw Exception("No event plan to revert to.");
     }
     eventPlan = editedAndDisregarded!.deepCopy();
+
+    if (eventPlan.id != null) {
+      updateAgenda();
+    }
 
     editState = EditState.hasUpdated;
     notifyListeners();

@@ -30,3 +30,6 @@ Note: In debug mode, app will use local emulators. If built with flutter web bui
 - `firebase login:list` - displays which firebase account you are logged in as. Helpful if you have a separate firebase account for running locally.
 - `firebase login:add` - adds a new firebase account
 - `firebase login:use <account_email>` - sets default firebase account for project
+
+## Models
+- Models use Freeze library. If you update the fields on a model, run `dart run build_runner build --delete-conflicting-outputs` to update the Freeze object. 

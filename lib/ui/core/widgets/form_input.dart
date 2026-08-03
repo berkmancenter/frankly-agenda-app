@@ -15,7 +15,10 @@ class FormInput extends StatelessWidget {
       this.minLines,
       this.expands,
       this.width,
-      this.typeFormatters = const []});
+      this.isObscured,
+      this.typeFormatters = const [],
+      this.textInputAction,
+      this.onFieldSubmitted});
 
   final String labelText;
   final TextEditingController fieldController;
@@ -28,7 +31,10 @@ class FormInput extends StatelessWidget {
   final int? minLines;
   final bool? expands;
   final double? width;
+  final bool? isObscured;
   final List<TextInputFormatter> typeFormatters;
+  final TextInputAction? textInputAction;
+  final Function(String)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +74,13 @@ class FormInput extends StatelessWidget {
             },
             focusNode: focusNode,
             keyboardType: inputType,
-            maxLines: maxLines, // For a text field that can display up to 5 lines
+            maxLines: isObscured == true ? 1 : maxLines, // For a text field that can display up to 5 lines
             minLines: minLines,
             expands: expands ?? false,
+            obscureText: isObscured ?? false,
             inputFormatters: [...typeFormatters],
+            textInputAction: textInputAction,
+            onFieldSubmitted: onFieldSubmitted,
           ),
         ),
         const SizedBox(

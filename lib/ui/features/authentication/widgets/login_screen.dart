@@ -15,54 +15,61 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            Navigator.canPop(context)
-                ? IconButton(
-                    onPressed: () => GoRouter.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back))
-                : IconButton(
-                    onPressed: () => router.go(Routes.home),
-                    icon: const Icon(Icons.home_filled)),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Welcome',
-                    style: AppTextStyle.headline2,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'We\'re glad your back! Sign in here.',
-                    style: AppTextStyle.eyebrowSmall,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  LogInForm(authViewModel: _authViewModel),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 800.0,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50),
+                Navigator.canPop(context)
+                    ? IconButton(
+                        onPressed: () => GoRouter.of(context).pop(),
+                        icon: const Icon(Icons.arrow_back))
+                    : IconButton(
+                        onPressed: () => router.go(Routes.home),
+                        icon: const Icon(Icons.home_filled)),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Don\'t have an account?'),
-                      TextButton(
-                          onPressed: () => context.push(Routes.signup),
-                          child: const Text('Register'))
+                      Text(
+                        'Welcome',
+                        style: AppTextStyle.headline2,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'We\'re glad your back! Sign in here.',
+                        style: AppTextStyle.eyebrowSmall,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      LogInForm(authViewModel: _authViewModel),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          const Text('Don\'t have an account?'),
+                          TextButton(
+                              onPressed: () => context.push(Routes.signup),
+                              child: const Text('Register'))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -143,11 +150,15 @@ class _LogInFormState extends State<LogInForm> {
               labelText: 'Email',
               fieldController: _email,
               isRequired: true,
+              textInputAction: TextInputAction.next,
             ),
             FormInput(
               labelText: 'Password',
               fieldController: _password,
               isRequired: true,
+              isObscured: true,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => submitLogin(),
             ),
             const SizedBox(
               height: 10,

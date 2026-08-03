@@ -3,7 +3,7 @@ import 'package:agenda_wizard/models/agenda/agenda_section.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'agenda.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Agenda {
   final List<AgendaSection> sections;
   final int? eventNumber; // which event(s) in a series of events

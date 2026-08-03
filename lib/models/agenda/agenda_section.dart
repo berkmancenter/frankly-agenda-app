@@ -3,7 +3,7 @@ import 'package:agenda_wizard/models/agenda/custom_duration.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'agenda_section.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AgendaSection {
   String name, description;
   final List<AgendaItem> items;

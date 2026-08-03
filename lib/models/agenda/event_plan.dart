@@ -3,18 +3,24 @@ import 'package:agenda_wizard/models/agenda/warning.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'event_plan.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class EventPlan {
   String eventName, eventDescription;
   final List<Agenda> agendas;
   final bool isSeries;
+  String? id;
+  Object? created;
+  Object? modified;
   List<Warning>? warnings;
 
   EventPlan(
       {required this.eventName,
       required this.eventDescription,
       required this.agendas,
-      required this.isSeries});
+      required this.isSeries,
+      this.created,
+      this.modified,
+      this.id});
 
   factory EventPlan.fromJson(Map<String, dynamic> json) =>
       _$EventPlanFromJson(json);
@@ -31,7 +37,8 @@ class EventPlan {
         eventName: eventName,
         eventDescription: eventDescription,
         agendas: newAgendas,
-        isSeries: isSeries);
+        isSeries: isSeries,
+        id: id);
 
     if (warnings != null) {
       List<Warning> newWarnings = [];

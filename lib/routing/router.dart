@@ -4,7 +4,10 @@ import 'package:agenda_wizard/models/builder/agenda_builder.dart';
 import 'package:agenda_wizard/ui/core/widgets/app_scaffold.dart';
 import 'package:agenda_wizard/routing/routes.dart';
 import 'package:agenda_wizard/ui/features/authentication/view_model/auth_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/authentication/view_model/logout_viewmodel.dart';
+import 'package:agenda_wizard/ui/features/authentication/view_model/profile_agendas_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/authentication/widgets/login_screen.dart';
+import 'package:agenda_wizard/ui/features/authentication/widgets/profile.dart';
 import 'package:agenda_wizard/ui/features/authentication/widgets/signup_screen.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/view_model/build_agenda_viewmodel.dart';
 import 'package:agenda_wizard/ui/features/build_agenda_wizard/build_agenda_screen.dart';
@@ -51,7 +54,8 @@ final router = GoRouter(
                   final buildAgendaViewModel = BuildAgendaViewmodel(
                       buildAgendaRepository: context.read(),
                       agendaBuilder: agendaBuilder,
-                      agendaRepository: context.read());
+                      agendaRepository: context.read(),
+                      userRepository: context.read());
                   return BuildAgendaScreen(viewModel: buildAgendaViewModel);
                 },
               )
@@ -64,7 +68,8 @@ final router = GoRouter(
                   builder: (context, state) {
                     final listAgendasViewModel = ListAgendasViewModel(
                         buildAgendaRepository: context.read(),
-                        agendaRepository: context.read());
+                        agendaRepository: context.read(),
+                        userRepository: context.read());
                     return ListAgendasScreen(
                       viewmodel: listAgendasViewModel,
                     );
@@ -83,6 +88,7 @@ final router = GoRouter(
                         final agendaEditorViewmodel = AgendaEditorViewmodel(
                             agendaRepository: context.read(),
                             buildAgendaRepository: buildAgendaRepository,
+                            userRepository: context.read(),
                             optionalEventPlan: eventPlan);
                         return AgendaEditorScreen(
                             viewModel: agendaEditorViewmodel);
@@ -91,17 +97,53 @@ final router = GoRouter(
                   ]),
             ],
           ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                  path: Routes.login,
+                  builder: (context, state) {
+                    final authViewModel = AuthViewModel(
+                      authRepository: context.read(),
+                    );
+                    return LoginScreen(
+                      authViewModel: authViewModel,
+                    );
+                  }),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.profile,
+                builder: (context, state) {
+                  final logoutViewModel = LogoutViewModel(
+                    authRepository: context.read(),
+                  );
+                  final profileViewModel =
+                      ProfileViewModel(agendaRepository: context.read());
+                  return Profile(
+                    logOutViewModel: logoutViewModel,
+                    profileViewModel: profileViewModel,
+                  );
+                },
+                redirect: (context, state) {
+                  final user = FirebaseAuth.instance.currentUser;
+                  return user == null ? Routes.login : null;
+                },
+              ),
+            ],
+          ),
         ]),
-    GoRoute(
-        path: Routes.login,
-        builder: (context, state) {
-          final authViewModel = AuthViewModel(
-            authRepository: context.read(),
-          );
-          return LoginScreen(
-            authViewModel: authViewModel,
-          );
-        }),
+    // GoRoute(
+    //     path: Routes.login,
+    //     builder: (context, state) {
+    //       final authViewModel = AuthViewModel(
+    //         authRepository: context.read(),
+    //       );
+    //       return LoginScreen(
+    //         authViewModel: authViewModel,
+    //       );
+    //     }),
     GoRoute(
         path: Routes.signup,
         builder: (context, state) {
@@ -112,16 +154,16 @@ final router = GoRouter(
             authViewModel: authViewModel,
           );
         }),
-    GoRoute(
-      path: Routes.profile,
-      builder: (context, state) {
-        return const Text('Hi i\'m your profile');
-      },
-      redirect: (context, state) {
-        final user = FirebaseAuth.instance.currentUser;
-        return user == null ? Routes.login : null;
-      },
-    ),
+    // GoRoute(
+    //   path: Routes.profile,
+    //   builder: (context, state) {
+    //     return const Text('Hi i\'m your profile');
+    //   },
+    //   redirect: (context, state) {
+    //     final user = FirebaseAuth.instance.currentUser;
+    //     return user == null ? Routes.login : null;
+    //   },
+    // ),
     GoRoute(
       path: Routes.error,
       builder: (context, state) {
